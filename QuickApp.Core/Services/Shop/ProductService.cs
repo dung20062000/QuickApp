@@ -19,69 +19,168 @@ namespace QuickApp.Core.Services.Shop
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public BaseResponse<List<Product>> GetAllProducts()
         {
-            return _dbContext.Products
-                .Include(p => p.ProductCategory)
-                .OrderBy(p => p.Name)
-                .ToList();
+            try
+            {
+                var products = _dbContext.Products
+                    .Include(p => p.ProductCategory)
+                    .OrderBy(p => p.Name)
+                    .ToList();
+
+                return new BaseResponse<List<Product>>
+                {
+                    Message = "Success",
+                    Status = ResponseStatus.Susscess,
+                    Data = products
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<List<Product>>
+                {
+                    Message = ex.Message,
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                };
+            }
         }
 
-        public Product? GetProductById(int id)
+        public BaseResponse<Product?> GetProductById(int id)
         {
-            return _dbContext.Products
-                .Include(p => p.ProductCategory)
-                .FirstOrDefault(p => p.Id == id);
+            try
+            {
+                var product = _dbContext.Products
+                    .Include(p => p.ProductCategory)
+                    .FirstOrDefault(p => p.Id == id);
+
+                if (product == null)
+                {
+                    return new BaseResponse<Product?>
+                    {
+                        Message = "Không tìm thấy sản phẩm",
+                        Status = ResponseStatus.NotFound,
+                        Data = null
+                    };
+                }
+
+                return new BaseResponse<Product?>
+                {
+                    Message = "Success",
+                    Status = ResponseStatus.Susscess,
+                    Data = product
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<Product?>
+                {
+                    Message = ex.Message,
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                };
+            }
         }
 
-        public async Task<(bool Succeeded, string[] Errors, Product? Product)> CreateProductAsync(Product product)
+        public async Task<BaseResponse<Product?>> CreateProductAsync(Product product)
         {
             if (product == null)
-                return (false, new[] { "Product cannot be null." }, null);
+            {
+                return new BaseResponse<Product?>
+                {
+                    Message = "Product cannot be null.",
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                };
+            }
 
             try
             {
                 _dbContext.Products.Add(product);
                 await _dbContext.SaveChangesAsync();
-                return (true, Array.Empty<string>(), product);
+                return new BaseResponse<Product?>
+                {
+                    Message = "Thêm sản phẩm thành công",
+                    Status = ResponseStatus.Susscess,
+                    Data = product
+                };
             }
             catch (Exception ex)
             {
-                return (false, new[] { ex.Message }, null);
+                return new BaseResponse<Product?>
+                {
+                    Message = ex.Message,
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                };
             }
         }
 
-        public async Task<(bool Succeeded, string[] Errors)> UpdateProductAsync(Product product)
+        public async Task<BaseResponse<Product?>> UpdateProductAsync(Product product)
         {
             if (product == null)
-                return (false, new[] { "Product cannot be null." });
+            {
+                return new BaseResponse<Product?>
+                {
+                    Message = "Product cannot be null.",
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                };
+            }
 
             try
             {
                 _dbContext.Products.Update(product);
                 await _dbContext.SaveChangesAsync();
-                return (true, Array.Empty<string>());
+                return new BaseResponse<Product?>
+                {
+                    Message = "Cập nhật sản phẩm thành công",
+                    Status = ResponseStatus.Susscess,
+                    Data = product
+                };
             }
-            catch (Exception ex)
+            catch
             {
-                return (false, new[] { ex.Message });
+                return new BaseResponse<Product?>
+                {
+                    Message = "Lỗi hệ thống",
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                };
             }
         }
 
-        public async Task<(bool Succeeded, string[] Errors)> DeleteProductAsync(Product product)
+        public async Task<BaseResponse<Product?>> DeleteProductAsync(Product product)
         {
             if (product == null)
-                return (false, new[] { "Product cannot be null." });
+            {
+                return new BaseResponse<Product?>
+                {
+                    Message = "Product cannot be null.",
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                };
+            }
 
             try
             {
                 _dbContext.Products.Remove(product);
                 await _dbContext.SaveChangesAsync();
-                return (true, Array.Empty<string>());
+                return new BaseResponse<Product?>
+                {
+                    Message = "Xóa sản phẩm thành công",
+                    Status = ResponseStatus.Susscess,
+                    Data = product
+                };
             }
-            catch (Exception ex)
+            catch
             {
-                return (false, new[] { ex.Message });
+                return new BaseResponse<Product?>
+                {
+                    Message = "Lỗi hệ thống",
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                };
             }
         }
     }
