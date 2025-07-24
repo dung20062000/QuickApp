@@ -7,112 +7,150 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuickApp.Core.CoreDtos.Request.Shop;
 using QuickApp.Core.Models.Shop;
 using QuickApp.Core.Services.Shop;
 using QuickApp.Server.Authorization;
+using QuickApp.Server.Dtos.Request.Shop;
 using QuickApp.Server.ViewModels.Shop;
 
 namespace QuickApp.Server.Controllers
 {
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [Route("api/products")]
     [Authorize]
     public class ProductController : BaseApiController
     {
         private readonly IProductService _productService;
+        private readonly IMapper _mapper;
 
         public ProductController(ILogger<ProductController> logger, IMapper mapper, IProductService productService)
             : base(logger, mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<ProductVM>))]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] ProductRequestServerDto request)
         {
-            var products = _productService.GetAllProducts();
-            return Ok(_mapper.Map<IEnumerable<ProductVM>>(products));
+            var searchRequest = _mapper.Map<ProductSearchCoreRequest>(request);
+            var resp = _productService.GetAllProducts(searchRequest);
+            var vms = _mapper.Map<List<ProductVM>>(resp.Data ?? new List<Product>());
+            var result = new BaseResponse<List<ProductVM>>
+            {
+                Message = resp.Message,
+                Status = resp.Status,
+                Data = vms
+            };
+            return Ok(result);
         }
 
         [HttpGet("{id:int}")]
-        [ProducesResponseType(200, Type = typeof(ProductVM))]
-        [ProducesResponseType(404)]
         public IActionResult GetById(int id)
         {
-            var product = _productService.GetProductById(id);
-            if (product == null)
-                return NotFound(id);
-
-            return Ok(_mapper.Map<ProductVM>(product));
+            var resp = _productService.GetProductById(id);
+            var result = new BaseResponse<ProductVM>
+            {
+                Message = resp.Message,
+                Status = resp.Status,
+                Data = resp.Data != null ? _mapper.Map<ProductVM>(resp.Data) : null
+            };
+            if (resp.Status == ResponseStatus.NotFound)
+                return NotFound(result);
+            return Ok(result);
         }
 
         [HttpPost]
         [Authorize(AuthPolicies.ManageAllUsersPolicy)]
-        [ProducesResponseType(201, Type = typeof(ProductVM))]
-        [ProducesResponseType(400)]
         public async Task<IActionResult> Create([FromBody] ProductVM productVM)
         {
             if (productVM == null)
-                return BadRequest("Product data is required.");
+                return BadRequest(new BaseResponse<ProductVM>
+                {
+                    Message = "Product data is required.",
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                });
 
             var product = _mapper.Map<Product>(productVM);
-            var result = await _productService.CreateProductAsync(product);
-
-            if (!result.Succeeded)
+            var resp = await _productService.CreateProductAsync(product);
+            var result = new BaseResponse<ProductVM>
             {
-                AddModelError(result.Errors);
-                return BadRequest(ModelState);
-            }
+                Message = resp.Message,
+                Status = resp.Status,
+                Data = resp.Data != null ? _mapper.Map<ProductVM>(resp.Data) : null
+            };
 
-            var createdProduct = _mapper.Map<ProductVM>(result.Product);
-            return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
+            if (resp.Status == ResponseStatus.Success && result.Data != null)
+                return CreatedAtAction(nameof(GetById), new { id = result.Data.Id }, result);
+
+            return BadRequest(result);
         }
 
         [HttpPut("{id:int}")]
         [Authorize(AuthPolicies.ManageAllUsersPolicy)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
         public async Task<IActionResult> Update(int id, [FromBody] ProductVM productVM)
         {
             if (productVM == null)
-                return BadRequest("Product data is required.");
+                return BadRequest(new BaseResponse<ProductVM>
+                {
+                    Message = "Product data is required.",
+                    Status = ResponseStatus.Fail,
+                    Data = null
+                });
 
-            var product = _productService.GetProductById(id);
-            if (product == null)
-                return NotFound(id);
+            var productResp = _productService.GetProductById(id);
+            if (productResp.Data == null)
+                return NotFound(new BaseResponse<ProductVM>
+                {
+                    Message = "Product not found.",
+                    Status = ResponseStatus.NotFound,
+                    Data = null
+                });
 
+            var product = productResp.Data;
             _mapper.Map(productVM, product);
-            var result = await _productService.UpdateProductAsync(product);
 
-            if (!result.Succeeded)
+            var resp = await _productService.UpdateProductAsync(product!);
+            var result = new BaseResponse<ProductVM>
             {
-                AddModelError(result.Errors);
-                return BadRequest(ModelState);
-            }
+                Message = resp.Message,
+                Status = resp.Status,
+                Data = resp.Data != null ? _mapper.Map<ProductVM>(resp.Data) : null
+            };
 
-            return NoContent();
+            if (resp.Status == ResponseStatus.Success)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         [HttpDelete("{id:int}")]
         [Authorize(AuthPolicies.ManageAllUsersPolicy)]
-        [ProducesResponseType(200, Type = typeof(ProductVM))]
-        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(int id)
         {
-            var product = _productService.GetProductById(id);
-            if (product == null)
-                return NotFound(id);
+            var productResp = _productService.GetProductById(id);
+            if (productResp.Data == null)
+                return NotFound(new BaseResponse<ProductVM>
+                {
+                    Message = "Product not found.",
+                    Status = ResponseStatus.NotFound,
+                    Data = null
+                });
 
-            var result = await _productService.DeleteProductAsync(product);
-
-            if (!result.Succeeded)
+            var resp = await _productService.DeleteProductAsync(productResp.Data!);
+            var result = new BaseResponse<ProductVM>
             {
-                AddModelError(result.Errors);
-                return BadRequest(ModelState);
-            }
+                Message = resp.Message,
+                Status = resp.Status,
+                Data = resp.Data != null ? _mapper.Map<ProductVM>(resp.Data) : null
+            };
 
-            return Ok(_mapper.Map<ProductVM>(product));
+            if (resp.Status == ResponseStatus.Success)
+                return Ok(result);
+
+            return BadRequest(result);
         }
     }
 }

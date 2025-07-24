@@ -6,9 +6,12 @@
 
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using QuickApp.Core.CoreDtos.Request.Shop;
 using QuickApp.Core.Models.Account;
 using QuickApp.Core.Models.Shop;
 using QuickApp.Core.Services.Account;
+using QuickApp.Server.Dtos.Request.Shop;
+using QuickApp.Server.ServerDtos.Request.Shop;
 using QuickApp.Server.ViewModels.Account;
 using QuickApp.Server.ViewModels.Shop;
 
@@ -59,6 +62,15 @@ namespace QuickApp.Server.Configuration
 
             CreateMap<Order, OrderVM>()
                 .ReverseMap();
+
+            CreateMap<ProductCategory, CategoryVM>()
+                .ReverseMap();
+
+
+
+            //mappinh for Search DTO
+            CreateMap<ProductRequestServerDto, ProductSearchCoreRequest>();
+            CreateMap<CategoryRequestServerDto, CategorySearchCoreRequest>();
         }
     }
 }

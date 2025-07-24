@@ -1,6 +1,6 @@
 public enum ResponseStatus
 {
-    Susscess = 1,
+    Success = 1,
     Fail = 2,
     Existed = 3,
     NonExisted = 4,

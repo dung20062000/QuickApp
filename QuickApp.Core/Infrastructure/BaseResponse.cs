@@ -1,3 +1,5 @@
+using QuickApp.Core.Infrastructure;
+
 public class BaseResponse<T>
 {
     /// <summary>
@@ -10,4 +12,5 @@ public class BaseResponse<T>
     /// </summary>
     public ResponseStatus Status { get; set; }
     public T? Data { get; set; }
+    public int TotalRecords { get; set; } = DefaultValues.TotalRecords;
 }

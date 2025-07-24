@@ -5,6 +5,7 @@
 // ---------------------------------------
 
 using Microsoft.EntityFrameworkCore;
+using QuickApp.Core.CoreDtos.Request.Shop;
 using QuickApp.Core.Infrastructure;
 using QuickApp.Core.Models.Shop;
 
@@ -19,7 +20,7 @@ namespace QuickApp.Core.Services.Shop
             _dbContext = dbContext;
         }
 
-        public BaseResponse<List<Product>> GetAllProducts()
+        public BaseResponse<List<Product>> GetAllProducts(ProductSearchCoreRequest searchRequest)
         {
             try
             {
@@ -31,7 +32,7 @@ namespace QuickApp.Core.Services.Shop
                 return new BaseResponse<List<Product>>
                 {
                     Message = "Success",
-                    Status = ResponseStatus.Susscess,
+                    Status = ResponseStatus.Success,
                     Data = products
                 };
             }
@@ -67,7 +68,7 @@ namespace QuickApp.Core.Services.Shop
                 return new BaseResponse<Product?>
                 {
                     Message = "Success",
-                    Status = ResponseStatus.Susscess,
+                    Status = ResponseStatus.Success,
                     Data = product
                 };
             }
@@ -101,7 +102,7 @@ namespace QuickApp.Core.Services.Shop
                 return new BaseResponse<Product?>
                 {
                     Message = "Thêm sản phẩm thành công",
-                    Status = ResponseStatus.Susscess,
+                    Status = ResponseStatus.Success,
                     Data = product
                 };
             }
@@ -135,7 +136,7 @@ namespace QuickApp.Core.Services.Shop
                 return new BaseResponse<Product?>
                 {
                     Message = "Cập nhật sản phẩm thành công",
-                    Status = ResponseStatus.Susscess,
+                    Status = ResponseStatus.Success,
                     Data = product
                 };
             }
@@ -169,7 +170,7 @@ namespace QuickApp.Core.Services.Shop
                 return new BaseResponse<Product?>
                 {
                     Message = "Xóa sản phẩm thành công",
-                    Status = ResponseStatus.Susscess,
+                    Status = ResponseStatus.Success,
                     Data = product
                 };
             }
