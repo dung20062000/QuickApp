@@ -66,11 +66,15 @@ namespace QuickApp.Server.Configuration
             CreateMap<ProductCategory, CategoryVM>()
                 .ReverseMap();
 
+            CreateMap<NhaCungCap, NhaCungCapVM>()
+                .ReverseMap();
+
 
 
             //mappinh for Search DTO
             CreateMap<ProductRequestServerDto, ProductSearchCoreRequest>();
             CreateMap<CategoryRequestServerDto, CategorySearchCoreRequest>();
+            CreateMap<NhaCungCapRequestServerDto, NhaCungCapSearchCoreRequest>();
         }
     }
 }

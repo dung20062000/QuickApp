@@ -10,7 +10,6 @@ namespace QuickApp.Core.Models.Shop
 {
     public class ProductCategory : BaseEntity
     {
-        [Required(ErrorMessage = "Tên danh mục không được để trống")]
         public required string Name { get; set; }
         public string? Description { get; set; }
         public string? Icon { get; set; }

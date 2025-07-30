@@ -13,4 +13,5 @@ public class BaseResponse<T>
     public ResponseStatus Status { get; set; }
     public T? Data { get; set; }
     public int TotalRecords { get; set; } = DefaultValues.TotalRecords;
+    public Dictionary<string, string[]> Errors { get; set; } = new Dictionary<string, string[]>();
 }

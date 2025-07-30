@@ -25,6 +25,7 @@ namespace QuickApp.Core.Infrastructure
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<NhaCungCap> NhaCungCaps { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

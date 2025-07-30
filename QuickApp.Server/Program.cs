@@ -4,6 +4,8 @@
 // (c) 2024 www.ebenmonney.com/mit-license
 // ---------------------------------------
 
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +15,15 @@ using OpenIddict.Validation.AspNetCore;
 using Quartz;
 using QuickApp.Core.Infrastructure;
 using QuickApp.Core.Models.Account;
+using QuickApp.Core.Models.Shop;
 using QuickApp.Core.Services;
 using QuickApp.Core.Services.Account;
 using QuickApp.Core.Services.Shop;
+using QuickApp.Core.Services.Shop.Interfaces;
 using QuickApp.Server.Authorization;
 using QuickApp.Server.Authorization.Requirements;
 using QuickApp.Server.Configuration;
+using QuickApp.Server.Configuration.FluentValidations;
 using QuickApp.Server.Services;
 using QuickApp.Server.Services.Email;
 using System.Reflection;
@@ -195,6 +200,7 @@ builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Other Services
 builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -205,6 +211,13 @@ builder.Services.AddSingleton<IAuthorizationHandler, ViewUserAuthorizationHandle
 builder.Services.AddSingleton<IAuthorizationHandler, ManageUserAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, ViewRoleAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, AssignRolesAuthorizationHandler>();
+
+// Add FluentValidation
+//builder.Services.AddControllers()
+//    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NhaCungCapValidator>());
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<NhaCungCapValidator>();
+
 
 // DB Creation and Seeding
 builder.Services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
