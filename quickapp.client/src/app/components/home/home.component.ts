@@ -16,6 +16,7 @@ import { StatisticsDemoComponent } from '../controls/statistics-demo.component';
 import { NotificationsViewerComponent } from '../controls/notifications-viewer.component';
 import { TodoDemoComponent } from '../controls/todo-demo.component';
 import { BannerDemoComponent } from '../controls/banner-demo.component';
+import { ButtonModule } from 'primeng/button';
 
 interface WidgetIndex { element: string, index: number }
 
@@ -26,7 +27,7 @@ interface WidgetIndex { element: string, index: number }
   animations: [fadeInOut],
   imports: [
     CdkDropList, RouterLink, CdkDrag, CdkDragPlaceholder, StatisticsDemoComponent, NotificationsViewerComponent,
-    TodoDemoComponent, BannerDemoComponent, TranslateModule
+    TodoDemoComponent, BannerDemoComponent, TranslateModule, ButtonModule
   ]
 })
 export class HomeComponent implements AfterViewInit {

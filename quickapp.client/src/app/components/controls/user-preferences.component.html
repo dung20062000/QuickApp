@@ -25,6 +25,7 @@
           {{'preferences.English' | translate}} <small class="text-muted"><i>({{'preferences.Default' | translate}})</i></small>
         </ng-option>
         <ng-option [value]="'fr'">{{'preferences.French' | translate}}</ng-option>
+        <ng-option [value]="'vi'">{{'preferences.Vietnamese' | translate}}</ng-option>
         <ng-option [value]="'de'">{{'preferences.German' | translate}}</ng-option>
         <ng-option [value]="'es'">{{'preferences.Spanish' | translate}}</ng-option>
         <ng-option [value]="'pt'">{{'preferences.Portuguese' | translate}}</ng-option>
@@ -82,7 +83,7 @@
       <ng-select id="defaultTheme" [(ngModel)]="configurations.themeId" [searchable]="false" [clearable]="false" class="form-control theme-picker">
         @for (theme of themeManager.themes; track theme) {
           <ng-option [value]="theme.id">
-            <div class="theme-item" style="background-color: {{theme.background}}; color: {{theme.color}}">
+            <div class="theme-item" [style.background-color]="theme.background" [style.color]="theme.color">
               {{'preferences.' + theme.name + 'Theme' | translate}} <span class="small">{{theme.isDark ? '(Dark)' : ''}}</span>
             </div>
           </ng-option>

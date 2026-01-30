@@ -18,6 +18,9 @@ import { AppTitleService } from './services/app-title.service';
 import { LowerCaseUrlSerializer } from './services/lowercase-url-serializer.service';
 import { TranslateLanguageLoader } from './services/app-translation.service';
 
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -32,6 +35,11 @@ export const appConfig: ApplicationConfig = {
     ),
     { provide: ErrorHandler, useClass: AppErrorHandler },
     { provide: TitleStrategy, useClass: AppTitleService },
-    { provide: UrlSerializer, useClass: LowerCaseUrlSerializer }
+    { provide: UrlSerializer, useClass: LowerCaseUrlSerializer },
+    providePrimeNG({
+        theme: {
+            preset: Aura
+        }
+    })
   ]
 };
