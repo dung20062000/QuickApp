@@ -38,9 +38,12 @@
   </ItemGroup>
 
   <ItemGroup>  
+    <!-- Temporarily comment out to run backend and frontend separately -->
+    <!--
     <ProjectReference Include="..\quickapp.client\quickapp.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    -->
     <ProjectReference Include="..\QuickApp.Core\QuickApp.Core.csproj" />
   </ItemGroup>
 

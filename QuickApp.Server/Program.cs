@@ -1,4 +1,4 @@
-// ---------------------------------------
+﻿// ---------------------------------------
 // Email: quickapp@ebenmonney.com
 // Templates: www.ebenmonney.com/templates
 // (c) 2024 www.ebenmonney.com/mit-license
@@ -168,6 +168,16 @@ builder.Services.AddAuthorizationBuilder()
 builder.Services.AddCors();
 
 builder.Services.AddControllers();
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // Lắng nghe trên 0.0.0.0 thay vì localhost
+    options.ListenAnyIP(5225); // HTTP
+    options.ListenAnyIP(7085, listenOptions =>
+    {
+        listenOptions.UseHttps();
+    }); // HTTPS
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
