@@ -22,7 +22,8 @@
         {{ currentLanguage === 'vi' ? 'EN' : 'VI' }}
       </button>
       <button (click)="goToAdminLogin()" class="btn-admin">
-        <i class="fa fa-lock"></i> Admin <i class="fa-regular fa-star"></i>
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <!-- {{ currentLanguage === 'vi' ? 'Quản trị' : 'Admin' }} -->
       </button>
     </div>
   </div>
@@ -294,13 +295,13 @@
 
       <div class="footer-social" *ngIf="restaurantInfo?.socialMedia">
         <a [href]="restaurantInfo!.socialMedia.facebook" *ngIf="restaurantInfo!.socialMedia.facebook" target="_blank">
-          <i class="fa fa-facebook"></i>
+          <i class="fa-brands fa-facebook"></i>
         </a>
         <a [href]="restaurantInfo!.socialMedia.instagram" *ngIf="restaurantInfo!.socialMedia.instagram" target="_blank">
-          <i class="fa fa-instagram"></i>
+          <i class="fa-brands fa-square-instagram"></i>
         </a>
         <a [href]="restaurantInfo!.socialMedia.twitter" *ngIf="restaurantInfo!.socialMedia.twitter" target="_blank">
-          <i class="fa fa-twitter"></i>
+          <i class="fa-brands fa-square-twitter"></i>
         </a>
       </div>
     </div>

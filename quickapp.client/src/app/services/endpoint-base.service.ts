@@ -38,6 +38,16 @@ export class EndpointBase {
     return { headers };
   }
 
+  // Public request headers - Không có Authorization header
+  protected get publicRequestHeaders(): { headers: HttpHeaders | Record<string, string | string[]> } {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json, text/plain, */*'
+    });
+
+    return { headers };
+  }
+
   public refreshLogin(): Observable<User> {
     return this.authService.refreshLogin().pipe(
       catchError((error: ServerError) => {

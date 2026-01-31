@@ -3,14 +3,15 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, catchError } from 'rxjs/operators';
 import { MenuResponse, RestaurantInfo, SushiMenuItem, SushiCategory } from '../models/sushi-menu.model';
 import { ConfigurationService } from './configuration.service';
+import { EndpointBase } from './endpoint-base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SushiMenuService {
+export class SushiMenuService extends EndpointBase {
   private http = inject(HttpClient);
   private configurations = inject(ConfigurationService);
 
@@ -22,37 +23,50 @@ export class SushiMenuService {
   private useFakeData = true;
 
   // Lấy toàn bộ menu (categories + items)
+  // PUBLIC API - Không cần authentication
   getMenu(): Observable<MenuResponse> {
     if (this.useFakeData) {
       return of(this.getFakeMenuData()).pipe(delay(500));
     }
 
-    // Khi có API thật, uncomment dòng này
-    // return this.http.get<MenuResponse>(this.menuUrl, this.requestHeaders);
-    return of(this.getFakeMenuData());
+    // Sử dụng publicRequestHeaders cho public endpoint
+    return this.http.get<MenuResponse>(this.menuUrl, this.publicRequestHeaders).pipe(
+      catchError(error => {
+        return this.handleError(error, () => this.getMenu());
+      })
+    );
   }
 
   // Lấy thông tin nhà hàng
+  // PUBLIC API - Không cần authentication
   getRestaurantInfo(): Observable<RestaurantInfo> {
     if (this.useFakeData) {
       return of(this.getFakeRestaurantInfo()).pipe(delay(300));
     }
 
-    // Khi có API thật, uncomment dòng này
-    // return this.http.get<RestaurantInfo>(this.restaurantInfoUrl, this.requestHeaders);
-    return of(this.getFakeRestaurantInfo());
+    // Sử dụng publicRequestHeaders cho public endpoint
+    return this.http.get<RestaurantInfo>(this.restaurantInfoUrl, this.publicRequestHeaders).pipe(
+      catchError(error => {
+        return this.handleError(error, () => this.getRestaurantInfo());
+      })
+    );
   }
 
   // Lấy món ăn theo category
+  // PUBLIC API - Không cần authentication
   getItemsByCategory(categoryId: string): Observable<SushiMenuItem[]> {
     if (this.useFakeData) {
       const items = this.getFakeMenuData().items.filter(item => item.categoryId === categoryId);
       return of(items).pipe(delay(300));
     }
 
-    // Khi có API thật, uncomment dòng này
-    // return this.http.get<SushiMenuItem[]>(`${this.menuUrl}/category/${categoryId}`, this.requestHeaders);
-    return of([]);
+    // Sử dụng publicRequestHeaders cho public endpoint
+    const endpointUrl = `${this.menuUrl}/category/${categoryId}`;
+    return this.http.get<SushiMenuItem[]>(endpointUrl, this.publicRequestHeaders).pipe(
+      catchError(error => {
+        return this.handleError(error, () => this.getItemsByCategory(categoryId));
+      })
+    );
   }
 
   // FAKE DATA - Dữ liệu mẫu để test
