@@ -1,21 +1,22 @@
 // Sushi Menu Models
 
 export interface SushiCategory {
-  id: string;
+  id: number;
   name: string;
-  description: string;
-  icon: string;
+  description: string | null;
+  icon?: string;
 }
 
 export interface SushiMenuItem {
-  id: string;
+  id: number;
   name: string;
   nameVi: string;
   description: string;
   descriptionVi: string;
-  categoryId: string;
+  productCategoryId: number;  // API trả về productCategoryId, không phải categoryId
+  categoryName: string;        // Tên category từ API
   price: number;
-  imageUrl: string;
+  imageUrl: string | null;
   isPopular: boolean;
   isNew: boolean;
   isVegetarian: boolean;
@@ -25,10 +26,23 @@ export interface SushiMenuItem {
   reviews: number;
 }
 
-export interface MenuResponse {
+// API Response wrapper từ backend
+export interface ApiResponse<T> {
+  message: string;
+  status: number;
+  data: T;
+  totalRecords: number;
+  errors: Record<string, unknown>;
+}
+
+// Menu data structure
+export interface MenuData {
   categories: SushiCategory[];
   items: SushiMenuItem[];
 }
+
+// Menu response type (wrapped trong API response)
+export type MenuResponse = ApiResponse<MenuData>;
 
 export interface RestaurantInfo {
   name: string;
@@ -46,3 +60,5 @@ export interface RestaurantInfo {
     twitter?: string;
   };
 }
+
+export type RestaurantInfoResponse = ApiResponse<RestaurantInfo>;

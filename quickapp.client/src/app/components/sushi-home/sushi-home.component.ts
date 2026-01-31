@@ -46,9 +46,10 @@ export class SushiHomeComponent implements OnInit {
     // Load menu
     this.sushiMenuService.getMenu().subscribe({
       next: (response) => {
-        this.categories = response.categories;
-        this.menuItems = response.items;
-        this.filteredItems = response.items;
+        // API trả về: { message, status, data: { categories, items } }
+        this.categories = response.data.categories;
+        this.menuItems = response.data.items;
+        this.filteredItems = response.data.items;
         this.isLoading = false;
       },
       error: (error) => {
@@ -60,7 +61,7 @@ export class SushiHomeComponent implements OnInit {
     // Load restaurant info
     this.sushiMenuService.getRestaurantInfo().subscribe({
       next: (info) => {
-        this.restaurantInfo = info;
+        this.restaurantInfo = info.data;
       },
       error: (error) => {
         console.error('Error loading restaurant info:', error);
@@ -75,7 +76,9 @@ export class SushiHomeComponent implements OnInit {
     if (categoryId === 'all') {
       this.filteredItems = this.menuItems;
     } else {
-      this.filteredItems = this.menuItems.filter(item => item.categoryId === categoryId);
+      // API dùng productCategoryId (number), cần convert string sang number
+      const numericId = parseInt(categoryId, 10);
+      this.filteredItems = this.menuItems.filter(item => item.productCategoryId === numericId);
     }
 
     // Smooth scroll to menu section

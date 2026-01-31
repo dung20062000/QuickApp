@@ -108,10 +108,10 @@
 
       <button
         *ngFor="let category of categories"
-        (click)="filterByCategory(category.id)"
-        [class.active]="selectedCategory === category.id"
+        (click)="filterByCategory(category.id.toString())"
+        [class.active]="selectedCategory === category.id.toString()"
         class="category-btn">
-        <span class="category-icon">{{ category.icon }}</span>
+        <span class="category-icon">{{ category.icon || '🍣' }}</span>
         <span>{{ category.name }}</span>
       </button>
     </div>

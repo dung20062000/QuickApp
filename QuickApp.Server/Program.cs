@@ -211,6 +211,8 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IMenuService, MenuService>();
+builder.Services.AddScoped<IRestaurantInfoService, RestaurantInfoService>();
 
 // Other Services
 builder.Services.AddScoped<IEmailSender, EmailSender>();

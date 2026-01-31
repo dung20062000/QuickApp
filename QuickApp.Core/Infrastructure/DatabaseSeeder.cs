@@ -227,6 +227,108 @@ namespace QuickApp.Core.Infrastructure
 
                 logger.LogInformation("Seeding demo data completed");
             }
+
+            // Seed Menu Categories and Items
+            if (!await dbContext.MenuItems.AnyAsync())
+            {
+                logger.LogInformation("Seeding menu data");
+
+                // Sushi Categories
+                var cat1 = new ProductCategory { Name = "Nigiri Sushi", Description = "Traditional hand-pressed sushi", Icon = "🍣" };
+                var cat2 = new ProductCategory { Name = "Maki Rolls", Description = "Rolled sushi with seaweed", Icon = "🍱" };
+                var cat3 = new ProductCategory { Name = "Sashimi", Description = "Fresh sliced raw fish", Icon = "🐟" };
+                var cat4 = new ProductCategory { Name = "Special Rolls", Description = "Chef's signature creations", Icon = "⭐" };
+                var cat5 = new ProductCategory { Name = "Vegetarian", Description = "Plant-based options", Icon = "🥒" };
+
+                dbContext.ProductCategories.AddRange(cat1, cat2, cat3, cat4, cat5);
+                await dbContext.SaveChangesAsync();
+
+                // Menu Items
+                var menuItems = new List<MenuItem>
+                {
+                    // Nigiri Sushi
+                    new() { Name = "Salmon Nigiri", NameVi = "Nigiri Cá Hồi", Description = "Fresh Norwegian salmon on seasoned rice",
+                        DescriptionVi = "Cá hồi Na Uy tươi trên cơm trộn giấm", ProductCategory = cat1, Price = 45000,
+                        Ingredients = "[\"Salmon\",\"Sushi Rice\",\"Wasabi\"]", IngredientsVi = "[\"Cá hồi\",\"Cơm sushi\",\"Wasabi\"]",
+                        IsPopular = true, Rating = 4.8m, Reviews = 124 },
+                    
+                    new() { Name = "Tuna Nigiri", NameVi = "Nigiri Cá Ngừ", Description = "Premium bluefin tuna",
+                        DescriptionVi = "Cá ngừ vây xanh cao cấp", ProductCategory = cat1, Price = 55000,
+                        Ingredients = "[\"Tuna\",\"Sushi Rice\",\"Wasabi\"]", IngredientsVi = "[\"Cá ngừ\",\"Cơm sushi\",\"Wasabi\"]",
+                        IsPopular = true, Rating = 4.9m, Reviews = 98 },
+
+                    // Maki Rolls
+                    new() { Name = "California Roll", NameVi = "Maki California", Description = "Crab, avocado, cucumber",
+                        DescriptionVi = "Cua, bơ, dưa chuột", ProductCategory = cat2, Price = 75000,
+                        Ingredients = "[\"Crab Stick\",\"Avocado\",\"Cucumber\",\"Tobiko\"]",
+                        IngredientsVi = "[\"Thanh cua\",\"Bơ\",\"Dưa chuột\",\"Trứng cá\"]",
+                        IsPopular = true, Rating = 4.7m, Reviews = 156 },
+
+                    new() { Name = "Spicy Tuna Roll", NameVi = "Maki Cá Ngừ Cay", Description = "Tuna with spicy mayo",
+                        DescriptionVi = "Cá ngừ với sốt mayonnaise cay", ProductCategory = cat2, Price = 85000,
+                        Ingredients = "[\"Tuna\",\"Spicy Mayo\",\"Cucumber\",\"Sesame\"]",
+                        IngredientsVi = "[\"Cá ngừ\",\"Sốt mayo cay\",\"Dưa chuột\",\"Mè\"]",
+                        IsPopular = true, Rating = 4.8m, Reviews = 143 },
+
+                    // Sashimi
+                    new() { Name = "Salmon Sashimi", NameVi = "Sashimi Cá Hồi", Description = "6 pieces of fresh salmon",
+                        DescriptionVi = "6 miếng cá hồi tươi", ProductCategory = cat3, Price = 95000,
+                        Ingredients = "[\"Premium Salmon\"]", IngredientsVi = "[\"Cá hồi cao cấp\"]",
+                        IsPopular = true, Rating = 4.9m, Reviews = 201 },
+
+                    // Special Rolls
+                    new() { Name = "Dragon Roll", NameVi = "Maki Rồng", Description = "Eel, avocado topped with eel sauce",
+                        DescriptionVi = "Lươn, bơ phủ sốt lươn", ProductCategory = cat4, Price = 120000,
+                        Ingredients = "[\"Eel\",\"Avocado\",\"Cucumber\",\"Eel Sauce\"]",
+                        IngredientsVi = "[\"Lươn\",\"Bơ\",\"Dưa chuột\",\"Sốt lươn\"]",
+                        IsPopular = true, Rating = 4.9m, Reviews = 112 },
+
+                    new() { Name = "Rainbow Roll", NameVi = "Maki Cầu Vồng", Description = "California roll topped with assorted fish",
+                        DescriptionVi = "Maki California phủ các loại cá", ProductCategory = cat4, Price = 130000,
+                        Ingredients = "[\"Salmon\",\"Tuna\",\"Avocado\",\"Crab\"]",
+                        IngredientsVi = "[\"Cá hồi\",\"Cá ngừ\",\"Bơ\",\"Cua\"]",
+                        IsPopular = true, IsNew = true, Rating = 4.8m, Reviews = 95 },
+
+                    // Vegetarian
+                    new() { Name = "Avocado Roll", NameVi = "Maki Bơ", Description = "Fresh avocado with sesame",
+                        DescriptionVi = "Bơ tươi với mè", ProductCategory = cat5, Price = 50000,
+                        Ingredients = "[\"Avocado\",\"Sesame\",\"Sushi Rice\"]",
+                        IngredientsVi = "[\"Bơ\",\"Mè\",\"Cơm sushi\"]",
+                        IsVegetarian = true, Rating = 4.5m, Reviews = 56 }
+                };
+
+                dbContext.MenuItems.AddRange(menuItems);
+                await dbContext.SaveChangesAsync();
+
+                logger.LogInformation("Menu data seeding completed");
+            }
+
+            // Seed Restaurant Info
+            if (!await dbContext.RestaurantInfos.AnyAsync())
+            {
+                logger.LogInformation("Seeding restaurant info");
+
+                var restaurantInfo = new RestaurantInfo
+                {
+                    Name = "Muc Sushi House",
+                    Description = "Experience authentic Japanese cuisine with our chef's special creations. Fresh ingredients, traditional techniques, and modern presentation.",
+                    DescriptionVi = "Trải nghiệm ẩm thực Nhật Bản chính thống với những sáng tạo đặc biệt của đầu bếp. Nguyên liệu tươi ngon, kỹ thuật truyền thống và cách trình bày hiện đại.",
+                    Phone = "+84 123 456 789",
+                    Email = "info@mucsushi.vn",
+                    Address = "123 Nguyen Hue Street, District 1, Ho Chi Minh City",
+                    AddressVi = "123 Đường Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh",
+                    OpenHours = "Mon-Sun: 10:00 AM - 10:00 PM",
+                    OpenHoursVi = "T2-CN: 10:00 - 22:00",
+                    Facebook = "https://facebook.com/mucsushi",
+                    Instagram = "https://instagram.com/mucsushi",
+                    Twitter = "https://twitter.com/mucsushi"
+                };
+
+                dbContext.RestaurantInfos.Add(restaurantInfo);
+                await dbContext.SaveChangesAsync();
+
+                logger.LogInformation("Restaurant info seeding completed");
+            }
         }
     }
 }

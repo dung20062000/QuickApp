@@ -69,12 +69,78 @@ namespace QuickApp.Server.Configuration
             CreateMap<NhaCungCap, NhaCungCapVM>()
                 .ReverseMap();
 
+            // MenuItem Mapping
+            CreateMap<MenuItem, MenuItemVM>()
+                .ForMember(d => d.CategoryName, map => map.MapFrom(s => s.ProductCategory.Name))
+                .ForMember(d => d.Ingredients, map => map.MapFrom(s => DeserializeStringArray(s.Ingredients)))
+                .ForMember(d => d.IngredientsVi, map => map.MapFrom(s => DeserializeStringArray(s.IngredientsVi)));
+
+            CreateMap<MenuItemVM, MenuItem>()
+                .ForMember(d => d.ProductCategory, map => map.Ignore())
+                .ForMember(d => d.Ingredients, map => map.MapFrom(s => SerializeStringArray(s.Ingredients)))
+                .ForMember(d => d.IngredientsVi, map => map.MapFrom(s => SerializeStringArray(s.IngredientsVi)))
+                .ForMember(d => d.IsActive, map => map.Ignore())
+                .ForMember(d => d.CreatedBy, map => map.Ignore())
+                .ForMember(d => d.CreatedDate, map => map.Ignore())
+                .ForMember(d => d.UpdatedBy, map => map.Ignore())
+                .ForMember(d => d.UpdatedDate, map => map.Ignore());
+
+            // RestaurantInfo Mapping
+            CreateMap<RestaurantInfo, RestaurantInfoVM>()
+                .ForMember(d => d.SocialMedia, map => map.MapFrom(s => new SocialMediaVM
+                {
+                    Facebook = s.Facebook,
+                    Instagram = s.Instagram,
+                    Twitter = s.Twitter
+                }));
+
+            CreateMap<RestaurantInfoVM, RestaurantInfo>()
+                .ForMember(d => d.Facebook, map => map.MapFrom(s => s.SocialMedia != null ? s.SocialMedia.Facebook : null))
+                .ForMember(d => d.Instagram, map => map.MapFrom(s => s.SocialMedia != null ? s.SocialMedia.Instagram : null))
+                .ForMember(d => d.Twitter, map => map.MapFrom(s => s.SocialMedia != null ? s.SocialMedia.Twitter : null))
+                .ForMember(d => d.IsActive, map => map.Ignore())
+                .ForMember(d => d.CreatedBy, map => map.Ignore())
+                .ForMember(d => d.CreatedDate, map => map.Ignore())
+                .ForMember(d => d.UpdatedBy, map => map.Ignore())
+                .ForMember(d => d.UpdatedDate, map => map.Ignore());
+
 
 
             //mappinh for Search DTO
             CreateMap<ProductRequestServerDto, ProductSearchCoreRequest>();
             CreateMap<CategoryRequestServerDto, CategorySearchCoreRequest>();
             CreateMap<NhaCungCapRequestServerDto, NhaCungCapSearchCoreRequest>();
+        }
+
+        // Helper methods for JSON serialization
+        private static string[]? DeserializeStringArray(string? json)
+        {
+            if (string.IsNullOrEmpty(json))
+                return null;
+
+            try
+            {
+                return System.Text.Json.JsonSerializer.Deserialize<string[]>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static string? SerializeStringArray(string[]? array)
+        {
+            if (array == null)
+                return null;
+
+            try
+            {
+                return System.Text.Json.JsonSerializer.Serialize(array);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

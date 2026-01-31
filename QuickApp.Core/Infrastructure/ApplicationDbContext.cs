@@ -25,7 +25,12 @@ namespace QuickApp.Core.Infrastructure
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        
         public DbSet<NhaCungCap> NhaCungCaps { get; set; }
+
+        public DbSet<MenuItem> MenuItems { get; set; }
+
+        public DbSet<RestaurantInfo> RestaurantInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -86,6 +91,17 @@ namespace QuickApp.Core.Infrastructure
             builder.Entity<OrderDetail>().Property(p => p.UnitPrice).HasColumnType(priceDecimalType);
             builder.Entity<OrderDetail>().Property(p => p.Discount).HasColumnType(priceDecimalType);
             builder.Entity<OrderDetail>().ToTable($"{tablePrefix}{nameof(OrderDetails)}");
+
+            // MenuItem configuration
+            builder.Entity<MenuItem>().Property(m => m.Name).IsRequired().HasMaxLength(200);
+            builder.Entity<MenuItem>().HasIndex(m => m.Name);
+            builder.Entity<MenuItem>().Property(m => m.Price).HasColumnType(priceDecimalType);
+            builder.Entity<MenuItem>().Property(m => m.Rating).HasColumnType("decimal(3,1)");
+            builder.Entity<MenuItem>().ToTable($"{tablePrefix}{nameof(MenuItems)}");
+
+            // RestaurantInfo configuration
+            builder.Entity<RestaurantInfo>().Property(r => r.Name).IsRequired().HasMaxLength(200);
+            builder.Entity<RestaurantInfo>().ToTable($"{tablePrefix}{nameof(RestaurantInfos)}");
         }
 
         public override int SaveChanges()
