@@ -80,6 +80,12 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.isLoading = false;
             this.reset();
 
+            // Luôn redirect về /admin sau khi đăng nhập thành công
+            if (!this.authService.loginRedirectUrl || this.authService.loginRedirectUrl === '/') {
+              this.authService.loginRedirectUrl = '/admin';
+            }
+            this.authService.redirectLoginUser();
+
             if (!this.isModal) {
               this.alertService.showMessage('Login', `Welcome ${user.userName}!`, MessageSeverity.success);
             } else {

@@ -1,0 +1,314 @@
+<!-- Loading Spinner -->
+<div *ngIf="isLoading" class="loading-overlay">
+  <div class="spinner-container">
+    <div class="spinner"></div>
+    <p>{{ currentLanguage === 'vi' ? 'Đang tải...' : 'Loading...' }}</p>
+  </div>
+</div>
+
+<!-- Navigation Bar -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-brand">
+      <span class="logo">🍣</span>
+      <h1 class="brand-name">{{ restaurantInfo?.name || 'Muc Sushi' }}</h1>
+    </div>
+    <div class="navbar-menu">
+      <a (click)="scrollToSection('hero')" class="nav-link">{{ currentLanguage === 'vi' ? 'Trang chủ' : 'Home' }}</a>
+      <a (click)="scrollToSection('menu-section')" class="nav-link">{{ currentLanguage === 'vi' ? 'Thực đơn' : 'Menu' }}</a>
+      <a (click)="scrollToSection('about')" class="nav-link">{{ currentLanguage === 'vi' ? 'Về chúng tôi' : 'About' }}</a>
+      <a (click)="scrollToSection('contact')" class="nav-link">{{ currentLanguage === 'vi' ? 'Liên hệ' : 'Contact' }}</a>
+      <button (click)="toggleLanguage()" class="btn-language">
+        {{ currentLanguage === 'vi' ? 'EN' : 'VI' }}
+      </button>
+      <button (click)="goToAdminLogin()" class="btn-admin">
+        <i class="fa fa-lock"></i> Admin
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="hero" class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <div class="hero-text">
+      <h1 class="hero-title animate-fade-in">
+        {{ currentLanguage === 'vi' ? 'Nghệ Thuật Sushi Nhật Bản' : 'The Art of Japanese Sushi' }}
+      </h1>
+      <p class="hero-subtitle animate-fade-in-delay">
+        {{ currentLanguage === 'vi'
+          ? 'Trải nghiệm hương vị tuyệt hảo từ những nguyên liệu tươi ngon nhất'
+          : 'Experience exquisite flavors from the finest fresh ingredients' }}
+      </p>
+      <button (click)="scrollToSection('menu-section')" class="btn-hero animate-fade-in-delay-2">
+        <span>{{ currentLanguage === 'vi' ? 'Khám phá thực đơn' : 'Explore Menu' }}</span>
+        <i class="fa fa-arrow-down"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Sushi Icons Animation -->
+  <div class="floating-icons">
+    <span class="float-icon icon-1">🍣</span>
+    <span class="float-icon icon-2">🍱</span>
+    <span class="float-icon icon-3">🐟</span>
+    <span class="float-icon icon-4">🥢</span>
+  </div>
+</section>
+
+<!-- Popular Items Showcase -->
+<section class="popular-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">
+        {{ currentLanguage === 'vi' ? 'Món Ăn Nổi Bật' : 'Popular Dishes' }}
+      </h2>
+      <p class="section-subtitle">
+        {{ currentLanguage === 'vi' ? 'Được yêu thích nhất bởi thực khách' : 'Most loved by our guests' }}
+      </p>
+    </div>
+
+    <div class="popular-grid">
+      <div *ngFor="let item of popularItems" class="popular-card">
+        <div class="popular-image">
+          <img [src]="item.imageUrl" [alt]="getItemName(item)" />
+          <div class="popular-badge">
+            <i class="fa fa-star"></i>
+            <span>{{ item.rating }}</span>
+          </div>
+        </div>
+        <div class="popular-info">
+          <h3>{{ getItemName(item) }}</h3>
+          <p>{{ getItemDescription(item) }}</p>
+          <div class="popular-footer">
+            <span class="price">{{ formatPrice(item.price) }}</span>
+            <span class="reviews">
+              <i class="fa fa-heart"></i> {{ item.reviews }} {{ currentLanguage === 'vi' ? 'đánh giá' : 'reviews' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="categories-section">
+  <div class="container">
+    <div class="categories-scroll">
+      <button
+        (click)="filterByCategory('all')"
+        [class.active]="selectedCategory === 'all'"
+        class="category-btn">
+        <span class="category-icon">🍽️</span>
+        <span>{{ currentLanguage === 'vi' ? 'Tất cả' : 'All' }}</span>
+      </button>
+
+      <button
+        *ngFor="let category of categories"
+        (click)="filterByCategory(category.id)"
+        [class.active]="selectedCategory === category.id"
+        class="category-btn">
+        <span class="category-icon">{{ category.icon }}</span>
+        <span>{{ category.name }}</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Menu Section -->
+<section id="menu-section" class="menu-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">
+        {{ currentLanguage === 'vi' ? 'Thực Đơn' : 'Our Menu' }}
+      </h2>
+      <p class="section-subtitle">
+        {{ currentLanguage === 'vi'
+          ? 'Khám phá hương vị đa dạng từ ẩm thực Nhật Bản truyền thống'
+          : 'Discover diverse flavors from traditional Japanese cuisine' }}
+      </p>
+    </div>
+
+    <div class="menu-grid">
+      <div *ngFor="let item of filteredItems" class="menu-card">
+        <div class="menu-image-container">
+          <img [src]="item.imageUrl" [alt]="getItemName(item)" class="menu-image" />
+          <div class="menu-badges">
+            <span *ngIf="item.isNew" class="badge badge-new">
+              {{ currentLanguage === 'vi' ? 'Mới' : 'New' }}
+            </span>
+            <span *ngIf="item.isVegetarian" class="badge badge-veg">
+              🥬 {{ currentLanguage === 'vi' ? 'Chay' : 'Veg' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="menu-content">
+          <div class="menu-header">
+            <h3 class="menu-item-name">{{ getItemName(item) }}</h3>
+            <div class="menu-rating">
+              <i class="fa fa-star"></i>
+              <span>{{ item.rating }}</span>
+            </div>
+          </div>
+
+          <p class="menu-description">{{ getItemDescription(item) }}</p>
+
+          <div class="menu-ingredients">
+            <span *ngFor="let ingredient of getItemIngredients(item)" class="ingredient-tag">
+              {{ ingredient }}
+            </span>
+          </div>
+
+          <div class="menu-footer">
+            <span class="menu-price">{{ formatPrice(item.price) }}</span>
+            <button class="btn-order">
+              <i class="fa fa-shopping-cart"></i>
+              {{ currentLanguage === 'vi' ? 'Đặt món' : 'Order' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=800" alt="Sushi Chef" />
+        <div class="about-image-overlay">
+          <div class="about-stats">
+            <div class="stat-item">
+              <h3>10+</h3>
+              <p>{{ currentLanguage === 'vi' ? 'Năm kinh nghiệm' : 'Years Experience' }}</p>
+            </div>
+            <div class="stat-item">
+              <h3>5000+</h3>
+              <p>{{ currentLanguage === 'vi' ? 'Khách hàng hài lòng' : 'Happy Customers' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-content">
+        <h2 class="section-title">
+          {{ currentLanguage === 'vi' ? 'Về Chúng Tôi' : 'About Us' }}
+        </h2>
+        <p class="about-text" *ngIf="restaurantInfo">
+          {{ currentLanguage === 'vi' ? restaurantInfo.descriptionVi : restaurantInfo.description }}
+        </p>
+
+        <div class="about-features">
+          <div class="feature-item">
+            <div class="feature-icon">🐟</div>
+            <div>
+              <h4>{{ currentLanguage === 'vi' ? 'Nguyên liệu tươi sống' : 'Fresh Ingredients' }}</h4>
+              <p>{{ currentLanguage === 'vi'
+                ? 'Nhập khẩu trực tiếp từ Nhật Bản'
+                : 'Imported directly from Japan' }}</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">👨‍🍳</div>
+            <div>
+              <h4>{{ currentLanguage === 'vi' ? 'Đầu bếp chuyên nghiệp' : 'Expert Chefs' }}</h4>
+              <p>{{ currentLanguage === 'vi'
+                ? 'Đào tạo tại Nhật Bản với hơn 10 năm kinh nghiệm'
+                : 'Trained in Japan with 10+ years experience' }}</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">⭐</div>
+            <div>
+              <h4>{{ currentLanguage === 'vi' ? 'Chất lượng hàng đầu' : 'Premium Quality' }}</h4>
+              <p>{{ currentLanguage === 'vi'
+                ? 'Cam kết mang đến trải nghiệm ẩm thực tốt nhất'
+                : 'Committed to delivering the best dining experience' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">
+        {{ currentLanguage === 'vi' ? 'Liên Hệ' : 'Contact Us' }}
+      </h2>
+      <p class="section-subtitle">
+        {{ currentLanguage === 'vi'
+          ? 'Chúng tôi luôn sẵn sàng phục vụ bạn'
+          : 'We\'re always here to serve you' }}
+      </p>
+    </div>
+
+    <div class="contact-grid" *ngIf="restaurantInfo">
+      <div class="contact-card">
+        <div class="contact-icon">📞</div>
+        <h3>{{ currentLanguage === 'vi' ? 'Điện thoại' : 'Phone' }}</h3>
+        <p>{{ restaurantInfo.phone }}</p>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">📧</div>
+        <h3>Email</h3>
+        <p>{{ restaurantInfo.email }}</p>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">📍</div>
+        <h3>{{ currentLanguage === 'vi' ? 'Địa chỉ' : 'Address' }}</h3>
+        <p>{{ currentLanguage === 'vi' ? restaurantInfo.addressVi : restaurantInfo.address }}</p>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">🕐</div>
+        <h3>{{ currentLanguage === 'vi' ? 'Giờ mở cửa' : 'Opening Hours' }}</h3>
+        <p>{{ currentLanguage === 'vi' ? restaurantInfo.openHoursVi : restaurantInfo.openHours }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>{{ restaurantInfo?.name || 'Muc Sushi' }}</h3>
+        <p>{{ currentLanguage === 'vi'
+          ? 'Nghệ thuật sushi chính thống Nhật Bản'
+          : 'Authentic Japanese Sushi Art' }}</p>
+      </div>
+
+      <div class="footer-social" *ngIf="restaurantInfo?.socialMedia">
+        <a [href]="restaurantInfo!.socialMedia.facebook" *ngIf="restaurantInfo!.socialMedia.facebook" target="_blank">
+          <i class="fa fa-facebook"></i>
+        </a>
+        <a [href]="restaurantInfo!.socialMedia.instagram" *ngIf="restaurantInfo!.socialMedia.instagram" target="_blank">
+          <i class="fa fa-instagram"></i>
+        </a>
+        <a [href]="restaurantInfo!.socialMedia.twitter" *ngIf="restaurantInfo!.socialMedia.twitter" target="_blank">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 {{ restaurantInfo?.name || 'Muc Sushi' }}. {{ currentLanguage === 'vi'
+        ? 'Bảo lưu mọi quyền.'
+        : 'All rights reserved.' }}</p>
+    </div>
+  </div>
+</footer>

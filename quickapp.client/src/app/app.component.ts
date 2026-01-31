@@ -1,12 +1,7 @@
-// ---------------------------------------
-// Email: quickapp@ebenmonney.com
-// Templates: www.ebenmonney.com/templates
-// (c) 2024 www.ebenmonney.com/mit-license
-// ---------------------------------------
-
 import { Component, OnInit, OnDestroy, inject, Renderer2 } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastaService, ToastaConfig, ToastOptions, ToastData, ToastaModule } from 'ngx-toasta';
 import { NgbCollapseModule, NgbModal, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
@@ -53,6 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isUserLoggedIn = false;
   newNotificationCount = 0;
   appTitle = 'QuickApp';
+  isSushiHomePage = false;
 
   stickyToasties: number[] = [];
 
@@ -89,6 +85,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isUserLoggedIn = this.authService.isLoggedIn;
+
+    // Check if current route is sushi-home
+    this.checkRoute();
+
+    // Listen to route changes
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.checkRoute();
+    });
 
     // Extra sec to display preboot loaded information
     setTimeout(() => this.isAppLoaded = true, 1000);
@@ -132,6 +138,11 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribeNotifications();
     this.languageChangedSubscription?.unsubscribe();
+  }
+
+  private checkRoute() {
+    // Ẩn navbar cũ khi ở trang sushi-home (trang public)
+    this.isSushiHomePage = this.router.url === '/' || this.router.url.startsWith('/?');
   }
 
   private unsubscribeNotifications() {

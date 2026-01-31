@@ -10,9 +10,14 @@ import { AuthGuard } from './services/auth-guard';
 export const routes: Routes = [
   {
     path: '',
+    loadComponent: () => import('./components/sushi-home/sushi-home.component').then(m => m.SushiHomeComponent),
+    title: 'Muc Sushi - Authentic Japanese Cuisine'
+  },
+  {
+    path: 'admin',
     loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent),
     canActivate: [AuthGuard],
-    title: 'Home'
+    title: 'Admin Dashboard'
   },
   {
     path: 'login',
@@ -48,11 +53,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent),
     title: 'About Us'
   },
-  {
-    path: 'home',
-    redirectTo: '/',
-    pathMatch: 'full'
-  },
+  // {
+  //   path: 'home',
+  //   redirectTo: '/',
+  //   pathMatch: 'full'
+  // },
   {
     path: '**',
     loadComponent: () => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent),

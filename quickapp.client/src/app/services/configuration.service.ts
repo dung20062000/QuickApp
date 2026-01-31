@@ -60,7 +60,7 @@ export class ConfigurationService {
     this.saveToLocalStore(value, DBkeys.HOME_URL);
   }
   get homeUrl(): string {
-    return this._homeUrl ?? ConfigurationService.defaultHomeUrl;
+    return this._homeUrl ?? ConfigurationService.adminHomeUrl;
   }
 
   set showDashboardStatistics(value: boolean) {
@@ -100,6 +100,7 @@ export class ConfigurationService {
   // ***Specify default configurations here***
   public static readonly defaultLanguage = 'en';
   public static readonly defaultHomeUrl = '/';
+  public static readonly adminHomeUrl = '/admin';
   public static readonly defaultThemeId = 1;
   public static readonly defaultShowDashboardStatistics = true;
   public static readonly defaultShowDashboardNotifications = true;

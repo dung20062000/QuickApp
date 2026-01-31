@@ -1,6 +1,7 @@
 <div class="app-component app-container">
   <ngx-toasta></ngx-toasta>
 
+  @if (!isSushiHomePage) {
   <nav id="header" class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <div class="container-xl px-md-3 px-xxl-4">
       <a ngPreserveWhitespaces class="navbar-brand" routerLink="/" (click)="isMenuCollapsed = true">
@@ -94,6 +95,7 @@
       }
     </div>
   </nav>
+  }
 
   @if (!isAppLoaded) {
   <div id="pre-bootstrap" class="prebootStep prebootShow">
@@ -109,11 +111,14 @@
   </div>
   }
 
-  <main class="container-xl px-3 px-md-4 px-xxl-5">
+  <main [class.sushi-home-main]="isSushiHomePage" class="container-xl px-3 px-md-4 px-xxl-5">
     <router-outlet></router-outlet>
+    @if (!isSushiHomePage) {
     <div class="footer-height"></div>
+    }
   </main>
 
+  @if (!isSushiHomePage) {
   <footer class="footer fixed-bottom">
     <div class="container">
       <p class="text-center text-muted">
@@ -124,4 +129,5 @@
       </p>
     </div>
   </footer>
+  }
 </div>

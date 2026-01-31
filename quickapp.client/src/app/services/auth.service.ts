@@ -64,7 +64,7 @@ export class AuthService {
 
   redirectLoginUser() {
     const redirect = this.loginRedirectUrl && this.loginRedirectUrl !== '/' &&
-      this.loginRedirectUrl !== ConfigurationService.defaultHomeUrl ? this.loginRedirectUrl : this.homeUrl;
+      this.loginRedirectUrl !== ConfigurationService.defaultHomeUrl ? this.loginRedirectUrl : ConfigurationService.adminHomeUrl;
     this.loginRedirectUrl = null;
 
     const urlParamsAndFragment = Utilities.splitInTwo(redirect, '#');
