@@ -64,20 +64,18 @@ export class SidebarMenuComponent implements OnInit {
         routerLink: '/about'
       },
       {
-        label: 'mainMenu.Categories',
-        icon: 'fa fa-cog',
+        label: 'Restaurant Management',
+        icon: 'fa fa-building',
         items: [
           {
-            label: 'danh mục 1',
-            icon: 'fa fa-cog',
-            // routerLink: '/settings/users',
-            // permission: Permissions.viewUsers
+            label: 'Restaurant Info',
+            icon: 'fa fa-info-circle',
+            routerLink: '/management/shop/restaurant-info'
           },
           {
-            label: 'danh mục 2',
-            icon: 'fa fa-cog',
-            // routerLink: '/settings/users',
-            // permission: Permissions.viewUsers
+            label: 'Menu Management',
+            icon: 'fa fa-utensils',
+            routerLink: '/management/shop/menu-management'
           },
         ]
       },

@@ -27,7 +27,14 @@
     "Products": "Sản phẩm",
     "Orders": "Đơn hàng",
     "About": "Giới thiệu",
-    "Logout": "Đăng xuất"
+    "Logout": "Đăng xuất",
+    "Categories": {
+      "Categories": "Danh mục",
+      "Restaurant": "Thông tin cơ sở",
+      "Management": "Quản lý",
+      "Settings": "Cài đặt"
+    }
+
   },
   "pageHeader": {
     "Dashboard": "Bảng điều khiển",

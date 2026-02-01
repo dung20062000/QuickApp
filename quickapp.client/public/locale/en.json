@@ -27,7 +27,13 @@
     "Products": "Products",
     "Orders": "Orders",
     "About": "About",
-    "Logout": "Logout"
+    "Logout": "Logout",
+    "Categories": {
+      "Categories": "Categories",
+      "Restaurant": "Restaurant Information",
+      "Management": "Management",
+      "Settings": "Settings"
+    }
   },
   "pageHeader": {
     "Dashboard": "Dashboard",

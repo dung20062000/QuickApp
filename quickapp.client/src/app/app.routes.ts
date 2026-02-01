@@ -49,6 +49,12 @@ export const routes: Routes = [
     title: 'Settings'
   },
   {
+    path: 'management/shop/restaurant-info',
+    loadComponent: () => import('./components/categories/restaurant-info/restaurant-info.component').then(m => m.RestaurantInfoComponent),
+    canActivate: [AuthGuard],
+    title: 'Restaurant Information'
+  },
+  {
     path: 'about',
     loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent),
     title: 'About Us'
