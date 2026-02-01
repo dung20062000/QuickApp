@@ -18,6 +18,7 @@ import { Alertify } from './models/Alertify';
 import { Permissions } from './models/permission.model';
 import { LoginComponent } from './components/login/login.component';
 import { NotificationsViewerComponent } from './components/controls/notifications-viewer.component';
+import { SidebarMenuComponent } from './components/controls/sidebar-menu.component';
 
 declare let alertify: Alertify;
 
@@ -27,7 +28,7 @@ declare let alertify: Alertify;
     styleUrl: './app.component.scss',
     imports: [
         ToastaModule, RouterLink, RouterLinkActive, NgbCollapseModule, NgbPopover, NotificationsViewerComponent,
-        RouterOutlet, TranslateModule
+        RouterOutlet, TranslateModule, SidebarMenuComponent
     ]
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -44,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
   renderer = inject(Renderer2);
 
   isMenuCollapsed = true;
+  isSidebarCollapsed = false; // Sidebar state
   isAppLoaded = false;
   isUserLoggedIn = false;
   newNotificationCount = 0;
@@ -85,6 +87,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isUserLoggedIn = this.authService.isLoggedIn;
+
+    // Check if mobile to set initial sidebar state
+    if (window.innerWidth <= 991) {
+      this.isSidebarCollapsed = true;
+    }
 
     // Check if current route is sushi-home
     this.checkRoute();
@@ -314,6 +321,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
   getYear() {
     return new Date().getUTCFullYear();
+  }
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+
+  closeSidebarOnMobile() {
+    // On mobile, close sidebar when menu item clicked
+    if (window.innerWidth <= 991) {
+      this.isSidebarCollapsed = true;
+    }
   }
 
   get userName(): string {

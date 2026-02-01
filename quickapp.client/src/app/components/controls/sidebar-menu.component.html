@@ -1,0 +1,61 @@
+<nav class="sidebar-menu" [class.collapsed]="isCollapsed">
+  <div class="menu-wrapper">
+    <ul class="menu-list">
+      @for (item of menuItems; track item.label) {
+        @if (hasPermission(item.permission)) {
+          <li class="menu-item" [class.has-submenu]="item.items && item.items.length > 0">
+            @if (item.routerLink) {
+              <a
+                [routerLink]="item.routerLink"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: item.routerLink === '/admin' }"
+                class="menu-link"
+                (click)="onMenuItemClick()"
+                [title]="item.label | translate">
+                <i [class]="item.icon"></i>
+                @if (!isCollapsed) {
+                  <span class="menu-label">{{ item.label | translate }}</span>
+                }
+              </a>
+            } @else {
+              <a
+                class="menu-link"
+                (click)="toggleSubmenu(item)"
+                [title]="item.label | translate">
+                <i [class]="item.icon"></i>
+                @if (!isCollapsed) {
+                  <span class="menu-label">{{ item.label | translate }}</span>
+                  @if (item.items && item.items.length > 0) {
+                    <i class="submenu-arrow fa"
+                       [class.fa-chevron-down]="!item.expanded"
+                       [class.fa-chevron-up]="item.expanded"></i>
+                  }
+                }
+              </a>
+
+              @if (item.items && item.items.length > 0 && item.expanded && !isCollapsed) {
+                <ul class="submenu">
+                  @for (subItem of item.items; track subItem.label) {
+                    @if (hasPermission(subItem.permission)) {
+                      <li class="submenu-item">
+                        <a
+                          [routerLink]="subItem.routerLink"
+                          routerLinkActive="active"
+                          class="submenu-link"
+                          (click)="onMenuItemClick()"
+                          [title]="subItem.label | translate">
+                          <i [class]="subItem.icon"></i>
+                          <span class="submenu-label">{{ subItem.label | translate }}</span>
+                        </a>
+                      </li>
+                    }
+                  }
+                </ul>
+              }
+            }
+          </li>
+        }
+      }
+    </ul>
+  </div>
+</nav>

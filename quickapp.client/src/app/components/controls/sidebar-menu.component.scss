@@ -1,0 +1,189 @@
+// Theme variables - có thể override từ theme manager
+$sidebar-width: 250px;
+$sidebar-collapsed-width: 60px;
+$transition-duration: 0.3s;
+$header-height: 56px;
+
+// Sử dụng CSS variables để có thể thay đổi theme động
+// Để thay đổi màu sidebar theo theme, override các biến này trong theme manager
+// Ví dụ:
+// - Dark theme: --sidebar-bg: #1a1a2e; --sidebar-text: #eee;
+// - Light theme: --sidebar-bg: #f8f9fa; --sidebar-text: #333;
+// - Custom: --sidebar-active-bg: <your-primary-color>;
+:host {
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #cbd5e1;
+  --sidebar-hover-bg: #334155;
+  --sidebar-active-bg: #3b82f6;
+  --sidebar-active-text: #ffffff;
+  --sidebar-shadow: rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-menu {
+  position: fixed;
+  left: 0;
+  top: $header-height;
+  width: $sidebar-width;
+  height: calc(100vh - #{$header-height});
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  transition: width $transition-duration ease, transform $transition-duration ease;
+  overflow: hidden;
+  box-shadow: 2px 0 8px var(--sidebar-shadow);
+  z-index: 999;
+
+  &.collapsed {
+    width: $sidebar-collapsed-width;
+
+    .menu-label,
+    .submenu-label,
+    .submenu-arrow {
+      opacity: 0;
+      width: 0;
+    }
+
+    .submenu {
+      display: none;
+    }
+  }
+}
+
+.menu-wrapper {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  position: relative;
+
+  &.has-submenu {
+    .menu-link {
+      position: relative;
+    }
+  }
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+
+  i {
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .menu-label {
+    margin-left: 12px;
+    flex: 1;
+    transition: opacity $transition-duration ease, width $transition-duration ease;
+  }
+
+  .submenu-arrow {
+    margin-left: auto;
+    font-size: 12px;
+    transition: transform 0.2s ease, opacity $transition-duration ease;
+  }
+
+  &:hover {
+    background-color: var(--sidebar-hover-bg);
+    color: var(--sidebar-active-text);
+  }
+
+  &.active {
+    background-color: var(--sidebar-active-bg);
+    color: var(--sidebar-active-text);
+    box-shadow: inset 4px 0 0 var(--sidebar-active-text);
+
+    i {
+      color: var(--sidebar-active-text);
+    }
+  }
+}
+
+.submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.submenu-item {
+  .submenu-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px 10px 52px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    i {
+      font-size: 14px;
+      width: 16px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .submenu-label {
+      margin-left: 10px;
+    }
+
+    &:hover {
+      background-color: var(--sidebar-hover-bg);
+      color: var(--sidebar-active-text);
+      padding-left: 56px;
+    }
+
+    &.active {
+      background-color: rgba(59, 130, 246, 0.2);
+      color: var(--sidebar-active-text);
+      border-left: 3px solid var(--sidebar-active-bg);
+      padding-left: 49px;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 991px) {
+  .sidebar-menu {
+    transform: translateX(0);
+
+    &.collapsed {
+      transform: translateX(-100%);
+      width: $sidebar-width; // Keep full width when sliding out on mobile
+    }
+  }
+}

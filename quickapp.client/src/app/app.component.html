@@ -2,75 +2,51 @@
   <ngx-toasta></ngx-toasta>
 
   @if (!isSushiHomePage) {
+  <!-- Top Header (simplified) -->
   <nav id="header" class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-    <div class="container-xl px-md-3 px-xxl-4">
-      <a ngPreserveWhitespaces class="navbar-brand" routerLink="/admin" (click)="isMenuCollapsed = true">
+    <div class="container-fluid px-3">
+      <!-- Toggle Sidebar Button -->
+      @if (isUserLoggedIn) {
+      <button type="button" class="btn btn-link text-white me-2" (click)="toggleSidebar()">
+        <i class="fa fa-bars fa-lg"></i>
+      </button>
+      }
+
+      <!-- Brand/Logo -->
+      <a ngPreserveWhitespaces class="navbar-brand" routerLink="/admin">
         <img src="images/logo-white.png" class="d-inline-block align-top" alt="logo">
         <span class="d-lg-none d-xl-inline">{{appTitle}}</span>
       </a>
+
+      <!-- Mobile Toggle -->
       <button type="button" class="navbar-toggler" (click)="isMenuCollapsed = !isMenuCollapsed">
         <span class="navbar-toggler-icon"></span>
       </button>
 
+      <!-- Right Side Nav -->
       @if (isUserLoggedIn) {
       <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
-        <ul class="nav nav-pills flex-column flex-lg-row flex-fill">
-          <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link" routerLink="" (click)="isMenuCollapsed = true">
-              <i class="fa fa-home"></i>
+        <ul class="nav nav-pills flex-column flex-lg-row ms-auto">
+          <li class="nav-item">
+            <span class="navbar-text notifications-popup d-lg-none d-xl-inline-block me-2">
+              {{'app.Welcome' | translate}}
+            </span>
+            <a class="nav-link user-name d-inline-block px-2" [ngbPopover]="popTemplate"
+               (hidden)="markNotificationsAsRead()" placement="bottom" [popoverTitle]="notificationsTitle"
+               href="javascript:;" triggers="focus" popoverClass="notifications-popup">
+              {{userName}}
+              @if (newNotificationCount > 0) {
+              <span class="badge bg-secondary">{{newNotificationCount}}</span>
+              }
             </a>
+            <ng-template #popTemplate>
+              <app-notifications-viewer [isViewOnly]="true"></app-notifications-viewer>
+            </ng-template>
           </li>
-          @if (canViewCustomers) {
-          <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/customers" (click)="isMenuCollapsed = true">
-              {{'mainMenu.Customers' | translate}}
-            </a>
-          </li>
-          }
-          @if (canViewProducts) {
-          <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/products" (click)="isMenuCollapsed = true">
-              {{'mainMenu.Products' | translate}}
-            </a>
-          </li>
-          }
-          @if (canViewOrders) {
-          <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/orders" (click)="isMenuCollapsed = true">
-              {{'mainMenu.Orders' | translate}}
-            </a>
-          </li>
-          }
-          <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/about" (click)="isMenuCollapsed = true">
-              {{'mainMenu.About' | translate}}
-            </a>
-          </li>
-          <li class="nav-item ms-lg-auto me-lg-2" routerLinkActive="active">
-            <a class="nav-link" routerLink="/settings" (click)="isMenuCollapsed = true">
-              <i class="fa fa-cog"></i>
-            </a>
-          </li>
-        </ul>
-        <span class="navbar-text notifications-popup d-lg-none d-xl-inline-block">{{'app.Welcome' | translate}}</span>
-        <a class="nav-link user-name d-inline-block px-1" [ngbPopover]="popTemplate"
-           (hidden)="markNotificationsAsRead()" placement="bottom" [popoverTitle]="notificationsTitle"
-           href="javascript:;" triggers="focus" popoverClass="notifications-popup">
-          {{userName}}
-          @if (newNotificationCount > 0) {
-          <span class="badge bg-secondary">{{newNotificationCount}}</span>
-          }
-        </a>
-        <ng-template #popTemplate>
-          <app-notifications-viewer [isViewOnly]="true"></app-notifications-viewer>
-        </ng-template>
-        @if (newNotificationCount > 0) {
-        <span class="navbar-text d-none d-lg-inline">, </span>
-        }
-        <ul class="nav nav-pills flex-column flex-lg-row ms-lg-1">
           <li class="nav-item">
             <a class="nav-link" href="javascript:;" (click)="logout(); isMenuCollapsed = true">
-              <i class="fa fa-sign-out"></i> {{'mainMenu.Logout' | translate}}
+              <i class="fa fa-sign-out"></i>
+              <span class="d-lg-none"> {{'mainMenu.Logout' | translate}}</span>
             </a>
           </li>
         </ul>
@@ -95,6 +71,19 @@
       }
     </div>
   </nav>
+
+  <!-- Sidebar Menu (when logged in) -->
+  @if (isUserLoggedIn) {
+  <app-sidebar-menu
+    [isCollapsed]="isSidebarCollapsed"
+    (menuItemClick)="closeSidebarOnMobile()">
+  </app-sidebar-menu>
+
+  <!-- Mobile Overlay -->
+  @if (!isSidebarCollapsed) {
+  <div class="sidebar-overlay" (click)="isSidebarCollapsed = true"></div>
+  }
+  }
   }
 
 
@@ -113,7 +102,12 @@
   </div>
   }
 
-  <main [class.sushi-home-main]="isSushiHomePage" class="container-xl px-3 px-md-4 px-xxl-5">
+  <!-- Main Content Area -->
+  <main
+    [class.sushi-home-main]="isSushiHomePage"
+    [class.with-sidebar]="isUserLoggedIn && !isSushiHomePage"
+    [class.sidebar-collapsed]="isSidebarCollapsed"
+    class="main-content">
     <router-outlet></router-outlet>
     @if (!isSushiHomePage) {
     <div class="footer-height"></div>
