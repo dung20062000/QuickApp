@@ -48,12 +48,66 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     title: 'Settings'
   },
+
+  // ========== MANAGEMENT MODULE với Nested Routes & Breadcrumb ==========
   {
-    path: 'management/shop/restaurant-info',
-    loadComponent: () => import('./components/categories/restaurant-info/restaurant-info.component').then(m => m.RestaurantInfoComponent),
+    path: 'management',
+    loadComponent: () => import('./components/layouts/management-layout.component').then(m => m.ManagementLayoutComponent),
     canActivate: [AuthGuard],
-    title: 'Restaurant Information'
+    data: {
+      // breadcrumb: {
+      //   translateKey: 'Management',
+      //   icon: 'fa fa-cog'
+      // }
+    },
+    children: [
+      {
+        path: 'shop',
+        data: {
+          // breadcrumb: {
+          //   translateKey: 'Shop',
+          //   icon: 'fa fa-store'
+          // }
+        },
+        children: [
+          {
+            path: 'restaurant-info',
+            loadComponent: () => import('./components/categories/restaurant-info/restaurant-info.component').then(m => m.RestaurantInfoComponent),
+            title: 'Restaurant Information',
+            data: {
+              breadcrumb: {
+                translateKey: 'RestaurantInfo',
+                icon: 'fa fa-building'
+              }
+            }
+          },
+          {
+            path: 'restaurant-info/detail/:id',
+            loadComponent: () => import('./components/categories/restaurant-info/restaurant-info.component').then(m => m.RestaurantInfoComponent),
+            title: 'Restaurant Detail',
+            data: {
+              breadcrumb: {
+                translateKey: 'Detail',
+                icon: 'fa fa-info-circle'
+              }
+            }
+          },
+          {
+            path: 'restaurant-info/create',
+            loadComponent: () => import('./components/categories/restaurant-info/restaurant-info.component').then(m => m.RestaurantInfoComponent),
+            title: 'Create Restaurant',
+            data: {
+              breadcrumb: {
+                translateKey: 'CreateNew',
+                icon: 'fa fa-plus-circle'
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
+
   {
     path: 'about',
     loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent),

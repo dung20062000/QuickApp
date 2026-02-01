@@ -22,6 +22,7 @@
     }
   },
   "mainMenu": {
+    "Dashboard": "Dashboard",
     "Appointments": "Appointments",
     "Customers": "Customers",
     "Products": "Products",
@@ -385,5 +386,14 @@
       "Important": "Mark as important",
       "AddTask": "Add Task"
     }
+  },
+  "breadcrumb": {
+    "Dashboard": "Dashboard",
+    "Management": "Management",
+    "Shop": "Shop",
+    "RestaurantInfo": "Restaurant Info",
+    "Detail": "Detail",
+    "CreateNew": "Create New",
+    "List": "List"
   }
 }

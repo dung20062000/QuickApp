@@ -1,0 +1,22 @@
+<!-- Demo Navigation Card -->
+<div class="demo-navigation-card mb-4">
+  <div class="card bg-light">
+    <div class="card-body">
+      <h5 class="card-title">
+        <i class="fa fa-map-signs"></i> Demo Navigation
+      </h5>
+      <p class="text-muted mb-3">Test breadcrumb navigation với các route khác nhau:</p>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-outline-primary" (click)="navigateToList()">
+          <i class="fa fa-list"></i> Restaurant List
+        </button>
+        <button type="button" class="btn btn-outline-success" (click)="navigateToCreate()">
+          <i class="fa fa-plus"></i> Create New
+        </button>
+        <button type="button" class="btn btn-outline-info" (click)="navigateToDetail(123)">
+          <i class="fa fa-eye"></i> View Detail #123
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

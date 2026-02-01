@@ -139,4 +139,17 @@ export class RestaurantInfoComponent implements OnInit {
     }
     return '';
   }
+
+  // Navigation methods for demo
+  navigateToList(): void {
+    this.router.navigate(['/management/shop/restaurant-info']);
+  }
+
+  navigateToCreate(): void {
+    this.router.navigate(['/management/shop/restaurant-info/create']);
+  }
+
+  navigateToDetail(id: number): void {
+    this.router.navigate(['/management/shop/restaurant-info/detail', id]);
+  }
 }

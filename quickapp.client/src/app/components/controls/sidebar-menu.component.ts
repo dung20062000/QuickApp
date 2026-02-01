@@ -37,7 +37,7 @@ export class SidebarMenuComponent implements OnInit {
   buildMenu(): void {
     this.menuItems = [
       {
-        label: 'mainMenu.Home',
+        label: 'mainMenu.Dashboard',
         icon: 'fa fa-home',
         routerLink: '/admin'
       },
@@ -64,16 +64,16 @@ export class SidebarMenuComponent implements OnInit {
         routerLink: '/about'
       },
       {
-        label: 'Restaurant Management',
+        label: 'mainMenu.Categories.Categories',
         icon: 'fa fa-building',
         items: [
           {
-            label: 'Restaurant Info',
+            label: 'mainMenu.Categories.Restaurant',
             icon: 'fa fa-info-circle',
             routerLink: '/management/shop/restaurant-info'
           },
           {
-            label: 'Menu Management',
+            label: 'mainMenu.Categories.Management',
             icon: 'fa fa-utensils',
             routerLink: '/management/shop/menu-management'
           },

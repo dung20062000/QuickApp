@@ -22,6 +22,7 @@
     }
   },
   "mainMenu": {
+    "Dashboard": "Bảng điều khiển",
     "Appointments": "Lịch hẹn",
     "Customers": "Khách hàng",
     "Products": "Sản phẩm",
@@ -386,5 +387,14 @@
       "Important": "Đánh dấu quan trọng",
       "AddTask": "Thêm công việc"
     }
+  },
+  "breadcrumb": {
+    "Dashboard": "Bảng điều khiển",
+    "Management": "Quản lý",
+    "Shop": "Cửa hàng",
+    "RestaurantInfo": "Thông tin nhà hàng",
+    "Detail": "Chi tiết",
+    "CreateNew": "Tạo mới",
+    "List": "Danh sách"
   }
 }
