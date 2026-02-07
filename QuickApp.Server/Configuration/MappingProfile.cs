@@ -58,7 +58,9 @@ namespace QuickApp.Server.Configuration
                 .ReverseMap();
 
             CreateMap<Product, ProductVM>()
-                .ReverseMap();
+                .ForMember(d => d.ImageUrls, map => map.MapFrom(s => DeserializeStringArray(s.ImageUrls)))
+                .ReverseMap()
+                .ForMember(d => d.ImageUrls, map => map.MapFrom(s => SerializeStringArray(s.ImageUrls)));
 
             CreateMap<Order, OrderVM>()
                 .ReverseMap();

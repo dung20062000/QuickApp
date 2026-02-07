@@ -11,6 +11,13 @@ namespace QuickApp.Core.Models.Shop
         public required string Name { get; set; }
         public string? Description { get; set; }
         public string? Icon { get; set; }
+        
+        /// <summary>
+        /// JSON array of image URLs (max 5)
+        /// Example: ["/uploads/shop/products/image1.jpg", "/uploads/shop/products/image2.jpg"]
+        /// </summary>
+        public string? ImageUrls { get; set; }
+        
         public decimal BuyingPrice { get; set; }
         public decimal SellingPrice { get; set; }
         public int UnitsInStock { get; set; }

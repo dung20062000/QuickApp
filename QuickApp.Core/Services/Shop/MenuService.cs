@@ -136,7 +136,7 @@ namespace QuickApp.Core.Services.Shop
                 
                 return new BaseResponse<MenuItem?>
                 {
-                    Message = "Thêm món ?n thành công",
+                    Message = "Thêm món thành công",
                     Status = ResponseStatus.Success,
                     Data = menuItem
                 };

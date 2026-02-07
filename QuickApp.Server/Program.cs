@@ -26,6 +26,7 @@ using QuickApp.Server.Configuration;
 using QuickApp.Server.Configuration.FluentValidations;
 using QuickApp.Server.Services;
 using QuickApp.Server.Services.Email;
+using QuickApp.Server.Services.FileUpload;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -186,6 +187,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = OidcServerConfig.ServerName, Version = "v1" });
     c.OperationFilter<SwaggerAuthorizeOperationFilter>();
+    c.OperationFilter<FileUploadOperationFilter>(); // Handle file uploads
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.OAuth2,
@@ -217,6 +219,7 @@ builder.Services.AddScoped<IRestaurantInfoService, RestaurantInfoService>();
 // Other Services
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserIdAccessor, UserIdAccessor>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 // Auth Handlers
 builder.Services.AddSingleton<IAuthorizationHandler, ViewUserAuthorizationHandler>();
@@ -246,6 +249,9 @@ var app = builder.Build();
 
 app.UseDefaultFiles();
 app.MapStaticAssets();
+
+// Serve static files from wwwroot (for uploaded images)
+app.UseStaticFiles();
 
 if (app.Environment.IsDevelopment())
 {
