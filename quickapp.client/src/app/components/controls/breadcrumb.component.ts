@@ -17,7 +17,7 @@ import { BreadcrumbService, Breadcrumb } from '../../services/breadcrumb.service
             <span class="d-none d-md-inline ms-1">{{ 'breadcrumb.Dashboard' | translate }}</span>
           </a>
         </li>
-        
+
         @for (breadcrumb of breadcrumbs$ | async; track breadcrumb.url; let isLast = $last) {
           @if (isLast) {
             <li class="breadcrumb-item active" aria-current="page">
@@ -57,22 +57,22 @@ import { BreadcrumbService, Breadcrumb } from '../../services/breadcrumb.service
 
     .breadcrumb-item {
       font-size: 14px;
-      
+
       a {
         color: #6c757d;
         text-decoration: none;
         transition: color 0.2s;
-        
+
         &:hover {
           color: var(--bs-primary, #0d6efd);
         }
       }
-      
+
       &.active {
         color: #495057;
         font-weight: 500;
       }
-      
+
       i {
         margin-right: 4px;
         font-size: 13px;
@@ -89,7 +89,7 @@ import { BreadcrumbService, Breadcrumb } from '../../services/breadcrumb.service
       .breadcrumb-container {
         padding: 8px 15px;
       }
-      
+
       .breadcrumb-item {
         font-size: 13px;
       }
@@ -98,6 +98,6 @@ import { BreadcrumbService, Breadcrumb } from '../../services/breadcrumb.service
 })
 export class BreadcrumbComponent {
   private breadcrumbService = inject(BreadcrumbService);
-  
+
   breadcrumbs$ = this.breadcrumbService.breadcrumbs$;
 }

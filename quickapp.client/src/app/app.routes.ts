@@ -102,7 +102,18 @@ export const routes: Routes = [
                 icon: 'fa fa-plus-circle'
               }
             }
-          }
+          },
+          {
+            path: 'menu-items',
+            loadComponent: () => import('./components/categories/menu-items/menu-items.component').then(m => m.MenuItemsComponent),
+            title: 'Menu Items',
+            data: {
+              breadcrumb: {
+                translateKey: 'MenuItems',
+                icon: 'fa fa-list'
+              }
+            }
+          },
         ]
       }
     ]

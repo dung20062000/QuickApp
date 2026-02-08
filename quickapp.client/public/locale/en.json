@@ -32,6 +32,7 @@
     "Categories": {
       "Categories": "Categories",
       "Restaurant": "Restaurant Information",
+      "MenuItems": "Menu Items",
       "Management": "Management",
       "Settings": "Settings"
     }
@@ -394,6 +395,7 @@
     "RestaurantInfo": "Restaurant Info",
     "Detail": "Detail",
     "CreateNew": "Create New",
-    "List": "List"
+    "List": "List",
+    "MenuItems": "Menu Items"
   }
 }

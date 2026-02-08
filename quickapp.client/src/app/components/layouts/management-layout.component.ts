@@ -11,7 +11,7 @@ import { BreadcrumbComponent } from '../controls/breadcrumb.component';
     <div class="management-layout">
       <!-- Breadcrumb -->
       <app-breadcrumb></app-breadcrumb>
-      
+
       <!-- Child Routes Content -->
       <div class="management-content">
         <router-outlet></router-outlet>

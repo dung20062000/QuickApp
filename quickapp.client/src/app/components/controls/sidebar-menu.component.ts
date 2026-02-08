@@ -73,6 +73,11 @@ export class SidebarMenuComponent implements OnInit {
             routerLink: '/management/shop/restaurant-info'
           },
           {
+            label: 'mainMenu.Categories.MenuItems',
+            icon: 'fa fa-utensils',
+            routerLink: '/management/shop/menu-items',
+          },
+          {
             label: 'mainMenu.Categories.Management',
             icon: 'fa fa-utensils',
             routerLink: '/management/shop/menu-management'

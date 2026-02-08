@@ -123,7 +123,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.alertService.getDialogEvent().subscribe(alert => this.showDialog(alert));
     this.alertService.getMessageEvent().subscribe(message => this.showToast(message));
 
-    this.authService.reLoginDelegate = () => this.openLoginModal();
+    this.authService.reLoginDelegate = () => {
+      // Không mở modal nếu đang ở trang login hoặc trang public
+      if (this.router.url === '/login' || this.router.url === '/' || this.router.url.startsWith('/?')) {
+        return;
+      }
+      this.openLoginModal();
+    };
 
     this.authService.getLoginStatusEvent().subscribe(isLoggedIn => {
       this.isUserLoggedIn = isLoggedIn;

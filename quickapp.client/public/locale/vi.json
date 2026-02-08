@@ -32,6 +32,7 @@
     "Categories": {
       "Categories": "Danh mục",
       "Restaurant": "Thông tin cơ sở",
+      "MenuItems": "Thực đơn",
       "Management": "Quản lý",
       "Settings": "Cài đặt"
     }
@@ -395,6 +396,7 @@
     "RestaurantInfo": "Thông tin nhà hàng",
     "Detail": "Chi tiết",
     "CreateNew": "Tạo mới",
-    "List": "Danh sách"
+    "List": "Danh sách",
+    "MenuItems": "Thực đơn"
   }
 }

@@ -46,7 +46,7 @@ export class BreadcrumbService {
 
       // Lấy breadcrumb data từ route config
       const breadcrumbData = child.data['breadcrumb'];
-      
+
       if (breadcrumbData) {
         const breadcrumb: Breadcrumb = {
           label: breadcrumbData.label || '',
@@ -54,7 +54,7 @@ export class BreadcrumbService {
           icon: breadcrumbData.icon,
           translateKey: breadcrumbData.translateKey
         };
-        
+
         breadcrumbs.push(breadcrumb);
       }
 
