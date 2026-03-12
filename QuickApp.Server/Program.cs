@@ -128,7 +128,7 @@ builder.Services.AddOpenIddict()
             }
             else
             {
-                var oidcCertificate = X509CertificateLoader.LoadPkcs12FromFile(oidcCertFileName, oidcCertFilePassword);
+                var oidcCertificate = new X509Certificate2(oidcCertFileName, oidcCertFilePassword);
 
                 options.AddEncryptionCertificate(oidcCertificate)
                        .AddSigningCertificate(oidcCertificate);
@@ -170,15 +170,20 @@ builder.Services.AddCors();
 
 builder.Services.AddControllers();
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    // Lắng nghe trên 0.0.0.0 thay vì localhost
-    options.ListenAnyIP(5225); // HTTP
-    options.ListenAnyIP(7085, listenOptions =>
-    {
-        listenOptions.UseHttps();
-    }); // HTTPS
-});
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//    // Lắng nghe trên 0.0.0.0 thay vì localhost
+//    options.ListenAnyIP(5225); // HTTP
+//    options.ListenAnyIP(7085, listenOptions =>
+//    {
+//        listenOptions.UseHttps();
+//    }); // HTTPS
+//});
+//builder.WebHost.UseKestrel(options =>
+//{
+//    // Kestrel sẽ tự động đọc từ ASPNETCORE_URLS environment variable
+//    // Hoặc từ appsettings.json
+//});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -248,7 +253,7 @@ var app = builder.Build();
 /************* CONFIGURE REQUEST PIPELINE *************/
 
 app.UseDefaultFiles();
-app.MapStaticAssets();
+app.UseStaticFiles();
 
 // Serve static files from wwwroot (for uploaded images)
 app.UseStaticFiles();
