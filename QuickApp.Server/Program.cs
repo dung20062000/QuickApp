@@ -136,7 +136,8 @@ builder.Services.AddOpenIddict()
         }
 
         options.UseAspNetCore()
-               .EnableTokenEndpointPassthrough();
+               .EnableTokenEndpointPassthrough()
+               .DisableTransportSecurityRequirement(); // thêm dòng này để cho phép HTTP trong môi trường phát triển (không bắt buộc HTTPS) - chỉ nên dùng trong development
     })
     .AddValidation(options =>
     {
