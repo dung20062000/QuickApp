@@ -1,3 +1,7 @@
+import { AppIconButtonComponent } from '../app-icon-button/app-icon-button.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   Component,
   Input,
@@ -82,7 +86,7 @@ export function dateRangeValidator(title?: string): ValidatorFn {
   templateUrl: './date-range-picker.component.html',
   styleUrls: ['./date-range-picker.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BsDatepickerModule, AppIconButtonComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -111,8 +115,8 @@ export class DateRangePickerComponent
   @Input() customValidationMessages: { [key: string]: string } = {};
 
   // Date range picker specific inputs
-  @Input() minDate: Date | null = null;
-  @Input() maxDate: Date | null = null;
+  @Input() minDate: Date | undefined;
+  @Input() maxDate: Date | undefined;
   @Input() dateInputFormat: string = 'DD/MM/YYYY';
   @Input() containerClass: string = 'theme-dark-blue';
   @Input() showWeekNumbers: boolean = false;
@@ -150,7 +154,7 @@ export class DateRangePickerComponent
       ranges: this.ranges && this.ranges.length > 0 ? this.ranges : undefined,
       maxDateRange: this.maxDateRange || undefined,
       isAnimated: true,
-      value: this.value ? [this.value.startDate, this.value.endDate] : null,
+      value: (this.value && this.value.startDate && this.value.endDate) ? [this.value.startDate, this.value.endDate] : undefined,
     };
   }
 
@@ -188,7 +192,7 @@ export class DateRangePickerComponent
     this.disabled = isDisabled;
   }
 
-  onDateRangeChange(dateRange: Date[] | null): void {
+  onDateRangeChange(dateRange: any): void {
     this.minDate && this.minDate.setHours(0, 0, 0, 0);
     this.maxDate && this.maxDate.setHours(23, 59, 59, 999);
     let value: DateRange | null = null;
@@ -238,7 +242,7 @@ export class DateRangePickerComponent
     this.onChange(null);
     this.inputClear.emit();
     if (this.dateRangePicker) {
-      this.dateRangePicker.bsValue = null; // clears internal selection
+      this.dateRangePicker.bsValue = undefined; // clears internal selection
       this.dateRangePicker.hide(); // optional: close popup
     }
   }

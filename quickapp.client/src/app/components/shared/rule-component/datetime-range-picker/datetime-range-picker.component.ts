@@ -1,3 +1,6 @@
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   Component,
   Input,
@@ -21,7 +24,8 @@ import {
   BsDatepickerDirective,
   BsLocaleService,
 } from 'ngx-bootstrap/datepicker';
-import { Calendar } from 'primeng/calendar';
+import { DatePicker, DatePickerModule } from 'primeng/datepicker';
+import { AppIconButtonComponent } from '../app-icon-button/app-icon-button.component';
 import { viLocale } from 'ngx-bootstrap/locale'; // Import locale
 import { defineLocale } from 'ngx-bootstrap/chronos';
 
@@ -88,7 +92,7 @@ export function datetimeRangeValidator(title?: string): ValidatorFn {
     },
   ],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DatePickerModule, AppIconButtonComponent, BsDatepickerModule],
 })
 export class DatetimeRangePickerComponent
   implements ControlValueAccessor, OnInit, OnDestroy
@@ -111,8 +115,8 @@ export class DatetimeRangePickerComponent
   @Input() customValidationMessages: { [key: string]: string } = {};
 
   // Date picker specific inputs
-  @Input() minDate: Date | null = null;
-  @Input() maxDate: Date | null = null;
+  @Input() minDate: Date | undefined;
+  @Input() maxDate: Date | undefined;
   @Input() dateInputFormat: string = 'DD/MM/YYYY';
   @Input() containerClass: string = 'theme-dark-blue';
   @Input() showWeekNumbers: boolean = false;
@@ -152,10 +156,10 @@ export class DatetimeRangePickerComponent
   datePicker!: BsDatepickerDirective;
 
   @ViewChild('startTimePicker', { static: false })
-  startTimePicker!: Calendar;
+  startTimePicker!: DatePicker;
 
   @ViewChild('endTimePicker', { static: false })
-  endTimePicker!: Calendar;
+  endTimePicker!: DatePicker;
 
   private destroy$ = new Subject<void>();
   private onChange = (value: any) => {};
@@ -170,7 +174,7 @@ export class DatetimeRangePickerComponent
       adaptivePosition: this.adaptivePosition,
       showTodayButton: this.showTodayButton,
       isAnimated: true,
-      value: this.value.date,
+      value: this.value.date || undefined,
     };
   }
 
@@ -314,7 +318,7 @@ export class DatetimeRangePickerComponent
     this.updateCombinedDateTimes();
     this.emitChanges();
     if (this.datePicker) {
-      this.datePicker.bsValue = null;
+      this.datePicker.bsValue = undefined;
       this.datePicker.hide();
     }
   }
@@ -351,7 +355,7 @@ export class DatetimeRangePickerComponent
     this.inputClear.emit();
 
     if (this.datePicker) {
-      this.datePicker.bsValue = null;
+      this.datePicker.bsValue = undefined;
       this.datePicker.hide();
     }
     if (this.startTimePicker) {

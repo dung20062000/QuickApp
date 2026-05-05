@@ -1,3 +1,7 @@
+import { AppIconButtonComponent } from '../app-icon-button/app-icon-button.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import {
   Component,
   Input,
@@ -51,7 +55,7 @@ export function dateValidator(title?: string): ValidatorFn {
   templateUrl: './date-picker.component.html',
   styleUrls: ['./date-picker.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BsDatepickerModule, AppIconButtonComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -76,8 +80,8 @@ export class DatePickerComponent
   @Input() customValidationMessages: { [key: string]: string } = {};
 
   // Date picker specific inputs
-  @Input() minDate: Date | null = null;
-  @Input() maxDate: Date | null = null;
+  @Input() minDate: Date | undefined;
+  @Input() maxDate: Date | undefined;
   @Input() dateInputFormat: string = 'DD/MM/YYYY';
   @Input() containerClass: string = 'theme-dark-blue';
   @Input() showWeekNumbers: boolean = false;
@@ -111,7 +115,7 @@ export class DatePickerComponent
       adaptivePosition: this.adaptivePosition,
       showTodayButton: this.showTodayButton,
       isAnimated: true,
-      value: this.value,
+      value: this.value || undefined,
     };
   }
 
@@ -190,7 +194,7 @@ export class DatePickerComponent
     this.onChange(null);
     this.inputClear.emit();
     if (this.datePicker) {
-      this.datePicker.bsValue = null; // clears internal selected date
+      this.datePicker.bsValue = undefined; // clears internal selected date
       this.datePicker.hide(); // optional: close popup
     }
   }

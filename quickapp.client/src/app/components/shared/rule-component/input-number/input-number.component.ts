@@ -1,3 +1,5 @@
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   Component,
   Input,
@@ -100,6 +102,7 @@ export class InputNumberComponent
   @Input() decimalSeparator: string = '.';
   @Input() decimalPlaces: number = 20;
   @Input() max: number | undefined = undefined;
+  @Input() maxLength: number | undefined = undefined;
   @Input() disabled: boolean = false;
 
   // Events

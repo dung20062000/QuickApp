@@ -1,0 +1,227 @@
+.button-test-container {
+  background-color: #f8f9fa;
+  height: 100vh;
+  padding: 20px;
+  overflow: auto;
+  margin: 0 auto;
+}
+
+.button-test-container h2 {
+  color: #1f2937;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.button-test-container h3 {
+  color: #374151;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.test-section {
+  margin-bottom: 3rem;
+  padding: 1.5rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.form-example {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  margin-top: 1rem;
+}
+
+.form-example .form-group {
+  margin-bottom: 1rem;
+}
+
+.form-example .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-example .form-group input {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.form-example .form-group input:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-color: #3b82f6;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .button-test-container {
+    padding: 1rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-example {
+    padding: 1rem;
+  }
+}
+
+/* Custom additional class examples */
+::ng-deep .custom-primary-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+::ng-deep .custom-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+::ng-deep .custom-shadow-btn {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+::ng-deep .custom-shadow-btn:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+}
+
+::ng-deep .rounded-full {
+  border-radius: 9999px !important;
+}
+
+::ng-deep .custom-gradient-btn {
+  background: linear-gradient(45deg, #ff6b6b, #ffa726) !important;
+  color: white !important;
+  border: none !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+::ng-deep .custom-gradient-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+::ng-deep .custom-gradient-btn:hover::before {
+  left: 100%;
+}
+
+::ng-deep .custom-hover-effect {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+::ng-deep .custom-hover-effect:hover {
+  background-color: #6366f1 !important;
+  color: white !important;
+  transform: scale(1.05);
+}
+
+::ng-deep .custom-warning-btn {
+  background-color: #f59e0b !important;
+  color: white !important;
+  border: 2px solid #d97706 !important;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+  }
+}
+
+/* Icon Animation Classes */
+::ng-deep .rotating-icon {
+  animation: rotate 2s linear infinite;
+}
+
+::ng-deep .pulsing-icon {
+  animation: iconPulse 1.5s ease-in-out infinite;
+}
+
+::ng-deep .bounce-icon {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+::ng-deep .slide-icon {
+  animation: slideInOut 2s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes slideInOut {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+}

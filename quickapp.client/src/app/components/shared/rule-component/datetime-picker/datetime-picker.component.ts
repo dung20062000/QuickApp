@@ -1,3 +1,7 @@
+import { AppIconButtonComponent } from '../app-icon-button/app-icon-button.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import {
   Component,
   Input,
@@ -54,7 +58,7 @@ export function datetimeValidator(title?: string): ValidatorFn {
   templateUrl: './datetime-picker.component.html',
   styleUrls: ['./datetime-picker.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BsDatepickerModule, AppIconButtonComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -81,8 +85,8 @@ export class DatetimePickerComponent
   @Input() customValidationMessages: { [key: string]: string } = {};
 
   // Datetime picker specific inputs
-  @Input() minDate: Date | null = null;
-  @Input() maxDate: Date | null = null;
+  @Input() minDate: Date | undefined;
+  @Input() maxDate: Date | undefined;
   @Input() dateInputFormat: string = 'DD/MM/YYYY HH:mm';
   @Input() containerClass: string = 'theme-dark-blue';
   @Input() showWeekNumbers: boolean = false;
@@ -91,7 +95,8 @@ export class DatetimePickerComponent
   @Input() hourStep: number = 1;
   @Input() minuteStep: number = 15;
   @Input() showSeconds: boolean = false;
-  @Input() showMeridian: boolean = false; // 24-hour format by default
+  @Input() showMeridian: boolean = false;
+  @Input() showTimePicker: boolean = true; // 24-hour format by default
   @Input() disabled: boolean = false;
 
   // Events
@@ -123,7 +128,7 @@ export class DatetimePickerComponent
       withTimepicker: true,
       keepDatepickerOpened: true,
       isAnimated: true,
-      value: this.value,
+      value: this.value || undefined,
     };
   }
 
@@ -217,7 +222,7 @@ export class DatetimePickerComponent
     this.onChange(null);
     this.inputClear.emit();
     if (this.datePicker) {
-      this.datePicker.bsValue = null; // clears internal selected date
+      this.datePicker.bsValue = undefined; // clears internal selected date
       this.datePicker.hide(); // optional: close popup
     }
   }

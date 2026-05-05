@@ -46,6 +46,7 @@
     "font-awesome": "^4.7.0",
     "jest-editor-support": "*",
     "ng2-charts": "^7.0.0",
+    "ngx-bootstrap": "^21.2.0",
     "ngx-toasta": "^4.0.0",
     "primeng": "^21.1.1",
     "run-script-os": "*",

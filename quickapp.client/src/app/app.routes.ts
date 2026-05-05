@@ -130,6 +130,19 @@ export const routes: Routes = [
   //   pathMatch: 'full'
   // },
   {
+    path: 'component-guide',
+    loadComponent: () => import('./components/component-guide/component-guide.component').then(m => m.ComponentGuideComponent),
+    title: 'Component Guide',
+    children: [
+      { path: '', redirectTo: 'buttons', pathMatch: 'full' },
+      { path: 'buttons', loadComponent: () => import('./components/component-guide/button-test/button-test.component').then(m => m.ButtonTestComponent), title: 'Buttons Test' },
+      { path: 'inputs', loadComponent: () => import('./components/component-guide/input-test/input-test.component').then(m => m.InputTestComponent), title: 'Inputs Test' },
+      { path: 'date-pickers', loadComponent: () => import('./components/component-guide/date-picker-test/date-picker-test.component').then(m => m.DatePickerTestComponent), title: 'Date Pickers Test' },
+      { path: 'selectors', loadComponent: () => import('./components/component-guide/selector-test/selector-test.component').then(m => m.SelectorTestComponent), title: 'Selectors Test' },
+      { path: 'gender-radio', loadComponent: () => import('./components/component-guide/gender-radio-test/gender-radio-test.component').then(m => m.GenderRadioTestComponent), title: 'Gender Radio Test' },
+    ]
+  },
+  {
     path: '**',
     loadComponent: () => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent),
     title: 'Page Not Found'

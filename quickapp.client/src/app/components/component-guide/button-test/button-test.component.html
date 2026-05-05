@@ -1,0 +1,442 @@
+<div class="button-test-container">
+    <h2>App Button Component Test</h2>
+
+    <div class="test-section">
+        <h3>Button Variants (app-button)</h3>
+        <div class="button-group">
+            <app-button variant="blue" (buttonClick)="onButtonClick('blue')"> variant="blue" (default) </app-button>
+
+            <app-button variant="blueLight" (buttonClick)="onButtonClick('blueLight')">
+                variant="blueLight"
+            </app-button>
+
+            <app-button
+                variant="red"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('red')"
+            >
+                variant="red"
+            </app-button>
+
+            <app-button
+                variant="redLight"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('redLight')"
+            >
+                variant="redLight"
+            </app-button>
+
+            <app-button
+                variant="redGray"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('redGray')"
+            >
+                variant="redGray"
+            </app-button>
+
+            <app-button
+                variant="green"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('green')"
+            >
+                variant="green"
+            </app-button>
+
+            <app-button
+                variant="greenLight"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('greenLight')"
+            >
+                variant="greenLight"
+            </app-button>
+
+            <app-button variant="gray" title="This is an action button" (buttonClick)="onButtonClick('gray')">
+                variant="gray"
+            </app-button>
+
+            <app-button variant="ghost" title="This is a ghost button" (buttonClick)="onButtonClick('ghost')">
+                variant="ghost"
+            </app-button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>Icon Examples</h3>
+
+        <h4>Left Icons</h4>
+        <div class="button-group">
+            <app-button leftIcon="add" title="Add new item" (buttonClick)="onIconClick('add')"> Add Item </app-button>
+
+            <app-button
+                variant="gray"
+                leftIcon="search"
+                title="Search functionality"
+                (buttonClick)="onIconClick('search')"
+            >
+                Search
+            </app-button>
+
+            <app-button
+                variant="blueLight"
+                leftIcon="save"
+                size="sm"
+                title="Save changes"
+                (buttonClick)="onIconClick('save')"
+            >
+                Save
+            </app-button>
+
+            <app-button
+                variant="redLight"
+                leftIcon="delete"
+                size="lg"
+                title="Delete item"
+                (buttonClick)="onIconClick('delete')"
+            >
+                Delete
+            </app-button>
+        </div>
+
+        <h4>Right Icons</h4>
+        <div class="button-group">
+            <app-button rightIcon="arrow_forward" title="Navigate forward" (buttonClick)="onIconClick('forward')">
+                Next
+            </app-button>
+
+            <app-button
+                variant="gray"
+                rightIcon="download"
+                title="Download file"
+                (buttonClick)="onIconClick('download')"
+            >
+                Download
+            </app-button>
+
+            <app-button
+                variant="ghost"
+                rightIcon="open_in_new"
+                size="sm"
+                title="External link"
+                (buttonClick)="onIconClick('link')"
+            >
+                External Link
+            </app-button>
+
+            <app-button
+                variant="blueLight"
+                rightIcon="settings"
+                size="lg"
+                title="Open settings"
+                (buttonClick)="onIconClick('settings')"
+            >
+                Settings
+            </app-button>
+        </div>
+
+        <h4>Both Icons</h4>
+        <div class="button-group">
+            <app-button
+                leftIcon="bar_chart"
+                rightIcon="download"
+                title="Export report"
+                (buttonClick)="onIconClick('export')"
+            >
+                Export Report
+            </app-button>
+
+            <app-button
+                variant="gray"
+                leftIcon="sync"
+                rightIcon="check"
+                size="sm"
+                title="Sync and complete"
+                (buttonClick)="onIconClick('sync')"
+            >
+                Sync
+            </app-button>
+
+            <app-button
+                variant="blueLight"
+                leftIcon="cloud_upload"
+                rightIcon="public"
+                size="lg"
+                title="Upload to cloud"
+                (buttonClick)="onIconClick('upload')"
+            >
+                Upload to Cloud
+            </app-button>
+        </div>
+
+        <h4>Icon-Only Buttons (app-icon-button)</h4>
+        <div class="button-group">
+            <app-icon-button
+                icon="add"
+                variant="blue"
+                (buttonClick)="onButtonClick('blue')"
+                toolTip='variant="blue" (default)'
+            />
+
+            <app-icon-button
+                variant="blueLight"
+                icon="add"
+                (buttonClick)="onButtonClick('blueLight')"
+                toolTip='variant="blueLight"'
+            />
+
+            <app-icon-button
+                variant="red"
+                icon="add"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('red')"
+                toolTip='variant="red"'
+            />
+
+            <app-icon-button
+                variant="redLight"
+                icon="add"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('redLight')"
+                toolTip='variant="redLight"'
+            />
+
+            <app-icon-button
+                variant="redGray"
+                icon="add"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('redGray')"
+                toolTip='variant="redGray"'
+            />
+
+            <app-icon-button
+                variant="green"
+                icon="add"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('green')"
+                toolTip='variant="green"'
+            />
+
+            <app-icon-button
+                variant="greenLight"
+                icon="add"
+                title="This button performs destructive actions"
+                (buttonClick)="onButtonClick('greenLight')"
+                toolTip='variant="greenLight"'
+            />
+
+            <app-icon-button
+                variant="gray"
+                icon="add"
+                title="This is an action button"
+                (buttonClick)="onButtonClick('gray')"
+                toolTip='variant="gray"'
+            />
+
+            <app-icon-button
+                variant="ghost"
+                icon="add"
+                title="This is a ghost button"
+                (buttonClick)="onButtonClick('ghost')"
+                toolTip='variant="ghost"'
+            />
+        </div>
+
+        <h4>Custom Icon Classes</h4>
+        <div class="button-group">
+            <app-button
+                leftIcon="star"
+                leftIconClass="rotating-icon"
+                title="Button with rotating icon"
+                (buttonClick)="onIconClick('rotate')"
+            >
+                Rotating Star
+            </app-button>
+
+            <app-button
+                variant="gray"
+                rightIcon="favorite"
+                rightIconClass="pulsing-icon"
+                title="Button with pulsing icon"
+                (buttonClick)="onIconClick('pulse')"
+            >
+                Pulsing Heart
+            </app-button>
+
+            <app-button
+                variant="blueLight"
+                leftIcon="gps_fixed"
+                leftIconClass="bounce-icon"
+                rightIcon="rocket_launch"
+                rightIconClass="slide-icon"
+                title="Button with animated icons"
+                (buttonClick)="onIconClick('animated')"
+            >
+                Multi Animation
+            </app-button>
+        </div>
+
+        <h4>More Material Icons Examples</h4>
+        <div class="button-group">
+            <app-button leftIcon="refresh" title="Refresh data" (buttonClick)="onIconClick('refresh')">
+                Refresh
+            </app-button>
+
+            <app-button variant="gray" leftIcon="visibility" title="View details" (buttonClick)="onIconClick('view')">
+                View
+            </app-button>
+
+            <app-button variant="blueLight" leftIcon="file_copy" title="Copy file" (buttonClick)="onIconClick('copy')">
+                Copy
+            </app-button>
+
+            <app-button variant="ghost" leftIcon="share" title="Share content" (buttonClick)="onIconClick('share')">
+                Share
+            </app-button>
+
+            <app-button
+                variant="redLight"
+                leftIcon="warning"
+                size="sm"
+                title="Warning action"
+                (buttonClick)="onIconClick('warning')"
+            >
+                Warning
+            </app-button>
+
+            <app-button rightIcon="send" size="lg" title="Send message" (buttonClick)="onIconClick('send')">
+                Send Message
+            </app-button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>Button Sizes</h3>
+        <div class="button-group">
+            <app-button size="sm" title="Small button" (buttonClick)="onButtonClick('Small')"> Small </app-button>
+
+            <app-button size="md" title="Medium button (default)" (buttonClick)="onButtonClick('Medium')">
+                Medium
+            </app-button>
+
+            <app-button size="lg" title="Large button" (buttonClick)="onButtonClick('Large')"> Large </app-button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>Button States</h3>
+        <div class="button-group">
+            <app-button title="Normal button state" (buttonClick)="onButtonClick('Normal')"> Normal </app-button>
+
+            <app-button [disabled]="true" title="This button is disabled"> Disabled </app-button>
+
+            <app-button
+                [disabled]="isLoading"
+                title="Loading button - simulates async operation"
+                (buttonClick)="onLoadingClick()"
+            >
+                {{ isLoading ? "Loading..." : "Click to Load" }}
+            </app-button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>Form Buttons</h3>
+        <form (ngSubmit)="onSubmitClick()" class="form-example">
+            <div class="form-group">
+                <label for="testInput">Test Input:</label>
+                <input type="text" id="testInput" name="testInput" placeholder="Enter some text" />
+            </div>
+
+            <div class="button-group">
+                <app-button type="submit" title="Submit the form" variant="blue"> Submit Form </app-button>
+
+                <app-button type="reset" title="Reset the form" variant="gray"> Reset </app-button>
+
+                <app-button type="button" title="Cancel action" variant="gray"> Cancel </app-button>
+            </div>
+        </form>
+    </div>
+
+    <div class="test-section">
+        <h3>Mixed Examples</h3>
+        <div class="button-group">
+            <app-button
+                variant="redLight"
+                size="sm"
+                title="Small destructive action"
+                (buttonClick)="onButtonClick('Delete')"
+            >
+                Delete
+            </app-button>
+
+            <app-button
+                variant="gray"
+                size="lg"
+                title="Large action button"
+                (buttonClick)="onButtonClick('Large gray')"
+            >
+                Large gray
+            </app-button>
+
+            <app-button
+                variant="ghost"
+                size="sm"
+                [disabled]="isLoading"
+                title="Small ghost button"
+                (buttonClick)="onButtonClick('Ghost Small')"
+            >
+                Ghost Small
+            </app-button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>Additional Class Examples</h3>
+        <div class="button-group">
+            <app-button
+                additionalClass="custom-primary-btn"
+                title="Button with custom primary class"
+                (buttonClick)="onButtonClick('primary')"
+            >
+                Custom Primary
+            </app-button>
+
+            <app-button
+                variant="gray"
+                additionalClass="custom-shadow-btn rounded-full"
+                title="Button with multiple additional classes"
+                (buttonClick)="onButtonClick('shadow')"
+            >
+                Shadow & Rounded
+            </app-button>
+
+            <app-button
+                variant="blueLight"
+                size="lg"
+                additionalClass="custom-gradient-btn"
+                title="Large button with gradient class"
+                (buttonClick)="onButtonClick('gradient')"
+            >
+                Gradient Button
+            </app-button>
+
+            <app-button
+                variant="ghost"
+                additionalClass="custom-hover-effect"
+                title="Ghost button with hover effect"
+                (buttonClick)="onButtonClick('hover')"
+            >
+                Hover Effect
+            </app-button>
+
+            <app-button
+                variant="red"
+                size="sm"
+                additionalClass="custom-warning-btn"
+                title="Small destructive button with warning styling"
+                (buttonClick)="onButtonClick('warning')"
+            >
+                Warning Style
+            </app-button>
+        </div>
+    </div>
+</div>

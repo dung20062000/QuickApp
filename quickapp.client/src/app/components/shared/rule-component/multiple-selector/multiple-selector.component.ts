@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   Input,
@@ -11,13 +12,16 @@ import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
   AbstractControl,
+  FormsModule,
 } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 /**
  * Interface for select options
  */
 export interface SelectOption {
+  [key: string]: any;
   value: any;
   text: string;
   disabled?: boolean;
@@ -35,7 +39,7 @@ export interface SelectOption {
     },
   ],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgSelectModule],
 })
 export class MultipleSelectorComponent
   implements ControlValueAccessor, OnInit, OnDestroy

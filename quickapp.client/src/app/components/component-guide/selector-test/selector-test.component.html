@@ -1,0 +1,204 @@
+<div class="container-fluid">
+    <h1 class="mb-4">Rule Select Component</h1>
+    <!-- Component Test Table -->
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" style="width: 15%">Component</th>
+                    <th scope="col" style="width: 25%">Description</th>
+                    <th scope="col" style="width: 60%">Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let componentTest of componentTests; let i = index">
+                    <!-- Component Name -->
+                    <td class="align-top">
+                        <div class="component-name">
+                            <h6 class="mb-1 text-primary">{{ componentTest.component }}</h6>
+                            <small class="text-muted">{{ componentTest.componentType }}</small>
+                        </div>
+                    </td>
+
+                    <!-- Description -->
+                    <td class="align-top">
+                        <p class="mb-0 text-justify">{{ componentTest.description }}</p>
+                    </td>
+
+                    <!-- Example Form -->
+                    <td class="align-top">
+                        <div class="component-example">
+                            <form [formGroup]="componentTest.form" (ngSubmit)="onSubmit(componentTest)">
+                                <!-- Dynamic Component Implementation -->
+                                <div class="mb-3" [ngSwitch]="componentTest.componentType">
+                                    <!-- Select Component -->
+                                    <selector
+                                        *ngSwitchCase="'selector'"
+                                        [label]="componentTest.config?.label || 'Label'"
+                                        [required]="componentTest.config?.required || false"
+                                        [placeholder]="componentTest.config?.placeholder || 'Choose...'"
+                                        [control]="componentTest.form.get(componentTest.config?.formControlName)"
+                                        [submitted]="componentTest.submitted"
+                                        [formControlName]="componentTest.config?.formControlName"
+                                        [items]="componentTest.config?.items || []"
+                                        [bindValue]="componentTest.config?.bindValue || 'value'"
+                                        [bindLabel]="componentTest.config?.bindLabel || 'text'"
+                                        [clearable]="componentTest.config?.clearable !== false"
+                                        [searchable]="componentTest.config?.searchable !== false"
+                                        [virtualScroll]="componentTest.config?.virtualScroll || false"
+                                        [readonly]="componentTest.config?.readonly || false"
+                                        [id]="componentTest.componentType + '-' + i"
+                                        (selectionChange)="componentTest.config?.events?.change?.($event, componentTest)"
+                                        (selectionFocus)="componentTest.config?.events?.focus?.(componentTest)"
+                                        (selectionBlur)="componentTest.config?.events?.blur?.(componentTest)"
+                                        (selectionClear)="componentTest.config?.events?.clear?.(componentTest)"
+                                        (selectionOpen)="componentTest.config?.events?.open?.(componentTest)"
+                                        (selectionClose)="componentTest.config?.events?.close?.(componentTest)"
+                                    >
+                                    </selector>
+
+                                    <!-- Multiple Selector Component -->
+                                    <multiple-selector
+                                        *ngSwitchCase="'multiple-selector'"
+                                        [label]="componentTest.config?.label || 'Label'"
+                                        [required]="componentTest.config?.required || false"
+                                        [placeholder]="componentTest.config?.placeholder || 'Choose...'"
+                                        [control]="componentTest.form.get(componentTest.config?.formControlName)"
+                                        [submitted]="componentTest.submitted"
+                                        [formControlName]="componentTest.config?.formControlName"
+                                        [items]="componentTest.config?.items || []"
+                                        [bindValue]="componentTest.config?.bindValue || 'value'"
+                                        [bindLabel]="componentTest.config?.bindLabel || 'text'"
+                                        [clearable]="componentTest.config?.clearable !== false"
+                                        [searchable]="componentTest.config?.searchable !== false"
+                                        [virtualScroll]="componentTest.config?.virtualScroll || false"
+                                        [maxSelectedItems]="componentTest.config?.maxSelectedItems"
+                                        [closeOnSelect]="componentTest.config?.closeOnSelect || false"
+                                        [hideSelected]="componentTest.config?.hideSelected || false"
+                                        [readonly]="componentTest.config?.readonly || false"
+                                        [id]="componentTest.componentType + '-' + i"
+                                        (selectionChange)="componentTest.config?.events?.change?.($event, componentTest)"
+                                        (selectionFocus)="componentTest.config?.events?.focus?.(componentTest)"
+                                        (selectionBlur)="componentTest.config?.events?.blur?.(componentTest)"
+                                        (selectionClear)="componentTest.config?.events?.clear?.(componentTest)"
+                                        (selectionOpen)="componentTest.config?.events?.open?.(componentTest)"
+                                        (selectionClose)="componentTest.config?.events?.close?.(componentTest)"
+                                        (itemAdd)="componentTest.config?.events?.add?.($event, componentTest)"
+                                        (itemRemove)="componentTest.config?.events?.remove?.($event, componentTest)"
+                                    >
+                                    </multiple-selector>
+
+                                    <!-- Add new components here -->
+                                    <!-- Example:
+                      <your-new-component *ngSwitchCase="'your-new-component'"
+                        [property1]="componentTest.config?.property1"
+                        [property2]="componentTest.config?.property2"
+                        [control]="componentTest.form.get(componentTest.config?.formControlName)"
+                        [submitted]="componentTest.submitted"
+                        [formControlName]="componentTest.config?.formControlName"
+                        [id]="componentTest.componentType + '-' + i"
+                        (event1)="componentTest.config?.events?.event1?.($event, componentTest)">
+                      </your-new-component>
+                      -->
+
+                                    <!-- Default case for unsupported components -->
+                                    <div *ngSwitchDefault class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Component type "{{ componentTest.componentType }}" is not yet supported.
+                                        <br />
+                                        <small>Please add the component implementation to the template.</small>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="d-flex gap-2 mb-3">
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-paper-plane"></i> Submit
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary btn-sm"
+                                        (click)="onReset(componentTest)"
+                                    >
+                                        <i class="fas fa-undo"></i> Reset
+                                    </button>
+                                </div>
+
+                                <!-- Form Status and Value Display -->
+                                <div class="result-display">
+                                    <div class="col g-2">
+                                        <div class="col-md-6">
+                                            <div class="card card-sm">
+                                                <div class="card-header p-2">
+                                                    <h6 class="card-title mb-0">📊 Form Status</h6>
+                                                </div>
+                                                <div class="card-body p-2">
+                                                    <div class="status-item">
+                                                        <strong>Valid:</strong>
+                                                        <span
+                                                            [class]="
+                                                                componentTest.form.valid
+                                                                    ? 'text-success'
+                                                                    : 'text-danger'
+                                                            "
+                                                        >
+                                                            {{ componentTest.form.valid ? "✅ Yes" : "❌ No" }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="status-item">
+                                                        <strong>Submitted:</strong>
+                                                        <span
+                                                            [class]="
+                                                                componentTest.submitted ? 'text-info' : 'text-muted'
+                                                            "
+                                                        >
+                                                            {{ componentTest.submitted ? "✅ Yes" : "⏳ No" }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="card card-sm">
+                                                <div class="card-header p-2">
+                                                    <h6 class="card-title mb-0">💾 Current Value</h6>
+                                                </div>
+                                                <div class="card-body p-2">
+                                                    <div class="value-display">
+                                                        <strong>Value:</strong>
+                                                        <code class="text-primary">{{
+                                                            getFormValue(componentTest.form) || "null"
+                                                        }}</code>
+                                                    </div>
+                                                    <div class="type-display">
+                                                        <strong>Type:</strong>
+                                                        <span class="badge bg-info">{{
+                                                            getValueType(componentTest.form)
+                                                        }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Raw JSON Display (Collapsible) -->
+                                    <div class="mt-2">
+                                        <details class="json-details">
+                                            <summary class="json-summary">
+                                                <small>🔍 View Raw Form Data (JSON)</small>
+                                            </summary>
+                                            <div class="json-content">
+                                                <pre class="json-display">{{ componentTest.form.value | json }}</pre>
+                                            </div>
+                                        </details>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

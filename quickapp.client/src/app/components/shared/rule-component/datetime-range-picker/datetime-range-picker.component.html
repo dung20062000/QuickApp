@@ -55,7 +55,7 @@
                 {{ startTimeLabel }} <span *ngIf="required" class="text-danger">*</span>
             </label>
             <div class="input-group">
-                <p-calendar
+                <p-datepicker
                     #startTimePicker
                     [id]="id + '_start'"
                     [timeOnly]="true"
@@ -73,12 +73,11 @@
                     [inputStyleClass]="'form-control tw-pr-[50px] ' + (hasError ? 'is-invalid' : '')"
                     [showIcon]="false"
                     [showOnFocus]="true"
-                    [touchUI]="false"
                     (onFocus)="onInputFocus($event)"
                     (onBlur)="onStartTimeBlur($event)"
                     (onInput)="onStartTimeInputChange($event)"
                     (onShow)="onStartTimePickerOpen()"
-                    (onHide)="onStartTimePickerClose()"
+                    (onClose)="onStartTimePickerClose()"
                     (onClick)="onStartTimeInputClick($event)"
                 />
 
@@ -110,7 +109,7 @@
                 {{ endTimeLabel }} <span *ngIf="required" class="text-danger">*</span>
             </label>
             <div class="input-group">
-                <p-calendar
+                <p-datepicker
                     #endTimePicker
                     [id]="id + '_end'"
                     [timeOnly]="true"
@@ -128,12 +127,11 @@
                     [inputStyleClass]="'form-control tw-pr-[50px] ' + (hasError ? 'is-invalid' : '')"
                     [showIcon]="false"
                     [showOnFocus]="true"
-                    [touchUI]="false"
                     (onFocus)="onInputFocus($event)"
                     (onBlur)="onEndTimeBlur($event)"
                     (onInput)="onEndTimeInputChange($event)"
                     (onShow)="onEndTimePickerOpen()"
-                    (onHide)="onEndTimePickerClose()"
+                    (onClose)="onEndTimePickerClose()"
                     (onClick)="onEndTimeInputClick($event)"
                 />
 

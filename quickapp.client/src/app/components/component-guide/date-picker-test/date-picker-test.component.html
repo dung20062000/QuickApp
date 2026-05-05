@@ -1,0 +1,305 @@
+<div class="container-fluid">
+    <h1 class="mb-4">Date, Datetime & Time Picker Components Test</h1>
+
+    <!-- Component Test Table -->
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" style="width: 15%">Component</th>
+                    <th scope="col" style="width: 25%">Description</th>
+                    <th scope="col" style="width: 60%">Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let componentTest of componentTests; let i = index">
+                    <!-- Component Name -->
+                    <td class="align-top">
+                        <div class="component-name">
+                            <h6 class="mb-1 text-primary">{{ componentTest.component }}</h6>
+                            <small class="text-muted">{{ componentTest.componentType }}</small>
+                        </div>
+                    </td>
+
+                    <!-- Description -->
+                    <td class="align-top">
+                        <p class="mb-0 text-justify" style="white-space: pre-line">{{ componentTest.description }}</p>
+                    </td>
+
+                    <!-- Example Form -->
+                    <td class="align-top">
+                        <div class="component-example">
+                            <form [formGroup]="componentTest.form" (ngSubmit)="onSubmit(componentTest)">
+                                <!-- Dynamic Component Implementation -->
+                                <div class="mb-3" [ngSwitch]="componentTest.componentType">
+                                    <!-- Date Picker Component -->
+                                    <date-picker
+                                        *ngSwitchCase="'date-picker'"
+                                        [label]="componentTest.config?.label || 'Date'"
+                                        [required]="componentTest.config?.required || false"
+                                        [placeholder]="componentTest.config?.placeholder || 'Select date...'"
+                                        [control]="componentTest.form.get(componentTest.config?.formControlName)"
+                                        [submitted]="componentTest.submitted"
+                                        [formControlName]="componentTest.config?.formControlName"
+                                        [showClearButton]="componentTest.config?.showClearButton || false"
+                                        [id]="componentTest.componentType + '-' + i"
+                                        [minDate]="componentTest.config?.minDate"
+                                        [maxDate]="componentTest.config?.maxDate"
+                                        [dateInputFormat]="componentTest.config?.dateInputFormat || 'DD/MM/YYYY'"
+                                        [containerClass]="componentTest.config?.containerClass || 'theme-dark-blue'"
+                                        [showWeekNumbers]="componentTest.config?.showWeekNumbers || false"
+                                        [adaptivePosition]="componentTest.config?.adaptivePosition || true"
+                                        [showTodayButton]="componentTest.config?.showTodayButton || false"
+                                        [customValidationMessages]="
+                                            componentTest.config?.customValidationMessages || {}
+                                        "
+                                        (dateChange)="componentTest.config?.events?.dateChange?.($event, componentTest)"
+                                        (inputFocus)="componentTest.config?.events?.focus?.(componentTest)"
+                                        (inputBlur)="componentTest.config?.events?.blur?.(componentTest)"
+                                        (inputClear)="componentTest.config?.events?.clear?.(componentTest)"
+                                        (pickerOpen)="componentTest.config?.events?.pickerOpen?.(componentTest)"
+                                        (pickerClose)="componentTest.config?.events?.pickerClose?.(componentTest)"
+                                    >
+                                    </date-picker>
+
+                                    <!-- Date Range Picker Component -->
+                                    <date-range-picker
+                                        *ngSwitchCase="'date-range-picker'"
+                                        [label]="componentTest.config?.label || 'Date Range'"
+                                        [required]="componentTest.config?.required || false"
+                                        [startPlaceholder]="componentTest.config?.startPlaceholder || 'Start date...'"
+                                        [endPlaceholder]="componentTest.config?.endPlaceholder || 'End date...'"
+                                        [control]="componentTest.form.get(componentTest.config?.formControlName)"
+                                        [submitted]="componentTest.submitted"
+                                        [formControlName]="componentTest.config?.formControlName"
+                                        [showClearButton]="componentTest.config?.showClearButton || false"
+                                        [id]="componentTest.componentType + '-' + i"
+                                        [minDate]="componentTest.config?.minDate"
+                                        [maxDate]="componentTest.config?.maxDate"
+                                        [dateInputFormat]="componentTest.config?.dateInputFormat || 'DD/MM/YYYY'"
+                                        [containerClass]="componentTest.config?.containerClass || 'theme-dark-blue'"
+                                        [showWeekNumbers]="componentTest.config?.showWeekNumbers || false"
+                                        [adaptivePosition]="componentTest.config?.adaptivePosition || true"
+                                        [showTodayButton]="componentTest.config?.showTodayButton || false"
+                                        [ranges]="componentTest.config?.ranges || []"
+                                        [maxDateRange]="componentTest.config?.maxDateRange"
+                                        [customValidationMessages]="
+                                            componentTest.config?.customValidationMessages || {}
+                                        "
+                                        (dateRangeChange)="componentTest.config?.events?.dateRangeChange?.($event, componentTest)"
+                                        (inputFocus)="componentTest.config?.events?.focus?.(componentTest)"
+                                        (inputBlur)="componentTest.config?.events?.blur?.(componentTest)"
+                                        (inputClear)="componentTest.config?.events?.clear?.(componentTest)"
+                                        (pickerOpen)="componentTest.config?.events?.pickerOpen?.(componentTest)"
+                                        (pickerClose)="componentTest.config?.events?.pickerClose?.(componentTest)"
+                                    >
+                                    </date-range-picker>
+
+                                    <!-- Datetime Picker Component -->
+                                    <datetime-picker
+                                        *ngSwitchCase="'datetime-picker'"
+                                        [label]="componentTest.config?.label || 'Datetime'"
+                                        [required]="componentTest.config?.required || false"
+                                        [placeholder]="componentTest.config?.placeholder || 'Select datetime...'"
+                                        [control]="componentTest.form.get(componentTest.config?.formControlName)"
+                                        [submitted]="componentTest.submitted"
+                                        [formControlName]="componentTest.config?.formControlName"
+                                        [showClearButton]="componentTest.config?.showClearButton || false"
+                                        [id]="componentTest.componentType + '-' + i"
+                                        [minDate]="componentTest.config?.minDate"
+                                        [maxDate]="componentTest.config?.maxDate"
+                                        [dateInputFormat]="componentTest.config?.dateInputFormat || 'DD/MM/YYYY HH:mm'"
+                                        [containerClass]="componentTest.config?.containerClass || 'theme-dark-blue'"
+                                        [showWeekNumbers]="componentTest.config?.showWeekNumbers || false"
+                                        [adaptivePosition]="componentTest.config?.adaptivePosition || true"
+                                        [showTodayButton]="componentTest.config?.showTodayButton || false"
+                                        [showTimePicker]="componentTest.config?.showTimePicker !== false"
+                                        [hourStep]="componentTest.config?.hourStep || 1"
+                                        [minuteStep]="componentTest.config?.minuteStep || 15"
+                                        [showSeconds]="componentTest.config?.showSeconds || false"
+                                        [showMeridian]="componentTest.config?.showMeridian || false"
+                                        [customValidationMessages]="
+                                            componentTest.config?.customValidationMessages || {}
+                                        "
+                                        (datetimeChange)="componentTest.config?.events?.datetimeChange?.($event, componentTest)"
+                                        (inputFocus)="componentTest.config?.events?.focus?.(componentTest)"
+                                        (inputBlur)="componentTest.config?.events?.blur?.(componentTest)"
+                                        (inputClear)="componentTest.config?.events?.clear?.(componentTest)"
+                                        (pickerOpen)="componentTest.config?.events?.pickerOpen?.(componentTest)"
+                                        (pickerClose)="componentTest.config?.events?.pickerClose?.(componentTest)"
+                                    >
+                                    </datetime-picker>
+
+                                    <!-- Time Picker Component -->
+                                    <time-picker
+                                        *ngSwitchCase="'time-picker'"
+                                        [label]="componentTest.config?.label || 'Time'"
+                                        [required]="componentTest.config?.required || false"
+                                        [placeholder]="componentTest.config?.placeholder || 'HH:mm'"
+                                        [control]="componentTest.form.get(componentTest.config?.formControlName)"
+                                        [submitted]="componentTest.submitted"
+                                        [formControlName]="componentTest.config?.formControlName"
+                                        [showClearButton]="componentTest.config?.showClearButton || false"
+                                        [id]="componentTest.componentType + '-' + i"
+                                        [hourFormat]="componentTest.config?.hourFormat || '24'"
+                                        [stepHour]="componentTest.config?.stepHour || 1"
+                                        [stepMinute]="componentTest.config?.stepMinute || 1"
+                                        [stepSecond]="componentTest.config?.stepSecond || 1"
+                                        [showSeconds]="componentTest.config?.showSeconds || false"
+                                        [appendTo]="componentTest.config?.appendTo || 'body'"
+                                        [styleClass]="componentTest.config?.styleClass || ''"
+                                        [customValidationMessages]="
+                                            componentTest.config?.customValidationMessages || {}
+                                        "
+                                        (timeChange)="componentTest.config?.events?.timeChange?.($event, componentTest)"
+                                        (inputFocus)="componentTest.config?.events?.focus?.(componentTest)"
+                                        (inputBlur)="componentTest.config?.events?.blur?.(componentTest)"
+                                        (inputClear)="componentTest.config?.events?.clear?.(componentTest)"
+                                        (pickerOpen)="componentTest.config?.events?.pickerOpen?.(componentTest)"
+                                        (pickerClose)="componentTest.config?.events?.pickerClose?.(componentTest)"
+                                    >
+                                    </time-picker>
+
+                                    <!-- Datetime Range Picker Component -->
+                                    <datetime-range-picker
+                                        *ngSwitchCase="'datetime-range-picker'"
+                                        [label]="componentTest.config?.label || 'Datetime Range'"
+                                        [dateLabel]="componentTest.config?.dateLabel || 'Ngày'"
+                                        [startTimeLabel]="componentTest.config?.startTimeLabel || 'Bắt đầu'"
+                                        [endTimeLabel]="componentTest.config?.endTimeLabel || 'Kết thúc'"
+                                        [required]="componentTest.config?.required || false"
+                                        [datePlaceholder]="componentTest.config?.datePlaceholder || 'Chọn ngày...'"
+                                        [startTimePlaceholder]="componentTest.config?.startTimePlaceholder || 'Từ giờ'"
+                                        [endTimePlaceholder]="componentTest.config?.endTimePlaceholder || 'Đến giờ'"
+                                        [control]="componentTest.form.get(componentTest.config?.formControlName)"
+                                        [submitted]="componentTest.submitted"
+                                        [formControlName]="componentTest.config?.formControlName"
+                                        [showClearButton]="componentTest.config?.showClearButton || false"
+                                        [id]="componentTest.componentType + '-' + i"
+                                        [minDate]="componentTest.config?.minDate"
+                                        [maxDate]="componentTest.config?.maxDate"
+                                        [dateInputFormat]="componentTest.config?.dateInputFormat || 'DD/MM/YYYY'"
+                                        [containerClass]="componentTest.config?.containerClass || 'theme-dark-blue'"
+                                        [showWeekNumbers]="componentTest.config?.showWeekNumbers || false"
+                                        [adaptivePosition]="componentTest.config?.adaptivePosition || true"
+                                        [showTodayButton]="componentTest.config?.showTodayButton || false"
+                                        [hourFormat]="componentTest.config?.hourFormat || '24'"
+                                        [stepHour]="componentTest.config?.stepHour || 1"
+                                        [stepMinute]="componentTest.config?.stepMinute || 1"
+                                        [stepSecond]="componentTest.config?.stepSecond || 1"
+                                        [showSeconds]="componentTest.config?.showSeconds || false"
+                                        [appendTo]="componentTest.config?.appendTo || 'body'"
+                                        [customValidationMessages]="
+                                            componentTest.config?.customValidationMessages || {}
+                                        "
+                                        (datetimeRangeChange)="componentTest.config?.events?.datetimeRangeChange?.($event, componentTest)"
+                                        (dateChange)="componentTest.config?.events?.dateChange?.($event, componentTest)"
+                                        (startTimeChange)="componentTest.config?.events?.startTimeChange?.($event, componentTest)"
+                                        (endTimeChange)="componentTest.config?.events?.endTimeChange?.($event, componentTest)"
+                                        (inputFocus)="componentTest.config?.events?.focus?.(componentTest)"
+                                        (inputBlur)="componentTest.config?.events?.blur?.(componentTest)"
+                                        (inputClear)="componentTest.config?.events?.clear?.(componentTest)"
+                                    >
+                                    </datetime-range-picker>
+
+                                    <!-- Default case for unsupported components -->
+                                    <div *ngSwitchDefault class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Component type "{{ componentTest.componentType }}" is not yet supported.
+                                        <br />
+                                        <small>Please add the component implementation to the template.</small>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="d-flex gap-2 mb-3">
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-paper-plane"></i> Submit
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary btn-sm"
+                                        (click)="onReset(componentTest)"
+                                    >
+                                        <i class="fas fa-undo"></i> Reset
+                                    </button>
+                                </div>
+
+                                <!-- Form Status and Value Display -->
+                                <div class="result-display">
+                                    <div class="col g-2">
+                                        <div class="col-md-6">
+                                            <div class="card card-sm">
+                                                <div class="card-header p-2">
+                                                    <h6 class="card-title mb-0">📊 Form Status</h6>
+                                                </div>
+                                                <div class="card-body p-2">
+                                                    <div class="status-item">
+                                                        <strong>Valid:</strong>
+                                                        <span
+                                                            [class]="
+                                                                componentTest.form.valid
+                                                                    ? 'text-success'
+                                                                    : 'text-danger'
+                                                            "
+                                                        >
+                                                            {{ componentTest.form.valid ? "✅ Yes" : "❌ No" }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="status-item">
+                                                        <strong>Submitted:</strong>
+                                                        <span
+                                                            [class]="
+                                                                componentTest.submitted ? 'text-info' : 'text-muted'
+                                                            "
+                                                        >
+                                                            {{ componentTest.submitted ? "✅ Yes" : "⏳ No" }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="card card-sm">
+                                                <div class="card-header p-2">
+                                                    <h6 class="card-title mb-0">💾 Current Value</h6>
+                                                </div>
+                                                <div class="card-body p-2">
+                                                    <div class="value-display">
+                                                        <strong>Value:</strong>
+                                                        <code class="text-primary">{{
+                                                            getFormValue(componentTest.form) || "null"
+                                                        }}</code>
+                                                    </div>
+                                                    <div class="type-display">
+                                                        <strong>Type:</strong>
+                                                        <span class="badge bg-info">{{
+                                                            getValueType(componentTest.form)
+                                                        }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Raw JSON Display (Collapsible) -->
+                                    <div class="mt-2">
+                                        <details class="json-details">
+                                            <summary class="json-summary">
+                                                <small>🔍 View Raw Form Data (JSON)</small>
+                                            </summary>
+                                            <div class="json-content">
+                                                <pre class="json-display">{{ componentTest.form.value | json }}</pre>
+                                            </div>
+                                        </details>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
