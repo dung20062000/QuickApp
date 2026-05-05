@@ -4,28 +4,75 @@
     align-items: center;
 }
 
-.icon-close-name {
-    color: #999999;
-    position: absolute;
-    font-size: 12px;
-    right: 30px;
-    bottom: 9px;
-    cursor: pointer;
+.form-control {
+    padding-right: 80px !important;
+    height: 42px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #ffffff;
 }
 
-/* Date range picker specific styles */
 .form-control[readonly] {
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     cursor: pointer;
 }
 
-.date-range-display {
+.form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    outline: none;
+}
+
+.form-control.is-invalid {
+    border-color: #ef4444;
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-actions {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 2px;
+    z-index: 5;
 }
 
-.date-range-separator {
-    color: #6c757d;
-    font-weight: 500;
+.btn-clear, .btn-calendar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    transition: color 0.2s;
+}
+
+.btn-clear:hover {
+    color: #ef4444;
+}
+
+.btn-calendar:hover {
+    color: #3b82f6;
+}
+
+/* Custom styles for ngx-bootstrap datepicker popup */
+:host ::ng-deep .bs-datepicker {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+:host ::ng-deep .bs-datepicker-head {
+    background-color: #3b82f6 !important;
+}
+
+:host ::ng-deep .bs-datepicker-body table td span.selected,
+:host ::ng-deep .bs-datepicker-body table td.selected span {
+    background-color: #3b82f6 !important;
 }

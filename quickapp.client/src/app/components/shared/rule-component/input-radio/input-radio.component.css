@@ -5,6 +5,15 @@
     padding: 4px 0;
 }
 
+.radio-group.inline-group {
+    flex-wrap: wrap;
+}
+
+.radio-group:not(.inline-group) {
+    flex-direction: column;
+    gap: 12px;
+}
+
 .radio-option {
     display: flex;
     align-items: center;
@@ -27,6 +36,7 @@
     justify-content: center;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     background-color: #fff;
+    z-index: 1;
 }
 
 .radio-input:checked {
@@ -65,11 +75,15 @@
     color: #334155;
     user-select: none;
     font-weight: 500;
-    transition: color 0.2s;
+    transition: all 0.2s;
 }
 
 .radio-label:hover {
     color: #1e293b;
+}
+
+.radio-label.active {
+    color: #3b82f6;
 }
 
 .radio-label.disabled {

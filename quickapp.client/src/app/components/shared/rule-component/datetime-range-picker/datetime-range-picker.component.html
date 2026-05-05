@@ -16,7 +16,7 @@
                     type="text"
                     bsDatepicker
                     #datePicker="bsDatepicker"
-                    class="form-control !tw-pr-[50px]"
+                    class="form-control"
                     [class.is-invalid]="hasError"
                     [placeholder]="datePlaceholder"
                     [ngModel]="value.date"
@@ -29,23 +29,27 @@
                     (focus)="onInputFocus($event)"
                     (blur)="onInputBlur($event)"
                 />
-                <app-icon-button
-                    class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-                    (buttonClick)="toggleDatePicker()"
-                    [attr.aria-expanded]="datePicker.isOpen"
-                    [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
-                    icon="calendar_today"
-                    size="sm"
-                    variant="ghost"
-                />
-                <app-icon-button
-                    *ngIf="showClearButton && value.date && !disabled"
-                    variant="ghost"
-                    icon="close"
-                    size="sm"
-                    (buttonClick)="clearDate()"
-                    class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-                />
+                <div class="input-actions">
+                    <app-icon-button
+                        *ngIf="showClearButton && value.date && !disabled"
+                        variant="ghost"
+                        icon="close"
+                        size="sm"
+                        (buttonClick)="clearDate()"
+                        class="btn-clear"
+                        title="Xóa"
+                    />
+                    <app-icon-button
+                        class="btn-calendar"
+                        (buttonClick)="toggleDatePicker()"
+                        [attr.aria-expanded]="datePicker.isOpen"
+                        [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
+                        icon="calendar_today"
+                        size="sm"
+                        variant="ghost"
+                        title="Chọn ngày"
+                    />
+                </div>
             </div>
         </div>
 
@@ -70,7 +74,7 @@
                     [placeholder]="startTimePlaceholder"
                     [appendTo]="appendTo"
                     class="tw-w-full"
-                    [inputStyleClass]="'form-control tw-pr-[50px] ' + (hasError ? 'is-invalid' : '')"
+                    [inputStyleClass]="'form-control ' + (hasError ? 'is-invalid' : '')"
                     [showIcon]="false"
                     [showOnFocus]="true"
                     (onFocus)="onInputFocus($event)"
@@ -81,25 +85,26 @@
                     (onClick)="onStartTimeInputClick($event)"
                 />
 
-                <!-- Start time toggle button -->
-                <app-icon-button
-                    class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-                    (buttonClick)="toggleStartTimePicker()"
-                    [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
-                    icon="schedule"
-                    size="sm"
-                    variant="ghost"
-                />
-
-                <!-- Start time clear button -->
-                <app-icon-button
-                    *ngIf="showClearButton && value.startTime && !disabled"
-                    variant="ghost"
-                    icon="close"
-                    size="sm"
-                    (buttonClick)="clearStartTime()"
-                    class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-                />
+                <div class="input-actions">
+                    <app-icon-button
+                        *ngIf="showClearButton && value.startTime && !disabled"
+                        variant="ghost"
+                        icon="close"
+                        size="sm"
+                        (buttonClick)="clearStartTime()"
+                        class="btn-clear"
+                        title="Xóa"
+                    />
+                    <app-icon-button
+                        class="btn-calendar"
+                        (buttonClick)="toggleStartTimePicker()"
+                        [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
+                        icon="schedule"
+                        size="sm"
+                        variant="ghost"
+                        title="Chọn giờ bắt đầu"
+                    />
+                </div>
             </div>
         </div>
 
@@ -124,7 +129,7 @@
                     [placeholder]="endTimePlaceholder"
                     [appendTo]="appendTo"
                     class="tw-w-full"
-                    [inputStyleClass]="'form-control tw-pr-[50px] ' + (hasError ? 'is-invalid' : '')"
+                    [inputStyleClass]="'form-control ' + (hasError ? 'is-invalid' : '')"
                     [showIcon]="false"
                     [showOnFocus]="true"
                     (onFocus)="onInputFocus($event)"
@@ -135,25 +140,26 @@
                     (onClick)="onEndTimeInputClick($event)"
                 />
 
-                <!-- End time toggle button -->
-                <app-icon-button
-                    class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-                    (buttonClick)="toggleEndTimePicker()"
-                    [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
-                    icon="schedule"
-                    size="sm"
-                    variant="ghost"
-                />
-
-                <!-- End time clear button -->
-                <app-icon-button
-                    *ngIf="showClearButton && value.endTime && !disabled"
-                    variant="ghost"
-                    icon="close"
-                    size="sm"
-                    (buttonClick)="clearEndTime()"
-                    class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-                />
+                <div class="input-actions">
+                    <app-icon-button
+                        *ngIf="showClearButton && value.endTime && !disabled"
+                        variant="ghost"
+                        icon="close"
+                        size="sm"
+                        (buttonClick)="clearEndTime()"
+                        class="btn-clear"
+                        title="Xóa"
+                    />
+                    <app-icon-button
+                        class="btn-calendar"
+                        (buttonClick)="toggleEndTimePicker()"
+                        [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
+                        icon="schedule"
+                        size="sm"
+                        variant="ghost"
+                        title="Chọn giờ kết thúc"
+                    />
+                </div>
             </div>
         </div>
     </div>

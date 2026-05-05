@@ -3,11 +3,92 @@
     display: flex;
     align-items: center;
 }
-.icon-close-name {
-    color: #999999;
+
+.form-control {
+    padding-right: 80px !important; /* Spacing for two icons */
+    height: 42px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #ffffff;
+}
+
+.input-actions {
     position: absolute;
-    font-size: 12px;
-    right: 30px;
-    bottom: 9px;
-    cursor: pointer;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    z-index: 5;
+}
+
+.btn-clear, .btn-calendar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    transition: color 0.2s;
+}
+
+.btn-clear:hover {
+    color: #ef4444;
+}
+
+.btn-calendar:hover {
+    color: #3b82f6;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    outline: none;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.form-control:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+/* Custom styles for ngx-bootstrap datepicker popup */
+:host ::ng-deep .bs-datepicker {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+:host ::ng-deep .bs-datepicker-container {
+    padding: 0 !important;
+}
+
+:host ::ng-deep .bs-datepicker-head {
+    background-color: #007bff !important;
+    padding: 15px !important;
+}
+
+:host ::ng-deep .bs-datepicker-body {
+    padding: 15px !important;
+}
+
+:host ::ng-deep .bs-datepicker-body table td span.selected,
+:host ::ng-deep .bs-datepicker-body table td.selected span,
+:host ::ng-deep .bs-datepicker-body table td span[class*="select-"]:after,
+:host ::ng-deep .bs-datepicker-body table td[class*="select-"] span:after {
+    background-color: #007bff !important;
+}
+
+:host ::ng-deep .bs-datepicker-body table td span:hover {
+    background-color: #e7f1ff !important;
+    color: #007bff !important;
 }

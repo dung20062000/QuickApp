@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { GenderRadioComponent } from "../../shared/rule-component/gender-radio/gender-radio.component";
-import { AppButtonComponent } from "../../shared/rule-component/app-button/app-button.component";
 
 interface ComponentTest {
     component: string;
@@ -18,7 +17,7 @@ interface ComponentTest {
     templateUrl: "./gender-radio-test.component.html",
     styleUrl: "./gender-radio-test.component.css",
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, GenderRadioComponent, AppButtonComponent]
+    imports: [CommonModule, ReactiveFormsModule, GenderRadioComponent]
 })
 export class GenderRadioTestComponent implements OnInit {
     componentTests: ComponentTest[] = [];
@@ -43,7 +42,7 @@ Thông báo lỗi:
 Giá trị trả về:
 - Boolean: true (Nam), false (Nữ), null (chưa chọn)`,
                 {
-                    gender: ["", [Validators.required]],
+                    gender: [null, [Validators.required]],
                 },
                 {
                     label: "Giới tính",
@@ -65,7 +64,7 @@ Giá trị trả về:
 - Cho phép không chọn giá trị nào
 - Không hiển thị thông báo lỗi khi để trống`,
                 {
-                    genderOptional: [""],
+                    genderOptional: [null],
                 },
                 {
                     label: "Giới tính (Tùy chọn)",

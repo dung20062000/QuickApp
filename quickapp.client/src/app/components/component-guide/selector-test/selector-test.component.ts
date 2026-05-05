@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { SelectOption, SelectorComponent } from "../../shared/rule-component/selector/selector.component";
 import { MultipleSelectorComponent } from "../../shared/rule-component/multiple-selector/multiple-selector.component";
-import { AppButtonComponent } from "../../shared/rule-component/app-button/app-button.component";
 
 interface ComponentTest {
     component: string;
@@ -19,7 +18,7 @@ interface ComponentTest {
     templateUrl: "./selector-test.component.html",
     styleUrl: "./selector-test.component.css",
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, SelectorComponent, MultipleSelectorComponent, AppButtonComponent]
+    imports: [CommonModule, ReactiveFormsModule, SelectorComponent, MultipleSelectorComponent]
 })
 export class SelectorTestComponent implements OnInit {
     componentTests: ComponentTest[] = [];
@@ -68,19 +67,19 @@ export class SelectorTestComponent implements OnInit {
             this.createComponentTest(
                 "SelectorComponent - Basic",
                 "selector",
-                `Basic select component:
-- Single selection dropdown
-- Clearable option
-- Searchable option
-- Required validation
-- Custom placeholder
-Validation:
-- Required: "Trường dữ liệu này không được để trống"
-- Custom messages supported
-Value returned:
-- Selected option value`,
+                `Component chọn đơn cơ bản:
+- Danh sách thả xuống chọn 1 giá trị
+- Có nút xóa giá trị đã chọn
+- Hỗ trợ tìm kiếm trong danh sách
+- Kiểm tra bắt buộc nhập
+- Placeholder tùy chỉnh
+Kiểm tra dữ liệu:
+- Bắt buộc: "Trường dữ liệu này không được để trống"
+- Hỗ trợ thông báo tùy chỉnh
+Giá trị trả về:
+- Giá trị của tùy chọn được chọn`,
                 {
-                    province: ["", [Validators.required]],
+                    province: [null, [Validators.required]],
                 },
                 {
                     label: "Tỉnh/Thành phố",
@@ -105,18 +104,18 @@ Value returned:
             this.createComponentTest(
                 "SelectorComponent - Virtual Scroll",
                 "selector",
-                `Large dataset with virtual scrolling:
-- Virtual scroll enabled for performance
-- Large dataset handling
-- Searchable for filtering
-- Single selection
-Performance:
-- Optimized for 1000+ items
-- Smooth scrolling experience
-Value returned:
-- Selected option value`,
+                `Dữ liệu lớn với cuộn ảo:
+- Kích hoạt cuộn ảo để tối ưu hiệu suất
+- Xử lý tập dữ liệu lớn mượt mà
+- Hỗ trợ tìm kiếm và lọc
+- Chọn đơn một giá trị
+Hiệu suất:
+- Tối ưu cho danh sách trên 1000 mục
+- Trải nghiệm cuộn mượt mà
+Giá trị trả về:
+- Giá trị của tùy chọn được chọn`,
                 {
-                    education: ["", [Validators.required]],
+                    education: [null, [Validators.required]],
                 },
                 {
                     label: "Trình độ học vấn",
@@ -142,15 +141,15 @@ Value returned:
             this.createComponentTest(
                 "SelectorComponent - Readonly",
                 "selector",
-                `Readonly select component:
-- Non-editable dropdown
-- Display selected value only
-- No user interaction
-- Pre-selected value shown
-Use case:
-- Display mode
-- Confirmation forms
-- Read-only data presentation`,
+                `Component chỉ đọc (Readonly):
+- Danh sách thả xuống không thể chỉnh sửa
+- Chỉ hiển thị giá trị đã được chọn
+- Không có tương tác người dùng
+- Hiển thị giá trị mặc định sẵn có
+Trường hợp sử dụng:
+- Chế độ hiển thị thông tin
+- Form xác nhận
+- Trình bày dữ liệu chỉ đọc`,
                 {
                     gender: [2], // Pre-selected value
                 },
@@ -176,17 +175,17 @@ Use case:
             this.createComponentTest(
                 "MultipleSelectorComponent - Basic",
                 "multiple-selector",
-                `Multiple selection dropdown:
-- Multiple selections allowed
-- Tag display for selected items
-- Selection counter badge
-- Clearable all selections
-Features:
-- Add/remove items dynamically
-- Visual feedback for selections
-- Custom validation support
-Value returned:
-- Array of selected values`,
+                `Danh sách thả xuống chọn nhiều (Multiple):
+- Cho phép chọn nhiều giá trị cùng lúc
+- Hiển thị các mục đã chọn dưới dạng thẻ (tags)
+- Có huy hiệu đếm số lượng mục đã chọn
+- Có nút xóa toàn bộ lựa chọn
+Tính năng:
+- Thêm/xóa mục linh hoạt
+- Phản hồi trực quan cho các lựa chọn
+- Hỗ trợ kiểm tra dữ liệu tùy chỉnh
+Giá trị trả về:
+- Mảng các giá trị được chọn`,
                 {
                     languages: [[], [Validators.required]],
                 },
@@ -217,17 +216,17 @@ Value returned:
             this.createComponentTest(
                 "MultipleSelectorComponent - Limited Selection",
                 "multiple-selector",
-                `Limited multiple selection:
-- Maximum 3 items can be selected
-- Visual warning when limit reached
-- Automatic disable when max reached
-- Selection counter with limit display
-Features:
-- Smart UX for limited selections
-- Clear feedback on constraints
-- Prevents over-selection
-Value returned:
-- Array of selected values (max 3)`,
+                `Giới hạn số lượng lựa chọn:
+- Chỉ cho phép chọn tối đa 3 mục
+- Cảnh báo trực quan khi đạt giới hạn
+- Tự động vô hiệu hóa lựa chọn khi đạt mức tối đa
+- Bộ đếm hiển thị kèm giới hạn
+Tính năng:
+- Trải nghiệm người dùng thông minh cho giới hạn chọn
+- Phản hồi rõ ràng về các ràng buộc
+- Ngăn chặn việc chọn quá số lượng
+Giá trị trả về:
+- Mảng các giá trị được chọn (tối đa 3)`,
                 {
                     skills: [[], [Validators.required, Validators.maxLength(3)]],
                 },
@@ -268,17 +267,17 @@ Value returned:
             this.createComponentTest(
                 "MultipleSelectorComponent - Virtual Scroll",
                 "multiple-selector",
-                `Multiple selection with virtual scroll:
-- Handles large datasets efficiently
-- Multiple selections from big lists
-- Performance optimized rendering
-- Smooth scrolling experience
-Performance:
-- Virtual scroll for 1000+ items
-- Memory efficient rendering
-- Fast search and filter
-Value returned:
-- Array of selected values`,
+                `Chọn nhiều với cuộn ảo (Virtual Scroll):
+- Xử lý tập dữ liệu lớn hiệu quả
+- Chọn nhiều mục từ danh sách dài
+- Tối ưu hóa hiệu suất hiển thị
+- Trải nghiệm cuộn mượt mà
+Hiệu suất:
+- Cuộn ảo cho danh sách 1000+ mục
+- Sử dụng bộ nhớ hiệu quả
+- Tìm kiếm và lọc nhanh chóng
+Giá trị trả về:
+- Mảng các giá trị được chọn`,
                 {
                     departments: [[], [Validators.required]],
                 },
@@ -313,7 +312,7 @@ Value returned:
             //     "selector",
             //     "Description of your custom select test",
             //     {
-            //         customField: ["", [Validators.required]],
+            //         customField: [null, [Validators.required]],
             //     },
             //     {
             //         label: "Custom Label",

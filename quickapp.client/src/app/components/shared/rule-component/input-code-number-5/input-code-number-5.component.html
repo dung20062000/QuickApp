@@ -5,30 +5,14 @@
     </label>
 
     <div class="input-group">
-        <input
-            [id]="id"
-            type="text"
-            class="form-control"
-            [class.is-invalid]="hasError"
-            [placeholder]="placeholder"
-            [value]="value"
-            [disabled]="disabled"
-            [readonly]="readonly"
-            [autofocus]="autofocus"
-            maxlength="5"
-            (input)="onInputChange($event)"
-            (keypress)="onKeyPress($event)"
-            (focus)="onInputFocus($event)"
-            (blur)="onInputBlur($event)"
-        />
+        <input [id]="id" type="text" class="form-control" [class.is-invalid]="hasError" [placeholder]="placeholder"
+            [value]="value" [disabled]="disabled" [readonly]="readonly" [autofocus]="autofocus" maxlength="5"
+            (input)="onInputChange($event)" (keypress)="onKeyPress($event)" (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)" />
 
-        <span
-            *ngIf="showClearButton && value && !disabled && !readonly"
-            class="icon-close-name"
-            (click)="clearInput()"
-            aria-label="Xóa"
-        >
-            <i class="far fa-times"></i>
+        <span *ngIf="showClearButton && value && !disabled && !readonly" class="icon-close-name" (click)="clearInput()"
+            aria-label="Xóa">
+            <span class="material-symbols-outlined">close</span>
         </span>
     </div>
 

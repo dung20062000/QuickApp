@@ -1,5 +1,55 @@
 .input-group {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.icon-close-name {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-close-name:hover {
+  color: #495057;
+}
+
+.icon-close-name .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.form-control {
+  padding-right: 40px !important;
+}
+
+.icon-close-name {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-close-name:hover {
+  color: #495057;
+}
+
+.icon-close-name .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.form-control {
+  padding-right: 40px !important;
 }

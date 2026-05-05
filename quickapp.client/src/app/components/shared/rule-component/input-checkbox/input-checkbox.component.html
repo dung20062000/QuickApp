@@ -1,0 +1,58 @@
+<div [class]="'form-group ' + customClass">
+    <!-- Label for the whole group or single checkbox -->
+    <label class="control-label" *ngIf="label && options" [for]="id">
+        {{ label }}
+        <span class="text-danger" *ngIf="required"> *</span>
+    </label>
+
+    <!-- Checkbox Group Mode -->
+    <div *ngIf="options" class="checkbox-group" [class.inline-group]="inline" [class.disabled]="disabled || readonly">
+        <div class="checkbox-wrapper" *ngFor="let option of options; let i = index" 
+             [class.disabled]="disabled || readonly || option.disabled">
+            <label [for]="id + '_' + i" class="checkbox-container">
+                <input
+                    type="checkbox"
+                    [id]="id + '_' + i"
+                    [checked]="isOptionChecked(option.value)"
+                    [disabled]="disabled || readonly || option.disabled"
+                    (change)="onOptionToggle($event, option.value)"
+                    (focus)="onFocus($event)"
+                    (blur)="onBlur($event)"
+                    class="checkbox-input"
+                />
+                <span class="checkbox-checkmark"></span>
+                <span class="checkbox-label">
+                    {{ option.text }}
+                </span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Single Checkbox Mode -->
+    <div *ngIf="!options" class="checkbox-wrapper single-mode" [class.disabled]="disabled || readonly" [class.has-error]="hasError">
+        <label [for]="id" class="checkbox-container">
+            <input
+                type="checkbox"
+                [id]="id"
+                [checked]="value"
+                [disabled]="disabled || readonly"
+                (change)="onToggle($event)"
+                (focus)="onFocus($event)"
+                (blur)="onBlur($event)"
+                class="checkbox-input"
+            />
+            <span class="checkbox-checkmark"></span>
+            <span class="checkbox-label" *ngIf="label">
+                {{ label }}
+                <span class="text-danger" *ngIf="required"> *</span>
+            </span>
+        </label>
+    </div>
+
+    <!-- Error Messages -->
+    <div *ngIf="hasError" class="has-error m-b-12">
+        <div *ngFor="let message of errorMessages">
+            <span class="tw-text-[#B91C1C]">{{ message }}</span>
+        </div>
+    </div>
+</div>

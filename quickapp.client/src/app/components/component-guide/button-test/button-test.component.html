@@ -1,8 +1,8 @@
 <div class="button-test-container">
-    <h2>App Button Component Test</h2>
+    <h2>Kiểm thử Component Nút bấm (App Button)</h2>
 
     <div class="test-section">
-        <h3>Button Variants (app-button)</h3>
+        <h3>Các loại biến thể Nút (app-button)</h3>
         <div class="button-group">
             <app-button variant="blue" (buttonClick)="onButtonClick('blue')"> variant="blue" (default) </app-button>
 
@@ -61,9 +61,9 @@
     </div>
 
     <div class="test-section">
-        <h3>Icon Examples</h3>
+        <h3>Ví dụ về Icon</h3>
 
-        <h4>Left Icons</h4>
+        <h4>Icon bên trái</h4>
         <div class="button-group">
             <app-button leftIcon="add" title="Add new item" (buttonClick)="onIconClick('add')"> Add Item </app-button>
 
@@ -97,7 +97,7 @@
             </app-button>
         </div>
 
-        <h4>Right Icons</h4>
+        <h4>Icon bên phải</h4>
         <div class="button-group">
             <app-button rightIcon="arrow_forward" title="Navigate forward" (buttonClick)="onIconClick('forward')">
                 Next
@@ -133,7 +133,7 @@
             </app-button>
         </div>
 
-        <h4>Both Icons</h4>
+        <h4>Cả hai Icon</h4>
         <div class="button-group">
             <app-button
                 leftIcon="bar_chart"
@@ -167,7 +167,7 @@
             </app-button>
         </div>
 
-        <h4>Icon-Only Buttons (app-icon-button)</h4>
+        <h4>Nút chỉ có Icon (app-icon-button)</h4>
         <div class="button-group">
             <app-icon-button
                 icon="add"
@@ -240,7 +240,7 @@
             />
         </div>
 
-        <h4>Custom Icon Classes</h4>
+        <h4>Các Class Icon tùy chỉnh (Animation)</h4>
         <div class="button-group">
             <app-button
                 leftIcon="star"
@@ -309,7 +309,7 @@
     </div>
 
     <div class="test-section">
-        <h3>Button Sizes</h3>
+        <h3>Kích thước Nút</h3>
         <div class="button-group">
             <app-button size="sm" title="Small button" (buttonClick)="onButtonClick('Small')"> Small </app-button>
 
@@ -322,7 +322,7 @@
     </div>
 
     <div class="test-section">
-        <h3>Button States</h3>
+        <h3>Trạng thái Nút</h3>
         <div class="button-group">
             <app-button title="Normal button state" (buttonClick)="onButtonClick('Normal')"> Normal </app-button>
 
@@ -339,7 +339,7 @@
     </div>
 
     <div class="test-section">
-        <h3>Form Buttons</h3>
+        <h3>Nút trong Form</h3>
         <form (ngSubmit)="onSubmitClick()" class="form-example">
             <div class="form-group">
                 <label for="testInput">Test Input:</label>

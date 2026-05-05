@@ -10,7 +10,7 @@
             type="text"
             bsDaterangepicker
             #dateRangePicker="bsDaterangepicker"
-            class="form-control !tw-pr-[50px] tw-font-normal"
+            class="form-control tw-font-normal"
             [class.is-invalid]="hasError"
             [placeholder]="placeholder ? placeholder : startPlaceholder + ' - ' + endPlaceholder"
             [value]="displayValue"
@@ -26,23 +26,27 @@
             (onShown)="onPickerOpen()"
             (onHidden)="onPickerClose()"
         />
-        <app-icon-button
-            class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-            (buttonClick)="toggleDateRangePicker(dateRangePicker)"
-            [attr.aria-expanded]="dateRangePicker.isOpen"
-            [style.cursor]="disabled || readonly ? 'not-allowed' : 'pointer'"
-            icon="calendar_today"
-            size="sm"
-            variant="ghost"
-        />
-        <app-icon-button
-            *ngIf="showClearButton && value && !disabled && !readonly"
-            variant="ghost"
-            icon="close"
-            size="sm"
-            (buttonClick)="clearDateRange()"
-            class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-        />
+        <div class="input-actions">
+            <app-icon-button
+                *ngIf="showClearButton && value && !disabled && !readonly"
+                variant="ghost"
+                icon="close"
+                size="sm"
+                (buttonClick)="clearDateRange()"
+                class="btn-clear"
+                title="Xóa"
+            />
+            <app-icon-button
+                class="btn-calendar"
+                (buttonClick)="toggleDateRangePicker(dateRangePicker)"
+                [attr.aria-expanded]="dateRangePicker.isOpen"
+                [style.cursor]="disabled || readonly ? 'not-allowed' : 'pointer'"
+                icon="calendar_today"
+                size="sm"
+                variant="ghost"
+                title="Chọn khoảng ngày"
+            />
+        </div>
     </div>
 
     <div *ngIf="hasError" class="has-error m-b-12">

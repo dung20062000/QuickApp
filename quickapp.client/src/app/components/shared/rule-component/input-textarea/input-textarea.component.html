@@ -5,31 +5,14 @@
     </label>
 
     <div class="textarea-group">
-        <textarea
-            [id]="id"
-            [class.is-invalid]="hasError"
-            [class.non-resizable]="!resizable"
-            [placeholder]="placeholder"
-            [value]="value"
-            class="form-control"
-            [disabled]="disabled"
-            [readonly]="readonly"
-            [autofocus]="autofocus"
-            [maxLength]="maxLength"
-            [rows]="rows"
-            (input)="onInputChange($event)"
-            (keypress)="onKeyPress($event)"
-            (focus)="onInputFocus($event)"
-            (blur)="onInputBlur($event)"
-        ></textarea>
+        <textarea [id]="id" [class.is-invalid]="hasError" [class.non-resizable]="!resizable" [placeholder]="placeholder"
+            [value]="value" class="form-control" [disabled]="disabled" [readonly]="readonly" [autofocus]="autofocus"
+            [maxLength]="maxLength" [rows]="rows" (input)="onInputChange($event)" (keypress)="onKeyPress($event)"
+            (focus)="onInputFocus($event)" (blur)="onInputBlur($event)"></textarea>
 
-        <span
-            *ngIf="showClearButton && value && !disabled && !readonly"
-            class="icon-close-name"
-            (click)="clearInput()"
-            aria-label="Xóa"
-        >
-            <i class="far fa-times"></i>
+        <span *ngIf="showClearButton && value && !disabled && !readonly" class="icon-close-name" (click)="clearInput()"
+            aria-label="Xóa">
+            <span class="material-symbols-outlined">close</span>
         </span>
     </div>
 

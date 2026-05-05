@@ -1,0 +1,159 @@
+.checkbox-group {
+    display: flex;
+    gap: 24px;
+    margin-top: 8px;
+    padding: 4px 0;
+}
+
+.checkbox-group.inline-group {
+    flex-wrap: wrap;
+}
+
+.checkbox-group:not(.inline-group) {
+    flex-direction: column;
+    gap: 12px;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+    transition: all 0.2s;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 0;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #334155;
+    user-select: none;
+    font-weight: 500;
+    min-height: 24px;
+    transition: color 0.2s;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkbox-checkmark {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 22px;
+    width: 22px;
+    background-color: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* On mouse-over, add a background color ONLY if NOT checked and NOT disabled */
+.checkbox-container:hover .checkbox-input:not(:checked):not(:disabled) ~ .checkbox-checkmark {
+    border-color: #3b82f6;
+    background-color: #f8fafc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox-input:checked ~ .checkbox-checkmark {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkbox-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-input:checked ~ .checkbox-checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2.5px 2.5px 0;
+    transform: rotate(45deg);
+}
+
+/* Focus state */
+.checkbox-input:focus ~ .checkbox-checkmark {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    border-color: #3b82f6;
+}
+
+/* Disabled state styling - Improved with higher specificity */
+.checkbox-wrapper.disabled {
+    pointer-events: none !important;
+    opacity: 0.65;
+}
+
+.checkbox-wrapper.disabled .checkbox-container {
+    cursor: not-allowed !important;
+}
+
+.checkbox-wrapper.disabled .checkbox-checkmark {
+    background-color: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: none !important;
+}
+
+.checkbox-wrapper.disabled .checkbox-input:checked ~ .checkbox-checkmark {
+    background-color: #94a3b8 !important;
+    border-color: #94a3b8 !important;
+}
+
+.checkbox-wrapper.disabled .checkbox-input:checked ~ .checkbox-checkmark:after {
+    border-color: #f8fafc !important;
+}
+
+.checkbox-wrapper.disabled .checkbox-label {
+    color: #64748b !important;
+    text-decoration: none;
+}
+
+/* Error state */
+.checkbox-wrapper.has-error .checkbox-checkmark {
+    border-color: #ef4444;
+}
+
+.checkbox-label {
+    line-height: 22px;
+    padding-top: 2px;
+}
+
+.m-b-12 {
+    margin-bottom: 12px;
+}
+
+.tw-text-\[\#B91C1C\] {
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Control Label for group */
+.control-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #1e293b;
+}

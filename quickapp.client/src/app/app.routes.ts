@@ -140,6 +140,8 @@ export const routes: Routes = [
       { path: 'date-pickers', loadComponent: () => import('./components/component-guide/date-picker-test/date-picker-test.component').then(m => m.DatePickerTestComponent), title: 'Date Pickers Test' },
       { path: 'selectors', loadComponent: () => import('./components/component-guide/selector-test/selector-test.component').then(m => m.SelectorTestComponent), title: 'Selectors Test' },
       { path: 'gender-radio', loadComponent: () => import('./components/component-guide/gender-radio-test/gender-radio-test.component').then(m => m.GenderRadioTestComponent), title: 'Gender Radio Test' },
+      { path: 'input-radio', loadComponent: () => import('./components/component-guide/input-radio-test/input-radio-test.component').then(m => m.InputRadioTestComponent), title: 'Generic Radio Test' },
+      { path: 'input-checkbox', loadComponent: () => import('./components/component-guide/input-checkbox-test/input-checkbox-test.component').then(m => m.InputCheckboxTestComponent), title: 'Checkbox Test' },
     ]
   },
   {

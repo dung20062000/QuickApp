@@ -1,40 +1,24 @@
 <div class="form-group" [ngClass]="customClass">
-    <label *ngIf="label" [for]="id" class="control-label">
-        {{ label }}
-        <span *ngIf="required" class="text-danger">*</span>
-    </label>
+  <label *ngIf="label" [for]="id" class="control-label">
+    {{ label }}
+    <span *ngIf="required" class="text-danger">*</span>
+  </label>
 
-    <div class="input-group">
-        <input
-            [id]="id"
-            type="text"
-            inputmode="decimal"
-            class="form-control"
-            [class.is-invalid]="hasError"
-            [placeholder]="placeholder"
-            [value]="inputValue"
-            [disabled]="disabled"
-            [readonly]="readonly"
-            [autofocus]="autofocus"
-            (input)="onInputChange($event)"
-            (keypress)="onKeyPress($event)"
-            (focus)="onInputFocus($event)"
-            (blur)="onInputBlur($event)"
-        />
+  <div class="input-group">
+    <input [id]="id" type="text" inputmode="decimal" class="form-control" [class.is-invalid]="hasError"
+      [placeholder]="placeholder" [value]="inputValue" [disabled]="disabled" [readonly]="readonly"
+      [autofocus]="autofocus" (input)="onInputChange($event)" (keypress)="onKeyPress($event)"
+      (focus)="onInputFocus($event)" (blur)="onInputBlur($event)" />
 
-        <span
-            *ngIf="showClearButton && inputValue && inputValue.length > 0 && !disabled && !readonly"
-            class="icon-close-name"
-            (click)="clearInput()"
-            aria-label="Xóa"
-        >
-            <i class="far fa-times"></i>
-        </span>
+    <span *ngIf="showClearButton && inputValue && inputValue.length > 0 && !disabled && !readonly"
+      class="icon-close-name" (click)="clearInput()" aria-label="Xóa">
+      <span class="material-symbols-outlined">close</span>
+    </span>
+  </div>
+
+  <div *ngIf="hasError" class="has-error m-b-12">
+    <div *ngFor="let message of errorMessages" class="tw-text-[#B91C1C]">
+      {{ message }}
     </div>
-
-    <div *ngIf="hasError" class="has-error m-b-12">
-        <div *ngFor="let message of errorMessages" class="tw-text-[#B91C1C]">
-            {{ message }}
-        </div>
-    </div>
+  </div>
 </div>

@@ -1,0 +1,37 @@
+<div [class]="'form-group ' + customClass">
+    <label class="control-label" *ngIf="label" [for]="id">
+        {{ label }}
+        <span class="text-danger" *ngIf="required"> *</span>
+    </label>
+
+    <div class="radio-group" [class.inline-group]="inline" [class.disabled]="disabled || readonly">
+        <div class="radio-option" *ngFor="let option of options; let i = index">
+            <input
+                type="radio"
+                [id]="id + '_' + i"
+                [name]="id"
+                [value]="option.value"
+                [checked]="value === option.value"
+                [disabled]="disabled || readonly || option.disabled"
+                (click)="onOptionClick($event, option.value)"
+                (focus)="onSelectionFocus($event)"
+                (blur)="onSelectionBlur($event)"
+                class="radio-input"
+            />
+            <label
+                [for]="id + '_' + i"
+                class="radio-label"
+                [class.disabled]="disabled || readonly || option.disabled"
+                [class.active]="value === option.value"
+            >
+                {{ option.text }}
+            </label>
+        </div>
+    </div>
+
+    <div *ngIf="hasError" class="has-error m-b-12">
+        <div *ngFor="let message of errorMessages">
+            <span class="tw-text-[#B91C1C]">{{ message }}</span>
+        </div>
+    </div>
+</div>

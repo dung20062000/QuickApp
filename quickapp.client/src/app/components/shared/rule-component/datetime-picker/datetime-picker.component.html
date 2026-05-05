@@ -10,7 +10,7 @@
             type="text"
             bsDatepicker
             #datetimePicker="bsDatepicker"
-            class="form-control !tw-pr-[50px]"
+            class="form-control"
             [class.is-invalid]="hasError"
             [placeholder]="placeholder"
             [ngModel]="value"
@@ -27,23 +27,27 @@
             (onShown)="onPickerOpen()"
             (onHidden)="onPickerClose()"
         />
-        <app-icon-button
-            class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-            (buttonClick)="toggleDatetimePicker(datetimePicker)"
-            [attr.aria-expanded]="datetimePicker.isOpen"
-            [style.cursor]="disabled || readonly ? 'not-allowed' : 'pointer'"
-            icon="calendar_today"
-            size="sm"
-            variant="ghost"
-        />
-        <app-icon-button
-            *ngIf="showClearButton && value && !disabled && !readonly"
-            variant="ghost"
-            icon="close"
-            size="sm"
-            (buttonClick)="clearDatetime()"
-            class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-        />
+        <div class="input-actions">
+            <app-icon-button
+                *ngIf="showClearButton && value && !disabled && !readonly"
+                variant="ghost"
+                icon="close"
+                size="sm"
+                (buttonClick)="clearDatetime()"
+                class="btn-clear"
+                title="Xóa"
+            />
+            <app-icon-button
+                class="btn-calendar"
+                (buttonClick)="toggleDatetimePicker(datetimePicker)"
+                [attr.aria-expanded]="datetimePicker.isOpen"
+                [style.cursor]="disabled || readonly ? 'not-allowed' : 'pointer'"
+                icon="calendar_today"
+                size="sm"
+                variant="ghost"
+                title="Chọn ngày giờ"
+            />
+        </div>
     </div>
 
     <div *ngIf="hasError" class="has-error m-b-12">

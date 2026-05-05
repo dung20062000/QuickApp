@@ -17,68 +17,59 @@ import {
 import { Subject, takeUntil } from 'rxjs';
 
 /**
- * Interface for gender options
+ * Interface for radio options
  */
-export interface GenderOption {
-  value: boolean;
+export interface RadioOption {
+  value: any;
   text: string;
   disabled?: boolean;
 }
 
 @Component({
-  selector: 'gender-radio',
-  templateUrl: './gender-radio.component.html',
-  styleUrls: ['./gender-radio.component.css'],
+  selector: 'input-radio',
+  templateUrl: './input-radio.component.html',
+  styleUrls: ['./input-radio.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => GenderRadioComponent),
+      useExisting: forwardRef(() => InputRadioComponent),
       multi: true,
     },
   ],
   standalone: true,
   imports: [CommonModule, FormsModule],
 })
-export class GenderRadioComponent
+export class InputRadioComponent
   implements ControlValueAccessor, OnInit, OnDestroy
 {
-  @Input() label: string = 'Giới tính';
+  @Input() label: string = '';
   @Input() required: boolean = false;
-  @Input() id: string = '';
+  @Input() id: string = 'radio_' + Math.random().toString(36).substring(2, 9);
   @Input() readonly: boolean = false;
   @Input() control: AbstractControl | null = null;
   @Input() submitted: boolean = false;
   @Input() customClass: string = '';
   @Input() customValidationMessages: { [key: string]: string } = {};
-  @Input() options: GenderOption[] = [
-    { value: true, text: 'Nam' },
-    { value: false, text: 'Nữ' },
-  ];
+  @Input() options: RadioOption[] = [];
   @Input() defaultValue: any | null = null;
   @Input() disabled: boolean = false;
+  @Input() inline: boolean = true;
 
   // Events
-  @Output() selectionChange = new EventEmitter<boolean>();
+  @Output() selectionChange = new EventEmitter<any>();
   @Output() selectionFocus = new EventEmitter<any>();
   @Output() selectionBlur = new EventEmitter<any>();
 
-  value: boolean | null = null;
+  value: any | null = null;
 
   private destroy$ = new Subject<void>();
-  private onChange = (value: boolean | null) => {};
+  private onChange = (value: any | null) => {};
   private onTouched = () => {};
 
   ngOnInit() {
-    if (this.defaultValue != null && this.value == null) {
+    if (this.defaultValue !== null && this.value === null) {
       this.value = this.defaultValue;
       this.onChange(this.value);
-    }
-    if (this.control) {
-      this.control.statusChanges
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
-          // Update component when control status changes
-        });
     }
   }
 
@@ -110,18 +101,38 @@ export class GenderRadioComponent
     this.disabled = isDisabled;
   }
 
-  onSelectionChange(value: boolean): void {
-    this.value = value;
-    this.onChange(value);
-    this.selectionChange.emit(value);
+  /**
+   * Handles option selection and toggle logic
+   */
+  onOptionClick(event: Event, optionValue: any): void {
+    if (this.disabled || this.readonly) return;
+
+    // Prevent default radio behavior to handle toggle manually if needed
+    // However, for accessibility, we might want to keep the radio behavior 
+    // and just handle the null case.
+    
+    if (!this.required && this.value === optionValue) {
+      // Toggle off if already selected and not required
+      setTimeout(() => {
+        this.value = null;
+        this.onChange(this.value);
+        this.selectionChange.emit(this.value);
+      }, 0);
+    } else {
+      this.value = optionValue;
+      this.onChange(this.value);
+      this.selectionChange.emit(this.value);
+    }
+    
+    this.onTouched();
   }
 
   onSelectionFocus(event: any): void {
-    this.onTouched();
     this.selectionFocus.emit(event);
   }
 
   onSelectionBlur(event: any): void {
+    this.onTouched();
     this.selectionBlur.emit(event);
   }
 

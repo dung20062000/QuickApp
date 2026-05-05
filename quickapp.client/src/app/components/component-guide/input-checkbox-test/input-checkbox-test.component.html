@@ -1,0 +1,61 @@
+<div class="container-fluid py-4">
+    <h1 class="mb-4">Checkbox Component Test</h1>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" style="width: 20%">Component</th>
+                    <th scope="col" style="width: 30%">Mô tả</th>
+                    <th scope="col" style="width: 50%">Ví dụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let componentTest of componentTests; let i = index">
+                    <td class="align-top">
+                        <h6 class="text-primary mb-1">{{ componentTest.component }}</h6>
+                        <small class="text-muted">{{ componentTest.componentType }}</small>
+                    </td>
+                    <td class="align-top">
+                        <p class="mb-0" style="white-space: pre-line">{{ componentTest.description }}</p>
+                    </td>
+                    <td class="align-top">
+                        <form [formGroup]="componentTest.form" (ngSubmit)="onSubmit(componentTest)">
+                            <div class="mb-4">
+                                <input-checkbox
+                                    [label]="componentTest.config.label"
+                                    [required]="componentTest.config.required"
+                                    [control]="componentTest.form.get(componentTest.config.formControlName)"
+                                    [submitted]="componentTest.submitted"
+                                    [formControlName]="componentTest.config.formControlName"
+                                    [disabled]="componentTest.config.disabled"
+                                    [options]="componentTest.config.options"
+                                    [inline]="componentTest.config.inline !== false"
+                                    [id]="'checkbox_test_' + i"
+                                ></input-checkbox>
+                            </div>
+
+                            <div class="d-flex gap-2 mb-3">
+                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="onReset(componentTest)">Reset</button>
+                            </div>
+
+                            <div class="p-3 bg-light rounded border">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small class="fw-bold">Giá trị:</small>
+                                    <code class="text-primary">{{ getFormValue(componentTest.form) }}</code>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <small class="fw-bold">Trạng thái:</small>
+                                    <span [class.text-success]="componentTest.form.valid" [class.text-danger]="!componentTest.form.valid">
+                                        {{ componentTest.form.valid ? 'HỢP LỆ' : 'KHÔNG HỢP LỆ' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

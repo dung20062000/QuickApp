@@ -1,14 +1,44 @@
 .textarea-group {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .textarea-group textarea {
-    resize: vertical;
-    min-height: 60px;
+  resize: vertical;
+  min-height: 60px;
 }
 
 .textarea-group .non-resizable {
-    resize: none;
+  resize: none;
+}
+
+.icon-close-name {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-close-name .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.icon-close-name:hover {
+  color: #495057;
+}
+
+.form-control {
+  padding-right: 40px; /* Make space for clear button */
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }

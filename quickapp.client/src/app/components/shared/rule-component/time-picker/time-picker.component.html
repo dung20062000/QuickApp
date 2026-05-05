@@ -21,7 +21,7 @@
             [placeholder]="placeholder"
             [appendTo]="appendTo"
             class="tw-w-full"
-            [inputStyleClass]="'form-control !tw-pr-[50px] ' + (hasError ? 'is-invalid' : '')"
+            [inputStyleClass]="'form-control ' + (hasError ? 'is-invalid' : '')"
             [styleClass]="styleClass"
             [showIcon]="false"
             [showOnFocus]="true"
@@ -33,23 +33,26 @@
             (click)="onInputClick($event)"
         />
 
-
-        <app-icon-button
-            class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-            (buttonClick)="toggleTimePicker($event)"
-            [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
-            icon="access_time"
-            size="sm"
-            variant="ghost"
-        />
-        <app-icon-button
-            *ngIf="showClearButton && value && !disabled"
-            variant="ghost"
-            icon="close"
-            size="sm"
-            (buttonClick)="clearTime()"
-            class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
-        />
+        <div class="input-actions">
+            <app-icon-button
+                *ngIf="showClearButton && value && !disabled"
+                variant="ghost"
+                icon="close"
+                size="sm"
+                (buttonClick)="clearTime()"
+                class="btn-clear"
+                title="Xóa"
+            />
+            <app-icon-button
+                class="btn-calendar"
+                (buttonClick)="toggleTimePicker($event)"
+                [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
+                icon="access_time"
+                size="sm"
+                variant="ghost"
+                title="Chọn giờ"
+            />
+        </div>
     </div>
 
     <div *ngIf="hasError" class="has-error m-b-12">

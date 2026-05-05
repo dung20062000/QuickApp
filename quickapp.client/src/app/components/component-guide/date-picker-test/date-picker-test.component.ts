@@ -13,7 +13,6 @@ import {
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
 import { defineLocale } from "ngx-bootstrap/chronos";
 import { viLocale } from "ngx-bootstrap/locale";
-import { AppButtonComponent } from "../../shared/rule-component/app-button/app-button.component";
 
 defineLocale("vi", viLocale);
 
@@ -39,7 +38,6 @@ interface ComponentTest {
         DateRangePickerComponent,
         TimePickerComponent,
         DatetimeRangePickerComponent,
-        AppButtonComponent
     ]
 })
 export class DatePickerTestComponent implements OnInit {
@@ -80,18 +78,18 @@ export class DatePickerTestComponent implements OnInit {
             this.createComponentTest(
                 "DatePickerComponent",
                 "date-picker",
-                `Date Picker Component:
+                `Component chọn ngày:
 - Placeholder: Nhập...
-- Format: DD/MM/YYYY
-- Single date selection
-- Min/Max date validation
-- Required validation support
-- Clear button functionality
+- Định dạng: DD/MM/YYYY
+- Chọn một ngày duy nhất
+- Kiểm tra ngày tối thiểu/tối đa
+- Hỗ trợ bắt buộc nhập
+- Nút xóa nhanh giá trị
 Thông báo lỗi:
-- Required: "Trường dữ liệu này không được để trống"
-- Invalid date: "Ngày không hợp lệ"
+- Bắt buộc: "Trường dữ liệu này không được để trống"
+- Ngày không hợp lệ: "Ngày không hợp lệ"
 Giá trị trả về:
-- Date object or null`,
+- Đối tượng Date hoặc null`,
                 {
                     birthDate: [null, [Validators.required, dateValidator("Ngày sinh")]],
                 },
@@ -122,11 +120,11 @@ Giá trị trả về:
             this.createComponentTest(
                 "DatePickerComponent (Start Date)",
                 "date-picker",
-                `Date Picker for Start Date:
-- Min date: ${this.minDate.toLocaleDateString()}
-- Max date: Today
-- Connected to end date validation
-- Custom validation messages`,
+                `Component chọn ngày bắt đầu:
+- Ngày tối thiểu: ${this.minDate.toLocaleDateString()}
+- Ngày tối đa: Hôm nay
+- Liên kết với kiểm tra ngày kết thúc
+- Thông báo lỗi tùy chỉnh`,
                 {
                     startDate: [null, [Validators.required, dateValidator("Ngày bắt đầu")]],
                 },
@@ -152,17 +150,17 @@ Giá trị trả về:
             this.createComponentTest(
                 "DateRangePickerComponent",
                 "date-range-picker",
-                `Date Range Picker Component:
-- Dual date selection (start and end)
-- Format: DD/MM/YYYY - DD/MM/YYYY
-- Predefined ranges support
-- Maximum date range validation (365 days)
-- Range validation (start < end)
+                `Component chọn khoảng ngày:
+- Chọn hai ngày (bắt đầu và kết thúc)
+- Định dạng: DD/MM/YYYY - DD/MM/YYYY
+- Hỗ trợ các khoảng chọn nhanh (hôm nay, tuần này...)
+- Kiểm tra khoảng cách tối đa (365 ngày)
+- Kiểm tra tính hợp lệ (ngày bắt đầu < ngày kết thúc)
 Thông báo lỗi:
-- Required: "Trường dữ liệu này không được để trống"
-- Invalid range: "Ngày bắt đầu phải trước ngày kết thúc"
+- Bắt buộc: "Trường dữ liệu này không được để trống"
+- Khoảng không hợp lệ: "Ngày bắt đầu phải trước ngày kết thúc"
 Giá trị trả về:
-- DateRange object with startDate and endDate`,
+- Đối tượng DateRange (startDate và endDate)`,
                 {
                     reportPeriod: [null, [Validators.required, dateRangeValidator("Khoảng thời gian báo cáo")]],
                 },
@@ -195,11 +193,11 @@ Giá trị trả về:
             this.createComponentTest(
                 "DateRangePickerComponent (Simple)",
                 "date-range-picker",
-                `Simple Date Range Picker:
-- Basic configuration
-- No predefined ranges
-- No maximum date range limit
-- Standard validation`,
+                `Component chọn khoảng ngày đơn giản:
+- Cấu hình cơ bản nhất
+- Không có các khoảng chọn nhanh
+- Không giới hạn số ngày tối đa
+- Kiểm tra dữ liệu tiêu chuẩn`,
                 {
                     simpleDateRange: [null, [Validators.required]],
                 },
@@ -220,19 +218,18 @@ Giá trị trả về:
             this.createComponentTest(
                 "DatetimePickerComponent",
                 "datetime-picker",
-                `Datetime Picker Component:
+                `Component chọn ngày giờ:
 - Placeholder: Nhập...
-- Format: DD/MM/YYYY HH:mm
-- Single datetime selection
-- Time picker included (24-hour format)
-- Min/Max date validation
-- Required validation support
-- Clear button functionality
+- Định dạng: DD/MM/YYYY HH:mm
+- Chọn ngày và giờ cùng lúc
+- Bao gồm bộ chọn giờ (định dạng 24h)
+- Kiểm tra ngày tối thiểu/tối đa
+- Hỗ trợ bắt buộc nhập
 Thông báo lỗi:
-- Required: "Trường dữ liệu này không được để trống"
-- Invalid datetime: "Ngày giờ không hợp lệ"
+- Bắt buộc: "Trường dữ liệu này không được để trống"
+- Ngày giờ không hợp lệ: "Ngày giờ không hợp lệ"
 Giá trị trả về:
-- Date object or null`,
+- Đối tượng Date hoặc null`,
                 {
                     appointmentDateTime: [null, [Validators.required, datetimeValidator("Ngày giờ hẹn")]],
                 },
@@ -268,11 +265,11 @@ Giá trị trả về:
             this.createComponentTest(
                 "DatetimePickerComponent (Meeting)",
                 "datetime-picker",
-                `Datetime Picker for Meeting Scheduling:
-- Custom time steps (30 minutes)
-- Business hours validation
-- Custom validation messages
-- Different format options`,
+                `Component chọn ngày giờ họp:
+- Bước nhảy thời gian tùy chỉnh (30 phút)
+- Kiểm tra trong giờ hành chính
+- Thông báo lỗi tùy chỉnh
+- Các tùy chọn định dạng khác nhau`,
                 {
                     meetingDateTime: [null, [Validators.required, datetimeValidator("Thời gian họp")]],
                 },
@@ -304,24 +301,18 @@ Giá trị trả về:
             this.createComponentTest(
                 "TimePickerComponent",
                 "time-picker",
-                `Time Picker Component:
+                `Component chọn giờ:
 - Placeholder: HH:mm
-- Format: HH:mm (24-hour format)
-- Single time selection
-- Custom input parsing (supports HH:mm, HHmm formats)
-- Smart parsing: 1111 → 11:11, 930 → 09:30
-- Required validation support
-- Clear button functionality
+- Định dạng: HH:mm (24 giờ)
+- Chọn một mốc thời gian duy nhất
+- Xử lý nhập liệu thông minh (hỗ trợ HH:mm, HHmm)
+- Ví dụ: 1111 → 11:11, 930 → 09:30
+- Hỗ trợ bắt buộc nhập
 Thông báo lỗi:
-- Required: "Trường dữ liệu này không được để trống"
-- Invalid time: "Thời gian không hợp lệ"
+- Bắt buộc: "Trường dữ liệu này không được để trống"
+- Giờ không hợp lệ: "Thời gian không hợp lệ"
 Giá trị trả về:
-- Date object with time or null
-Parsing examples:
-- "11:30" → 11:30
-- "1130" → 11:30
-- "930" → 09:30
-- "9:30" → 09:30`,
+- Đối tượng Date kèm theo giờ hoặc null`,
                 {
                     startTime: [null, [Validators.required, timeValidator("Thời gian bắt đầu")]],
                 },
@@ -350,11 +341,11 @@ Parsing examples:
             this.createComponentTest(
                 "TimePickerComponent (End Time)",
                 "time-picker",
-                `Time Picker for End Time:
-- Custom validation messages
-- Different step minutes (15 minutes)
-- 12-hour format support
-- Advanced parsing validation`,
+                `Component chọn giờ kết thúc:
+- Thông báo lỗi tùy chỉnh
+- Bước nhảy phút khác nhau (15 phút)
+- Hỗ trợ định dạng 12 giờ
+- Kiểm tra nhập liệu nâng cao`,
                 {
                     endTime: [null, [Validators.required, timeValidator("Thời gian kết thúc")]],
                 },
@@ -382,11 +373,11 @@ Parsing examples:
             this.createComponentTest(
                 "TimePickerComponent (With Seconds)",
                 "time-picker",
-                `Time Picker with Seconds:
-- Includes seconds selection
-- Format: HH:mm:ss
-- More precise time input
-- Custom step values`,
+                `Component chọn giờ có giây:
+- Bao gồm lựa chọn giây
+- Định dạng: HH:mm:ss
+- Nhập liệu thời gian chính xác hơn
+- Bước nhảy tùy chỉnh cho các thành phần`,
                 {
                     preciseTime: [null, [Validators.required, timeValidator("Thời gian chính xác")]],
                 },
@@ -411,20 +402,18 @@ Parsing examples:
             this.createComponentTest(
                 "DatetimeRangePickerComponent",
                 "datetime-range-picker",
-                `Datetime Range Picker Component:
-- Combines date picker with start and end time pickers
-- Format: Date + Start Time + End Time
-- Automatic datetime combination (startDateTime, endDateTime)
-- Time validation (start < end)
-- Custom time parsing support (1111 → 11:11)
-- Individual clear buttons for each field
-- Clear all functionality
+                `Component chọn khoảng ngày giờ:
+- Kết hợp chọn ngày và giờ bắt đầu/kết thúc
+- Định dạng: Ngày + Giờ bắt đầu + Giờ kết thúc
+- Tự động gộp thành đối tượng datetime hoàn chỉnh
+- Kiểm tra tính hợp lệ (bắt đầu < kết thúc)
+- Nút xóa riêng lẻ cho từng trường hoặc xóa tất cả
 Thông báo lỗi:
-- Required: "Trường dữ liệu này không được để trống"
-- Invalid range: "Thời gian bắt đầu phải trước thời gian kết thúc"
-- Missing date: "Vui lòng chọn ngày"
+- Bắt buộc: "Trường dữ liệu này không được để trống"
+- Khoảng không hợp lệ: "Thời gian bắt đầu phải trước thời gian kết thúc"
+- Thiếu ngày: "Vui lòng chọn ngày"
 Giá trị trả về:
-- DateTimeRange object with date, startTime, endTime, startDateTime, endDateTime`,
+- Đối tượng DateTimeRange chứa đầy đủ thông tin`,
                 {
                     scheduleTime: [null, [Validators.required, datetimeRangeValidator("Thời gian lịch hẹn")]],
                 },
@@ -463,11 +452,11 @@ Giá trị trả về:
             this.createComponentTest(
                 "DatetimeRangePickerComponent (Meeting)",
                 "datetime-range-picker",
-                `Datetime Range Picker for Meeting Scheduling:
-- Different step values (30 minutes)
-- Custom validation messages
-- Business meeting context
-- Flexible time slots`,
+                `Component chọn khoảng ngày giờ họp:
+- Bước nhảy thời gian khác nhau (30 phút)
+- Thông báo lỗi tùy chỉnh
+- Ngữ cảnh họp kinh doanh
+- Khung thời gian linh hoạt`,
                 {
                     meetingSchedule: [null, [Validators.required, datetimeRangeValidator("Thời gian họp")]],
                 },
