@@ -12,6 +12,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { AppIconButtonComponent } from '../app-icon-button/app-icon-button.component';
 
 @Component({
   selector: 'search-500',
@@ -25,7 +26,7 @@ import { debounceTime } from 'rxjs/operators';
     },
   ],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AppIconButtonComponent],
 })
 export class Search500Component
   implements ControlValueAccessor, OnInit, OnDestroy
@@ -96,6 +97,8 @@ export class Search500Component
     this.value = event.target.value;
     this.onChange(this.value);
     this.inputKeyup.emit(event);
+    // Trigger debounced confirm on every input
+    this.confirmSubject$.next(event);
   }
 
   onKeyPress(event: KeyboardEvent): void {
@@ -107,6 +110,8 @@ export class Search500Component
         this.onChange(this.value);
       }
       this.onTouched();
+      // Force immediate confirm on Enter
+      this.lastConfirmValue = ''; // Ensure emission
       this.confirmSubject$.next(event);
     }
   }
@@ -116,7 +121,6 @@ export class Search500Component
   }
 
   onInputBlur(event: any): void {
-    // Trim the input value on blur
     const trimmedValue = this.value.trim();
     if (trimmedValue !== this.value) {
       this.value = trimmedValue;
@@ -135,6 +139,7 @@ export class Search500Component
     this.value = '';
     this.onChange('');
     this.inputClear.emit();
+    this.lastConfirmValue = '';
     this.confirmSubject$.next(null);
   }
 }

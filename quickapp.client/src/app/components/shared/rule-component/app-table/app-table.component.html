@@ -1,0 +1,135 @@
+<div class="app-table-wrapper">
+    <p-table
+        #dt
+        [value]="loading ? skeletonArray : data"
+        [columns]="columns"
+        [dataKey]="dataKey"
+        [paginator]="paginator && !loading && data && data.length > 0"
+        [rows]="rows"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [totalRecords]="totalRecords !== null ? totalRecords : (data ? data.length : 0)"
+        [scrollable]="!!scrollHeight"
+        [scrollHeight]="scrollHeight || ''"
+        [tableStyle]="{ 'min-width': '100%' }"
+        styleClass="app-primeng-table"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Hiển thị {first} – {last} trong tổng số {totalRecords} bản ghi"
+        (onPage)="onTableChange($event)"
+        (onSort)="onTableChange($event)"
+    >
+        <!-- ============ HEADER ============ -->
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th
+                    *ngFor="let col of columns"
+                    [style.width]="col.width || 'auto'"
+                    [style.text-align]="col.align || 'left'"
+                    [pSortableColumn]="col.field"
+                    [pSortableColumnDisabled]="!col.sortable"
+                    [class]="'app-table-th ' + (col.headerClass || '')"
+                >
+                    <div class="th-content">
+                        <span class="th-label">{{ col.header }}</span>
+                        <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+                    </div>
+                </th>
+            </tr>
+            <!-- Filter Row -->
+            <tr *ngIf="hasAnyFilter" class="filter-row">
+                <th *ngFor="let col of columns" class="filter-th">
+                    <ng-container *ngIf="col.filterable">
+                        <!-- Text Filter (Sử dụng Search500 chung) -->
+                        <div *ngIf="!col.filterType || col.filterType === 'text'" class="table-filter-container">
+                            <search-500
+                                [placeholder]="'Lọc...'"
+                                [showClearButton]="true"
+                                (inputConfirm)="dt.filter($event.target?.value || $event, col.field, 'contains')"
+                            ></search-500>
+                        </div>
+                        
+                        <!-- Dropdown Filter (Sử dụng Selector chung) -->
+                        <div *ngIf="col.filterType === 'dropdown'" class="table-filter-container">
+                            <selector
+                                [items]="col.filterOptions || []"
+                                [placeholder]="'Tất cả'"
+                                [clearable]="true"
+                                [searchable]="false"
+                                (selectionChange)="dt.filter($event, col.field, 'equals')"
+                            ></selector>
+                        </div>
+                    </ng-container>
+                </th>
+            </tr>
+        </ng-template>
+
+        <!-- ============ BODY ============ -->
+        <ng-template pTemplate="body" let-row let-columns="columns">
+            <!-- Skeleton Rows -->
+            <tr *ngIf="loading" class="skeleton-row">
+                <td *ngFor="let col of columns">
+                    <p-skeleton height="20px" borderRadius="4px"></p-skeleton>
+                </td>
+            </tr>
+
+            <!-- Data Rows -->
+            <tr *ngIf="!loading" class="data-row">
+                <td
+                    *ngFor="let col of columns"
+                    [style.text-align]="col.align || 'left'"
+                    [class]="'app-table-td ' + (col.cellClass || '')"
+                >
+                    <!-- Custom Template -->
+                    <ng-container *ngIf="templateMap[col.field]; else defaultCell">
+                        <ng-container
+                            *ngTemplateOutlet="templateMap[col.field]; context: { $implicit: getCellValue(row, col.field), row: row }"
+                        ></ng-container>
+                    </ng-container>
+
+                    <!-- Default Cell -->
+                    <ng-template #defaultCell>
+                        <span *ngIf="col.type === 'date'" class="cell-text">
+                            {{ formatDate(getCellValue(row, col.field)) }}
+                        </span>
+                        <span *ngIf="col.type === 'datetime'" class="cell-text">
+                            {{ formatDatetime(getCellValue(row, col.field)) }}
+                        </span>
+                        <span *ngIf="col.type === 'number'" class="cell-text cell-number">
+                            {{ formatNumber(getCellValue(row, col.field)) }}
+                        </span>
+                        <span
+                            *ngIf="col.type === 'badge'"
+                            class="cell-badge"
+                            [ngClass]="col.badgeClass ? col.badgeClass(getCellValue(row, col.field), row) : 'badge-gray'"
+                        >
+                            {{ getCellValue(row, col.field) ?? '—' }}
+                        </span>
+                        <span
+                            *ngIf="!col.type || col.type === 'text' || col.type === 'custom'"
+                            class="cell-text"
+                            [title]="getCellValue(row, col.field)"
+                        >
+                            {{ getCellValue(row, col.field) ?? '—' }}
+                        </span>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-template>
+
+        <!-- ============ EMPTY STATE ============ -->
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [colSpan]="columns.length" class="empty-state-cell">
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <span class="material-symbols-outlined">inbox</span>
+                        </div>
+                        <p class="empty-title">{{ emptyMessage }}</p>
+                        <p class="empty-subtitle">Hãy thử thay đổi bộ lọc hoặc thêm dữ liệu mới.</p>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<ng-content></ng-content>

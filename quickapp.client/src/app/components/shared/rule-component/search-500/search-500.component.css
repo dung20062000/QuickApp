@@ -1,30 +1,72 @@
-.input-group {
+.search-500-group {
+  width: 100%;
+}
+
+.search-500-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
-.icon-close-name {
+.search-500-wrapper:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-500-icon {
   position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  z-index: 10;
-  color: #6c757d;
+  left: 10px;
+  font-size: 20px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.search-500-input {
+  width: 100%;
+  padding: 8px 36px 8px 36px !important;
+  border: none !important;
+  background: transparent !important;
+  font-size: 0.875rem;
+  color: #1e293b;
+  outline: none !important;
+  box-shadow: none !important;
+  font-family: inherit;
+}
+
+.search-500-input::placeholder {
+  color: #94a3b8;
+}
+
+.search-500-actions {
+  position: absolute;
+  right: 4px;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
-.icon-close-name:hover {
-  color: #495057;
+/* Disabled State */
+.search-500-wrapper[disabled],
+.search-500-wrapper:has(input:disabled) {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
 }
 
-.icon-close-name .material-symbols-outlined {
-  font-size: 20px;
+/* Custom size when used in Table Filter */
+:host-context(.table-filter-container) .search-500-wrapper {
+  border-radius: 6px;
 }
 
-.form-control {
-  padding-right: 40px !important;
+:host-context(.table-filter-container) .search-500-input {
+  padding: 5px 32px 5px 32px !important;
+  font-size: 0.825rem;
+}
+
+:host-context(.table-filter-container) .search-500-icon {
+  font-size: 18px;
+  left: 8px;
 }

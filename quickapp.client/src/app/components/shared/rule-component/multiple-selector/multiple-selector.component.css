@@ -1,51 +1,55 @@
 /* Select All Header Styling */
 .select-all-container {
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-bottom: 1px solid #e9ecef;
-    background-color: #f8f9fa;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
 .select-all-container:hover {
-    background-color: #e9ecef;
+  background-color: #e9ecef;
 }
 
 .select-all-checkbox {
-    margin: 0 8px 0 0;
-    cursor: pointer;
-    transform: scale(1.1);
+  margin: 0 8px 0 0;
+  cursor: pointer;
+  transform: scale(1.1);
 }
 
 .select-all-label {
-    font-weight: 500;
-    color: #495057;
-    cursor: pointer;
-    user-select: none;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  user-select: none;
 }
 
 /* Disabled state */
 .select-all-container.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    pointer-events: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .select-all-container.disabled .select-all-checkbox,
 .select-all-container.disabled .select-all-label {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 /* Custom styling for ng-select header */
 ::ng-deep .ng-select .ng-dropdown-panel .ng-dropdown-header {
-    padding: 0 !important;
-    margin: 0 !important;
-    border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
 }
 
-::ng-deep .ng-select .ng-dropdown-panel .ng-dropdown-header .select-all-container {
-    margin: 0;
+::ng-deep
+  .ng-select
+  .ng-dropdown-panel
+  .ng-dropdown-header
+  .select-all-container {
+  margin: 0;
 }

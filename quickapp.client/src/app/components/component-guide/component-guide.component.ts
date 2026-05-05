@@ -38,6 +38,11 @@ import { RouterModule } from '@angular/router';
               >Checkbox</a
             >
           </li>
+          <li>
+            <a routerLink="app-table" routerLinkActive="active"
+              >📊 Bảng dữ liệu</a
+            >
+          </li>
         </ul>
       </nav>
       <main class="content">

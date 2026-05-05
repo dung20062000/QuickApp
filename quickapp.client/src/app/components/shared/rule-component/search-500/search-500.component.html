@@ -1,20 +1,28 @@
-<div class="form-group" [ngClass]="customClass">
-    <div class="input-group">
-        <input [id]="id" type="text" class="form-control tw-font-normal" [placeholder]="placeholder" [value]="value"
-            [disabled]="disabled" [readonly]="readonly" [autofocus]="autofocus" [maxLength]="maxLength || 500"
-            (input)="onInputChange($event)" (keypress)="onKeyPress($event)" (focus)="onInputFocus($event)"
-            (blur)="onInputBlur($event)" />
-        <app-icon-button *ngIf="showClearButton && value && !disabled && !readonly" variant="ghost" icon="close"
-            size="sm" (buttonClick)="clearInput()"
-            class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2" />
-
-        <!-- <span
-            *ngIf="showClearButton && value && !disabled && !readonly"
-            class="icon-close-name"
-            (click)="clearInput()"
-            aria-label="Xóa"
-        >
-            <span class="material-symbols-outlined">close</span>
-        </span> -->
+<div class="search-500-group" [ngClass]="customClass">
+  <div class="search-500-wrapper">
+    <span class="material-symbols-outlined search-500-icon">search</span>
+    <input
+      [id]="id"
+      type="text"
+      class="search-500-input"
+      [placeholder]="placeholder"
+      [value]="value"
+      [disabled]="disabled"
+      [readonly]="readonly"
+      [autofocus]="autofocus"
+      [maxLength]="maxLength || 500"
+      (input)="onInputChange($event)"
+      (keypress)="onKeyPress($event)"
+      (focus)="onInputFocus($event)"
+      (blur)="onInputBlur($event)"
+    />
+    <div class="search-500-actions" *ngIf="showClearButton && value && !disabled && !readonly">
+      <app-icon-button
+        variant="ghost"
+        icon="close"
+        size="sm"
+        (buttonClick)="clearInput()"
+      ></app-icon-button>
     </div>
+  </div>
 </div>

@@ -142,6 +142,7 @@ export const routes: Routes = [
       { path: 'gender-radio', loadComponent: () => import('./components/component-guide/gender-radio-test/gender-radio-test.component').then(m => m.GenderRadioTestComponent), title: 'Gender Radio Test' },
       { path: 'input-radio', loadComponent: () => import('./components/component-guide/input-radio-test/input-radio-test.component').then(m => m.InputRadioTestComponent), title: 'Generic Radio Test' },
       { path: 'input-checkbox', loadComponent: () => import('./components/component-guide/input-checkbox-test/input-checkbox-test.component').then(m => m.InputCheckboxTestComponent), title: 'Checkbox Test' },
+      { path: 'app-table', loadComponent: () => import('./components/component-guide/app-table-test/app-table-test.component').then(m => m.AppTableTestComponent), title: 'Table Component Test' },
     ]
   },
   {
