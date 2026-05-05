@@ -1,0 +1,169 @@
+<div class="form-group" [ngClass]="customClass">
+    <label *ngIf="label" class="control-label">
+        {{ label }}
+        <span *ngIf="required" class="text-danger">*</span>
+    </label>
+
+    <div [class]="'tw-grid tw-gap-x-[16px] tw-gap-y-[4px] tw-grid-cols-' + (dateColSpan + timeColSpan * 2)">
+        <!-- DATE PICKER -->
+        <div [class]="'tw-col-span-' + dateColSpan">
+            <label class="control-label" *ngIf="dateLabel">
+                {{ dateLabel }} <span *ngIf="required" class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+                <input
+                    [id]="id + '_date'"
+                    type="text"
+                    bsDatepicker
+                    #datePicker="bsDatepicker"
+                    class="form-control !tw-pr-[50px]"
+                    [class.is-invalid]="hasError"
+                    [placeholder]="datePlaceholder"
+                    [ngModel]="value.date"
+                    (ngModelChange)="onDateChange($event)"
+                    [disabled]="disabled"
+                    [autofocus]="false"
+                    [minDate]="minDate"
+                    [maxDate]="maxDate"
+                    [bsConfig]="bsConfig"
+                    (focus)="onInputFocus($event)"
+                    (blur)="onInputBlur($event)"
+                />
+                <app-icon-button
+                    class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+                    (buttonClick)="toggleDatePicker()"
+                    [attr.aria-expanded]="datePicker.isOpen"
+                    [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
+                    icon="calendar_today"
+                    size="sm"
+                    variant="ghost"
+                />
+                <app-icon-button
+                    *ngIf="showClearButton && value.date && !disabled"
+                    variant="ghost"
+                    icon="close"
+                    size="sm"
+                    (buttonClick)="clearDate()"
+                    class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+                />
+            </div>
+        </div>
+
+        <!-- START TIME PICKER -->
+        <div [class]="'tw-col-span-' + timeColSpan">
+            <label class="control-label" *ngIf="startTimeLabel">
+                {{ startTimeLabel }} <span *ngIf="required" class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+                <p-calendar
+                    #startTimePicker
+                    [id]="id + '_start'"
+                    [timeOnly]="true"
+                    [hourFormat]="hourFormat"
+                    [stepHour]="stepHour"
+                    [stepMinute]="stepMinute"
+                    [stepSecond]="stepSecond"
+                    [showSeconds]="showSeconds"
+                    [ngModel]="value.startTime"
+                    (ngModelChange)="onStartTimeChange($event)"
+                    [disabled]="disabled || disableDatePicker"
+                    [placeholder]="startTimePlaceholder"
+                    [appendTo]="appendTo"
+                    class="tw-w-full"
+                    [inputStyleClass]="'form-control tw-pr-[50px] ' + (hasError ? 'is-invalid' : '')"
+                    [showIcon]="false"
+                    [showOnFocus]="true"
+                    [touchUI]="false"
+                    (onFocus)="onInputFocus($event)"
+                    (onBlur)="onStartTimeBlur($event)"
+                    (onInput)="onStartTimeInputChange($event)"
+                    (onShow)="onStartTimePickerOpen()"
+                    (onHide)="onStartTimePickerClose()"
+                    (onClick)="onStartTimeInputClick($event)"
+                />
+
+                <!-- Start time toggle button -->
+                <app-icon-button
+                    class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+                    (buttonClick)="toggleStartTimePicker()"
+                    [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
+                    icon="schedule"
+                    size="sm"
+                    variant="ghost"
+                />
+
+                <!-- Start time clear button -->
+                <app-icon-button
+                    *ngIf="showClearButton && value.startTime && !disabled"
+                    variant="ghost"
+                    icon="close"
+                    size="sm"
+                    (buttonClick)="clearStartTime()"
+                    class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+                />
+            </div>
+        </div>
+
+        <!-- END TIME PICKER -->
+        <div [class]="'tw-col-span-' + timeColSpan">
+            <label class="control-label" *ngIf="endTimeLabel">
+                {{ endTimeLabel }} <span *ngIf="required" class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+                <p-calendar
+                    #endTimePicker
+                    [id]="id + '_end'"
+                    [timeOnly]="true"
+                    [hourFormat]="hourFormat"
+                    [stepHour]="stepHour"
+                    [stepMinute]="stepMinute"
+                    [stepSecond]="stepSecond"
+                    [showSeconds]="showSeconds"
+                    [ngModel]="value.endTime"
+                    (ngModelChange)="onEndTimeChange($event)"
+                    [disabled]="disabled"
+                    [placeholder]="endTimePlaceholder"
+                    [appendTo]="appendTo"
+                    class="tw-w-full"
+                    [inputStyleClass]="'form-control tw-pr-[50px] ' + (hasError ? 'is-invalid' : '')"
+                    [showIcon]="false"
+                    [showOnFocus]="true"
+                    [touchUI]="false"
+                    (onFocus)="onInputFocus($event)"
+                    (onBlur)="onEndTimeBlur($event)"
+                    (onInput)="onEndTimeInputChange($event)"
+                    (onShow)="onEndTimePickerOpen()"
+                    (onHide)="onEndTimePickerClose()"
+                    (onClick)="onEndTimeInputClick($event)"
+                />
+
+                <!-- End time toggle button -->
+                <app-icon-button
+                    class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+                    (buttonClick)="toggleEndTimePicker()"
+                    [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
+                    icon="schedule"
+                    size="sm"
+                    variant="ghost"
+                />
+
+                <!-- End time clear button -->
+                <app-icon-button
+                    *ngIf="showClearButton && value.endTime && !disabled"
+                    variant="ghost"
+                    icon="close"
+                    size="sm"
+                    (buttonClick)="clearEndTime()"
+                    class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+                />
+            </div>
+        </div>
+    </div>
+
+    <!-- Error messages -->
+    <div *ngIf="hasError" class="has-error tw-mt-[4px]">
+        <div *ngFor="let message of errorMessages" class="tw-text-[#B91C1C]">
+            {{ message }}
+        </div>
+    </div>
+</div>

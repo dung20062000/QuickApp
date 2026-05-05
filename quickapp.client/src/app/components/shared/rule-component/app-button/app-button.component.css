@@ -1,0 +1,231 @@
+.app-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+    font-weight: 400;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: center;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Sizes */
+.app-button--sm {
+    height: 26px;
+    padding: 0 8px;
+    font-size: 10px;
+}
+
+.app-button--md {
+    height: 36px;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+.app-button--lg {
+    height: 40px;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+/* Variants */
+.app-button--blue {
+    background-color: #183883;
+    color: white;
+}
+
+.app-button--blue:hover:not(.app-button--disabled) {
+    background-color: #2a4f9d;
+}
+
+.app-button--blue:active:not(.app-button--disabled) {
+    background-color: #2a4f9d;
+}
+
+.app-button--blueLight {
+    background-color: #dbeafe;
+    color: #183883;
+}
+
+.app-button--blueLight:hover:not(.app-button--disabled) {
+    background-color: #bfdbfe;
+}
+
+.app-button--blueLight:active:not(.app-button--disabled) {
+    background-color: #bfdbfe;
+}
+
+.app-button--red {
+    background-color: #ef4444;
+    color: white;
+}
+
+.app-button--red:hover:not(.app-button--disabled) {
+    background-color: #dc2626;
+}
+
+.app-button--red:active:not(.app-button--disabled) {
+    background-color: #dc2626;
+}
+
+.app-button--redLight {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+.app-button--redLight:hover:not(.app-button--disabled) {
+    background-color: #fecaca;
+}
+
+.app-button--redLight:active:not(.app-button--disabled) {
+    background-color: #fecaca;
+}
+
+.app-button--redGray {
+    background-color: #dfe1e2;
+    color: #ef4444;
+}
+
+.app-button--redGray:hover:not(.app-button--disabled) {
+    background-color: #c9cdd0;
+}
+
+.app-button--redGray:active:not(.app-button--disabled) {
+    background-color: #c9cdd0;
+}
+
+.app-button--green {
+    background-color: #16a34a;
+    color: white;
+}
+
+.app-button--green:hover:not(.app-button--disabled) {
+    background-color: #15803d;
+}
+
+.app-button--green:active:not(.app-button--disabled) {
+    background-color: #15803d;
+}
+
+.app-button--greenLight {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+.app-button--greenLight:hover:not(.app-button--disabled) {
+    background-color: #bbf7d0;
+}
+
+.app-button--greenLight:active:not(.app-button--disabled) {
+    background-color: #bbf7d0;
+}
+
+.app-button--gray {
+    background-color: #dfe1e2;
+    color: #1f2b33;
+}
+
+.app-button--gray:hover:not(.app-button--disabled) {
+    background-color: #c9cdd0;
+}
+
+.app-button--gray:active:not(.app-button--disabled) {
+    background-color: #c9cdd0;
+}
+
+.app-button--ghost {
+    background-color: transparent;
+    color: #425460;
+}
+
+.app-button--ghost:hover:not(.app-button--disabled) {
+    background-color: #f3f4f6;
+}
+
+.app-button--ghost:active:not(.app-button--disabled) {
+    background-color: #e5e7eb;
+}
+
+.app-button--ghostBlue {
+    background-color: transparent;
+    color: #3b82f6;
+}
+
+.app-button--ghostBlue:hover:not(.app-button--disabled) {
+    background-color: #f3f4f6;
+}
+
+.app-button--ghostBlue:active:not(.app-button--disabled) {
+    background-color: #e5e7eb;
+}
+
+.app-button--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.app-button--disabled:hover,
+.app-button--disabled:active {
+    transform: none;
+}
+
+/* Icon styles */
+.app-button__left-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.app-button__right-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.app-button__content {
+    display: inline-flex;
+    align-items: center;
+    /* flex-grow: 1; */
+}
+
+/* Icon size adjustments based on button size */
+.app-button--sm .app-button__left-icon,
+.app-button--sm .app-button__right-icon {
+    font-size: 14px;
+}
+
+.app-button--md .app-button__left-icon,
+.app-button--md .app-button__right-icon {
+    font-size: 24px;
+}
+
+.app-button--lg .app-button__left-icon,
+.app-button--lg .app-button__right-icon {
+    font-size: 24px;
+}
+
+/* Button with only icon (no text content) */
+.app-button:has(.app-button__content:empty) {
+    padding: 0;
+    width: auto;
+    aspect-ratio: 1;
+}
+
+.app-button--sm:has(.app-button__content:empty) {
+    width: 26px;
+}
+
+.app-button--md:has(.app-button__content:empty) {
+    width: 33px;
+}
+
+.app-button--lg:has(.app-button__content:empty) {
+    width: 40px;
+}

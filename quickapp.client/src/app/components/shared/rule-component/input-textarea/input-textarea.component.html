@@ -1,0 +1,41 @@
+<div class="form-group" [ngClass]="customClass">
+    <label *ngIf="label" [for]="id" class="control-label">
+        {{ label }}
+        <span *ngIf="required" class="text-danger">*</span>
+    </label>
+
+    <div class="textarea-group">
+        <textarea
+            [id]="id"
+            [class.is-invalid]="hasError"
+            [class.non-resizable]="!resizable"
+            [placeholder]="placeholder"
+            [value]="value"
+            class="form-control"
+            [disabled]="disabled"
+            [readonly]="readonly"
+            [autofocus]="autofocus"
+            [maxLength]="maxLength"
+            [rows]="rows"
+            (input)="onInputChange($event)"
+            (keypress)="onKeyPress($event)"
+            (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)"
+        ></textarea>
+
+        <span
+            *ngIf="showClearButton && value && !disabled && !readonly"
+            class="icon-close-name"
+            (click)="clearInput()"
+            aria-label="Xóa"
+        >
+            <i class="far fa-times"></i>
+        </span>
+    </div>
+
+    <div *ngIf="hasError" class="has-error m-b-12">
+        <div *ngFor="let message of errorMessages" class="tw-text-[#B91C1C]">
+            {{ message }}
+        </div>
+    </div>
+</div>

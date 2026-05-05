@@ -1,0 +1,94 @@
+<div class="form-group" [ngClass]="customClass">
+    <label *ngIf="label" [for]="id" class="control-label">
+        {{ label }}
+        <span *ngIf="required" class="text-danger">*</span>
+        <!-- <span *ngIf="maxSelectedItems && selectedCount > 0" class="badge badge-info ml-2">
+            {{ selectedCount }}/{{ maxSelectedItems }}
+        </span> -->
+        <!-- <span *ngIf="!maxSelectedItems && selectedCount > 0" class="badge badge-secondary ml-2">
+            {{ selectedCount }} được chọn
+        </span> -->
+    </label>
+
+    <ng-select
+        [id]="id"
+        [items]="items"
+        [bindValue]="bindValue"
+        [bindLabel]="bindLabel"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [clearable]="clearable"
+        [searchable]="searchable"
+        [virtualScroll]="virtualScroll"
+        [multiple]="true"
+        [closeOnSelect]="closeOnSelect"
+        [hideSelected]="hideSelected"
+        [maxSelectedItems]="maxSelectedItems"
+        [ngModel]="value"
+        [class.is-invalid]="hasError"
+        [searchFn]="customSearchFn"
+        [appendTo]="appendTo"
+        (ngModelChange)="onSelectionChange($event)"
+        (focus)="onSelectionFocus($event)"
+        (blur)="onSelectionBlur($event)"
+        (clear)="onSelectionClear()"
+        (open)="onSelectionOpen()"
+        (close)="onSelectionClose()"
+        (search)="onSearch($event)"
+        [notFoundText]="notFoundText"
+        (add)="onItemAdd($event)"
+        (remove)="onItemRemove($event)"
+    >
+        <!-- Select All Header -->
+        <ng-template ng-header-tmp *ngIf="canShowSelectAll">
+            <div class="select-all-container" (click)="toggleSelectAll()" [class.disabled]="readonly || disabled">
+                <input
+                    type="checkbox"
+                    [checked]="isAllSelected"
+                    [indeterminate]="isPartiallySelected"
+                    [disabled]="readonly || disabled"
+                    (click)="$event.stopPropagation(); toggleSelectAll()"
+                    class="select-all-checkbox"
+                />
+                <span class="select-all-label">Chọn tất cả</span>
+            </div>
+        </ng-template>
+
+        <!-- Regular options -->
+        <ng-option *ngFor="let item of items" [value]="item[bindValue]" [disabled]="item.disabled">
+            {{ item[bindLabel] }}
+        </ng-option>
+        <ng-template ng-notfound-tmp let-search="searchTerm">
+            <div class="tw-flex tw-flex-col tw-items-center tw-gap-[4px] tw-p-[8px] tw-text-gray-500 tw-text-[14px]">
+                <i class="material-symbols-outlined tw-text-[32px]">inbox</i>
+                <ng-container *ngIf="items?.length; else emptyList">{{ notFoundText }}</ng-container>
+                <ng-template #emptyList>Danh sách trống</ng-template>
+            </div>
+        </ng-template>
+    </ng-select>
+
+    <!-- Selection summary -->
+    <!-- <div *ngIf="selectedCount > 0 && !hasError" class="selection-summary mt-1">
+        <small class="text-muted">
+            <i class="fas fa-check-circle text-success"></i>
+            Đã chọn {{ selectedCount }} mục
+            <span *ngIf="maxSelectedItems"> / {{ maxSelectedItems }}</span>
+        </small>
+    </div> -->
+
+    <!-- Max selection warning -->
+    <!-- <div *ngIf="isMaxSelected && !hasError" class="max-selection-warning mt-1">
+        <small class="text-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            Đã đạt giới hạn tối đa {{ maxSelectedItems }} mục
+        </small>
+    </div> -->
+
+    <!-- Error messages -->
+    <div *ngIf="hasError" class="has-error m-b-12">
+        <div *ngFor="let message of errorMessages" class="tw-text-[#B91C1C]">
+            {{ message }}
+        </div>
+    </div>
+</div>

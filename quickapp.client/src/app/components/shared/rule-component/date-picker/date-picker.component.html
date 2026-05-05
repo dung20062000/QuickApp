@@ -1,0 +1,52 @@
+<div class="form-group" [ngClass]="customClass">
+    <label *ngIf="label" [for]="id" class="control-label">
+        {{ label }}
+        <span *ngIf="required" class="text-danger">*</span>
+    </label>
+
+    <div class="input-group">
+        <input
+            [id]="id"
+            type="text"
+            bsDatepicker
+            #datePicker="bsDatepicker"
+            class="form-control !tw-pr-[50px]"
+            [class.is-invalid]="hasError"
+            [placeholder]="placeholder"
+            [ngModel]="value"
+            (ngModelChange)="onDateChange($event)"
+            [disabled]="disabled"
+            [autofocus]="autofocus"
+            [minDate]="minDate"
+            [maxDate]="maxDate"
+            [bsConfig]="bsConfig"
+            (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)"
+            (onShown)="onPickerOpen()"
+            (onHidden)="onPickerClose()"
+        />
+        <app-icon-button
+            class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+            (buttonClick)="toggleDatePicker(datePicker)"
+            [attr.aria-expanded]="datePicker.isOpen"
+            [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
+            icon="calendar_today"
+            size="sm"
+            variant="ghost"
+        />
+        <app-icon-button
+            *ngIf="showClearButton && value && !disabled"
+            variant="ghost"
+            icon="close"
+            size="sm"
+            (buttonClick)="clearDate()"
+            class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+        />
+    </div>
+
+    <div *ngIf="hasError" class="has-error m-b-12">
+        <div *ngFor="let message of errorMessages" class="tw-text-[#B91C1C]">
+            {{ message }}
+        </div>
+    </div>
+</div>

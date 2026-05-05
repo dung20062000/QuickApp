@@ -1,0 +1,36 @@
+<div class="form-group" [ngClass]="customClass">
+    <div class="input-group">
+        <input
+            [id]="id"
+            type="text"
+            class="form-control tw-font-normal"
+            [placeholder]="placeholder"
+            [value]="value"
+            [disabled]="disabled"
+            [readonly]="readonly"
+            [autofocus]="autofocus"
+            [maxLength]="maxLength || 500"
+            (input)="onInputChange($event)"
+            (keypress)="onKeyPress($event)"
+            (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)"
+        />
+        <app-icon-button
+            *ngIf="showClearButton && value && !disabled && !readonly"
+            variant="ghost"
+            icon="close"
+            size="sm"
+            (buttonClick)="clearInput()"
+            class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+        />
+
+        <!-- <span
+            *ngIf="showClearButton && value && !disabled && !readonly"
+            class="icon-close-name"
+            (click)="clearInput()"
+            aria-label="Xóa"
+        >
+            <i class="far fa-times"></i>
+        </span> -->
+    </div>
+</div>

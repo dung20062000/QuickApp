@@ -1,0 +1,45 @@
+<div class="form-group" [ngClass]="customClass">
+    <label *ngIf="label" [for]="id" class="control-label">
+        {{ label }}
+        <span *ngIf="required" class="text-danger">*</span>
+    </label>
+
+    <ng-select
+        [id]="id"
+        [items]="items"
+        [bindValue]="bindValue"
+        [bindLabel]="bindLabel"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [clearable]="clearable"
+        [searchable]="searchable"
+        [virtualScroll]="virtualScroll"
+        [ngModel]="value"
+        [class.is-invalid]="hasError"
+        (ngModelChange)="onSelectionChange($event)"
+        (focus)="onSelectionFocus($event)"
+        (blur)="onSelectionBlur($event)"
+        (clear)="onSelectionClear()"
+        (open)="onSelectionOpen()"
+        (close)="onSelectionClose()"
+        [notFoundText]="notFoundText"
+        [appendTo]="appendTo"
+        [multiple]="multiple"
+        [searchFn]="customSearchFn"
+    >
+        <ng-template ng-notfound-tmp let-search="searchTerm">
+            <div class="tw-flex tw-flex-col tw-items-center tw-gap-[4px] tw-p-[8px] tw-text-gray-500 tw-text-[14px]">
+                <i class="material-symbols-outlined tw-text-[32px]">inbox</i>
+                <ng-container *ngIf="items?.length; else emptyList">{{ notFoundText }}</ng-container>
+                <ng-template #emptyList>Danh sách trống</ng-template>
+            </div>
+        </ng-template>
+    </ng-select>
+
+    <div *ngIf="hasError" class="has-error m-b-12">
+        <div *ngFor="let message of errorMessages" class="tw-text-[#B91C1C]">
+            {{ message }}
+        </div>
+    </div>
+</div>

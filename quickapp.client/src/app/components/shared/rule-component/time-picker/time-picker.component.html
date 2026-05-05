@@ -1,0 +1,61 @@
+<div class="form-group tw-w-full" [ngClass]="customClass">
+    <label *ngIf="label" [for]="id" class="control-label">
+        {{ label }}
+        <span *ngIf="required" class="text-danger">*</span>
+    </label>
+
+    <div class="input-group tw-w-full">
+        <!-- PrimeNG calendar with time-only mode -->
+        <p-datepicker
+            #timePicker
+            [id]="id"
+            [timeOnly]="true"
+            [hourFormat]="hourFormat"
+            [stepHour]="stepHour"
+            [stepMinute]="stepMinute"
+            [stepSecond]="stepSecond"
+            [showSeconds]="showSeconds"
+            [ngModel]="value"
+            (ngModelChange)="onTimeChange($event)"
+            [disabled]="disabled"
+            [placeholder]="placeholder"
+            [appendTo]="appendTo"
+            class="tw-w-full"
+            [inputStyleClass]="'form-control !tw-pr-[50px] ' + (hasError ? 'is-invalid' : '')"
+            [styleClass]="styleClass"
+            [showIcon]="false"
+            [showOnFocus]="true"
+            [touchUI]="false"
+            (onShow)="onPickerOpen()"
+            (onClose)="onPickerClose()"
+            (onInput)="onInputChange($event)"
+            (onFocus)="onInputFocus($event)"
+            (onBlur)="onInputBlur($event)"
+            (click)="onInputClick($event)"
+        />
+
+
+        <app-icon-button
+            class="tw-absolute tw-right-[10px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+            (buttonClick)="toggleTimePicker($event)"
+            [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
+            icon="access_time"
+            size="sm"
+            variant="ghost"
+        />
+        <app-icon-button
+            *ngIf="showClearButton && value && !disabled"
+            variant="ghost"
+            icon="close"
+            size="sm"
+            (buttonClick)="clearTime()"
+            class="tw-absolute tw-right-[30px] tw-ml-[4px] tw-top-[50%] tw-transform tw--translate-y-1/2"
+        />
+    </div>
+
+    <div *ngIf="hasError" class="has-error m-b-12">
+        <div *ngFor="let message of errorMessages" class="tw-text-[#B91C1C]">
+            {{ message }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+.textarea-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.textarea-group textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.textarea-group .non-resizable {
+    resize: none;
+}

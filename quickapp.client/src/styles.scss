@@ -2,10 +2,12 @@
 
 @use 'app/assets/styles/custom-variables' as *;
 @use 'bootstrap/scss/bootstrap' as *;
-
+@use '@angular/material' as mat;
 @use 'app/assets/styles/vertical-tabs';
 @use 'app/assets/styles/ngx-datatable';
 @use 'app/assets/styles/styles-vendor';
+
+@include mat.core();
 
 body, html {
   height: 100%

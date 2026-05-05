@@ -1,0 +1,37 @@
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.icon-close-name {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    z-index: 10;
+    color: #6c757d;
+    transition: color 0.15s ease-in-out;
+}
+
+.icon-close-name:hover {
+    color: #495057;
+}
+
+.form-control {
+    padding-right: 40px; /* Make space for clear button */
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}

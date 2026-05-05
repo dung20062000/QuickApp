@@ -1,0 +1,13 @@
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.icon-close-name {
+    color: #999999;
+    position: absolute;
+    font-size: 12px;
+    right: 30px;
+    bottom: 9px;
+    cursor: pointer;
+}

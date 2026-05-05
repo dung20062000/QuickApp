@@ -1,0 +1,19 @@
+<button
+    [class]="getButtonClasses()"
+    [disabled]="disabled || loading"
+    [type]="type"
+    (click)="onButtonClick($event)"
+    [pTooltip]="toolTip"
+    tooltipPosition="top"
+    tooltipStyleClass="icon-button-tooltip"
+    tabindex="-1"
+    matRipple [matRippleDisabled]="disabled || loading"
+>
+    @if (loading) {
+    <span class="app-icon-button__spinner spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    } @else {
+    <i [class]="'material-symbols-outlined app-icon-button__icon ' + iconClass">
+        {{ icon }}
+    </i>
+    }
+</button>

@@ -1,0 +1,22 @@
+<button [class]="getButtonClasses()" [disabled]="disabled || loading" [type]="type" [title]="title"
+  (click)="onButtonClick($event)" matRipple [matRippleDisabled]="disabled || loading">
+  @if (loading) {
+  <span class="app-button__spinner spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+  } @else {
+    @if (leftIcon) {
+    <i [class]="'material-symbols-outlined app-button__left-icon ' + leftIconClass">
+      {{ leftIcon }}
+    </i>
+    }
+  }
+
+  <span class="app-button__content">
+    <ng-content></ng-content>
+  </span>
+
+  @if (rightIcon && !loading) {
+  <i [class]="'material-symbols-outlined app-button__right-icon ' + rightIconClass">
+    {{ rightIcon }}
+  </i>
+  }
+</button>
