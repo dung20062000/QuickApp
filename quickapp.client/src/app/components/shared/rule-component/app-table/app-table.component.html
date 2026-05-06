@@ -14,6 +14,7 @@
         styleClass="app-primeng-table"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Hiển thị {first} – {last} trong tổng số {totalRecords} bản ghi"
+        [paginatorDropdownAppendTo]="'body'"
         (onPage)="onTableChange($event)"
         (onSort)="onTableChange($event)"
     >
@@ -23,9 +24,7 @@
                 <th
                     *ngFor="let col of columns"
                     [style.width]="col.width || 'auto'"
-                    [style.text-align]="col.align || 'left'"
-                    [pSortableColumn]="col.field"
-                    [pSortableColumnDisabled]="!col.sortable"
+                    [pSortableColumn]="col.sortable ? col.field : null"
                     [class]="'app-table-th ' + (col.headerClass || '')"
                 >
                     <div class="th-content">
@@ -35,19 +34,19 @@
                 </th>
             </tr>
             <!-- Filter Row -->
-            <tr *ngIf="hasAnyFilter" class="filter-row">
+            <tr *ngIf="hasAnyFilter && !loading" class="filter-row">
                 <th *ngFor="let col of columns" class="filter-th">
                     <ng-container *ngIf="col.filterable">
-                        <!-- Text Filter (Sử dụng Search500 chung) -->
+                        <!-- Text Filter -->
                         <div *ngIf="!col.filterType || col.filterType === 'text'" class="table-filter-container">
                             <search-500
                                 [placeholder]="'Lọc...'"
                                 [showClearButton]="true"
-                                (inputConfirm)="dt.filter($event.target?.value || $event, col.field, 'contains')"
+                                (inputConfirm)="dt.filter($event, col.field, 'contains')"
                             ></search-500>
                         </div>
                         
-                        <!-- Dropdown Filter (Sử dụng Selector chung) -->
+                        <!-- Dropdown Filter -->
                         <div *ngIf="col.filterType === 'dropdown'" class="table-filter-container">
                             <selector
                                 [items]="col.filterOptions || []"
@@ -64,14 +63,14 @@
 
         <!-- ============ BODY ============ -->
         <ng-template pTemplate="body" let-row let-columns="columns">
-            <!-- Skeleton Rows -->
+            <!-- Skeleton Rows (When loading) -->
             <tr *ngIf="loading" class="skeleton-row">
                 <td *ngFor="let col of columns">
-                    <p-skeleton height="20px" borderRadius="4px"></p-skeleton>
+                    <div class="skeleton-box"></div>
                 </td>
             </tr>
 
-            <!-- Data Rows -->
+            <!-- Data Rows (When not loading) -->
             <tr *ngIf="!loading" class="data-row">
                 <td
                     *ngFor="let col of columns"
@@ -117,19 +116,14 @@
 
         <!-- ============ EMPTY STATE ============ -->
         <ng-template pTemplate="emptymessage" let-columns>
-            <tr>
-                <td [colSpan]="columns.length" class="empty-state-cell">
+            <tr *ngIf="!loading">
+                <td [attr.colspan]="columns.length" class="empty-state-cell">
                     <div class="empty-state">
-                        <div class="empty-icon">
-                            <span class="material-symbols-outlined">inbox</span>
-                        </div>
-                        <p class="empty-title">{{ emptyMessage }}</p>
-                        <p class="empty-subtitle">Hãy thử thay đổi bộ lọc hoặc thêm dữ liệu mới.</p>
+                        <span class="material-symbols-outlined empty-icon">database_off</span>
+                        <p class="empty-text">{{ emptyMessage }}</p>
                     </div>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
-
-<ng-content></ng-content>

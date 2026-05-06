@@ -46,13 +46,13 @@ export class Search500Component
   @Output() inputBlur = new EventEmitter<any>();
   @Output() inputKeyup = new EventEmitter<any>();
   @Output() inputClear = new EventEmitter<any>();
-  @Output() inputConfirm = new EventEmitter<any>();
+  @Output() inputConfirm = new EventEmitter<string>(); // Emits the value string
 
   value: string = '';
   private lastConfirmValue: string = '';
 
   private destroy$ = new Subject<void>();
-  private confirmSubject$ = new Subject<any>();
+  private confirmSubject$ = new Subject<string>();
   private onChange = (value: any) => {};
   private onTouched = () => {};
 
@@ -62,11 +62,11 @@ export class Search500Component
       .pipe(
         debounceTime(300), // 300ms debounce
       )
-      .subscribe((event) => {
+      .subscribe((val) => {
         // Only emit if value has changed from last confirm
-        if (this.value !== this.lastConfirmValue) {
-          this.lastConfirmValue = this.value;
-          this.inputConfirm.emit(event);
+        if (val !== this.lastConfirmValue) {
+          this.lastConfirmValue = val;
+          this.inputConfirm.emit(val);
         }
       });
   }
@@ -98,7 +98,7 @@ export class Search500Component
     this.onChange(this.value);
     this.inputKeyup.emit(event);
     // Trigger debounced confirm on every input
-    this.confirmSubject$.next(event);
+    this.confirmSubject$.next(this.value);
   }
 
   onKeyPress(event: KeyboardEvent): void {
@@ -110,9 +110,9 @@ export class Search500Component
         this.onChange(this.value);
       }
       this.onTouched();
-      // Force immediate confirm on Enter
-      this.lastConfirmValue = ''; // Ensure emission
-      this.confirmSubject$.next(event);
+      // Force immediate confirm on Enter by resetting lastConfirmValue
+      this.lastConfirmValue = ''; 
+      this.confirmSubject$.next(this.value);
     }
   }
 
@@ -129,17 +129,18 @@ export class Search500Component
 
     this.onTouched();
     this.inputBlur.emit(event);
+    
+    // If empty, ensure we confirm the clearing
     if (!this.value) {
       this.inputClear.emit();
     }
-    this.confirmSubject$.next(event);
+    this.confirmSubject$.next(this.value);
   }
 
   clearInput(): void {
     this.value = '';
     this.onChange('');
     this.inputClear.emit();
-    this.lastConfirmValue = '';
-    this.confirmSubject$.next(null);
+    this.confirmSubject$.next('');
   }
 }

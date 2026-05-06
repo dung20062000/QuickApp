@@ -85,17 +85,17 @@ export class AppTableComponent implements AfterContentInit, OnChanges {
   templates!: QueryList<AppTableTemplateDirective>;
 
   templateMap: { [key: string]: TemplateRef<any> } = {};
-  skeletonArray: number[] = [];
+  skeletonArray: any[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['skeletonRows']) {
-      this.skeletonArray = Array(this.skeletonRows).fill(0);
+      this.skeletonArray = Array.from({ length: this.skeletonRows }).map((_, i) => ({ [this.dataKey]: `skeleton_${i}` }));
     }
   }
 
   ngAfterContentInit(): void {
     this.updateTemplateMap();
-    this.skeletonArray = Array(this.skeletonRows).fill(0);
+    this.skeletonArray = Array.from({ length: this.skeletonRows }).map((_, i) => ({ [this.dataKey]: `skeleton_${i}` }));
   }
 
   private updateTemplateMap(): void {

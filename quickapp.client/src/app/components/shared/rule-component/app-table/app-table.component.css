@@ -1,73 +1,49 @@
 /* ===================================================
-   WRAPPER
+   TABLE WRAPPER & BASE
 =================================================== */
 .app-table-wrapper {
-    width: 100%;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 4px 12px 0 rgba(0, 0, 0, 0.05);
     background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
 }
 
 /* ===================================================
-   PRIMENG TABLE OVERRIDES
+   HEADER STYLES
 =================================================== */
-:host ::ng-deep .app-primeng-table {
-    border-radius: 12px;
-    overflow: hidden;
-    font-size: 0.875rem;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-/* Header */
 :host ::ng-deep .app-primeng-table .p-datatable-thead > tr > th {
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    color: #f1f5f9;
+    background-color: #f1f5f9; /* Premium light gray-blue */
+    color: #334155;
     font-weight: 600;
-    font-size: 0.8rem;
-    letter-spacing: 0.04em;
+    font-size: 13px;
+    padding: 12px 16px; /* Slightly reduced header padding too */
+    border-bottom: 2px solid #e2e8f0;
     text-transform: uppercase;
-    padding: 14px 16px;
-    border: none;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+    letter-spacing: 0.025em;
+    transition: background-color 0.2s;
     white-space: nowrap;
 }
 
-:host ::ng-deep .app-primeng-table .p-datatable-thead > tr > th:first-child {
-    border-radius: 12px 0 0 0;
+:host ::ng-deep .app-primeng-table .p-datatable-thead > tr > th:hover {
+    background-color: #f1f5f9;
 }
 
-:host ::ng-deep .app-primeng-table .p-datatable-thead > tr > th:last-child {
-    border-radius: 0 12px 0 0;
+/* Sort Icons */
+:host ::ng-deep .app-primeng-table .p-sortable-column-icon {
+    width: 12px;
+    height: 12px;
+    color: #94a3b8;
+    margin-left: 8px;
 }
 
-.th-content {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+:host ::ng-deep .app-primeng-table .p-sortable-column.p-highlight .p-sortable-column-icon {
+    color: #3b82f6;
 }
 
-:host ::ng-deep .p-sortable-column:not(.p-highlight):hover {
-    background: rgba(255, 255, 255, 0.05) !important;
-}
-
-:host ::ng-deep .p-sortable-column.p-highlight {
-    background: rgba(255, 255, 255, 0.1) !important;
-    color: #fff !important;
-}
-
-/* Filter Row */
-.filter-row {
-    background: #f8fafc;
-}
-
-.filter-th {
-    padding: 8px 12px !important;
-    background: #f8fafc !important;
-    border-bottom: 1px solid #e2e8f0 !important;
-}
-
-/* Table Filter Containers (Overrides for shared components when inside table) */
+/* ===================================================
+   FILTER ROW STYLES
+=================================================== */
 .table-filter-container {
     width: 100%;
 }
@@ -76,7 +52,7 @@
     margin-bottom: 0 !important;
 }
 
-/* Base input overrides */
+/* Base input overrides for filters */
 :host ::ng-deep .table-filter-container input,
 :host ::ng-deep .table-filter-container .ng-select,
 :host ::ng-deep .table-filter-container .ng-select .ng-select-container,
@@ -94,6 +70,7 @@
     min-height: 32px !important;
     border-radius: 6px !important;
     border: 1px solid #cbd5e1 !important;
+    background: #fff !important;
 }
 
 :host ::ng-deep .table-filter-container .search-input-wrapper input {
@@ -103,27 +80,28 @@
 }
 
 /* ===================================================
-   BODY / ROWS
+   BODY & ROW STYLES
 =================================================== */
 :host ::ng-deep .app-primeng-table .p-datatable-tbody > tr {
-    background: #ffffff;
-    transition: background-color 0.15s ease;
+    transition: background-color 0.15s;
+    background-color: #fff;
+}
+
+:host ::ng-deep .app-primeng-table .p-datatable-tbody > tr:nth-child(even) {
+    background-color: #fbfcfd;
 }
 
 :host ::ng-deep .app-primeng-table .p-datatable-tbody > tr:hover {
-    background-color: #f8fafc !important;
+    background-color: #f1f5f9 !important;
 }
 
 :host ::ng-deep .app-primeng-table .p-datatable-tbody > tr > td {
-    padding: 14px 16px;
-    border: none;
+    padding: 8px 16px; /* Reduced row padding as requested */
     border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
     color: #334155;
-    font-size: 0.9rem;
-    vertical-align: middle;
 }
 
-/* Cells */
 .cell-text {
     display: block;
     overflow: hidden;
@@ -136,90 +114,8 @@
     font-weight: 500;
 }
 
-/* Badge Cell */
-.cell-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-}
-
-/* Common badge variants */
-.badge-blue { background: #eff6ff; color: #2563eb; }
-.badge-green { background: #f0fdf4; color: #16a34a; }
-.badge-red { background: #fef2f2; color: #dc2626; }
-.badge-orange { background: #fff7ed; color: #ea580c; }
-.badge-gray { background: #f8fafc; color: #64748b; }
-
 /* ===================================================
-   EMPTY STATE
-=================================================== */
-.empty-state-cell {
-    padding: 0 !important;
-}
-
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 64px 24px;
-    text-align: center;
-}
-
-.empty-icon {
-    width: 72px;
-    height: 72px;
-    background: linear-gradient(135deg, #eff6ff, #dbeafe);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
-}
-
-.empty-icon .material-icons {
-    font-size: 36px;
-    color: #3b82f6;
-}
-
-.empty-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1e293b;
-    margin: 0 0 8px 0;
-}
-
-.empty-subtitle {
-    font-size: 0.85rem;
-    color: #94a3b8;
-    margin: 0;
-}
-
-/* ===================================================
-   SKELETON
-=================================================== */
-.skeleton-row td {
-    padding: 14px 16px !important;
-}
-
-:host ::ng-deep .skeleton-row .p-skeleton {
-    background: linear-gradient(90deg, #f1f5f9 25%, #e8eef4 50%, #f1f5f9 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-/* ===================================================
-   PAGINATOR (RIGHT ALIGNED)
+   PAGINATOR (REFINED ALIGNMENT)
 =================================================== */
 :host ::ng-deep .app-primeng-table .p-paginator {
     background: #fff;
@@ -228,54 +124,142 @@
     border-radius: 0 0 12px 12px;
     display: flex;
     align-items: center;
-    /* Move everything to the right */
-    justify-content: flex-end; 
-    gap: 16px;
+    justify-content: flex-end; /* Push everything to the right */
+    gap: 8px;
 }
 
-/* Push report text to the right as well */
-:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-current {
-    margin-left: auto;
-    order: 10; /* Put report text at the end */
-    font-size: 0.82rem;
-    color: #64748b;
-    font-weight: 400;
+/* 1. Rows per page dropdown */
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-rpp-options {
+    order: 1;
+    margin-right: 8px;
+}
+
+/* 2. Navigation buttons & Pages */
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-first,
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-prev,
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-pages,
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-next,
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-last {
+    order: 2;
 }
 
 :host ::ng-deep .app-primeng-table .p-paginator .p-paginator-pages {
-    order: 5;
+    display: flex;
+    align-items: center;
+    margin: 0 4px;
 }
 
-:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-page {
-    border-radius: 8px;
+/* 3. Current Page Report (Rightmost) */
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-current {
+    order: 3;
+    margin-left: 12px;
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Standard Paginator Button Styles */
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-page,
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-prev,
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-next,
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-first,
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-last {
+    border-radius: 6px;
     min-width: 32px;
     height: 32px;
-    font-size: 0.82rem;
+    padding: 0;
+    font-size: 13px;
     font-weight: 500;
     color: #475569;
     transition: all 0.2s;
-    margin: 0 2px;
+    border: 1px solid transparent;
+}
+
+:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-page:hover:not(.p-highlight) {
+    background-color: #f1f5f9;
+    color: #1e293b;
 }
 
 :host ::ng-deep .app-primeng-table .p-paginator .p-paginator-page.p-highlight {
     background: #3b82f6 !important;
     color: #fff !important;
-    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+    border-color: #3b82f6;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 
-:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-prev,
-:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-next,
-:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-first,
-:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-last {
-    border-radius: 8px;
-    width: 32px;
-    height: 32px;
-    color: #64748b;
+:host ::ng-deep .app-primeng-table .p-paginator .p-icon {
+    width: 14px;
+    height: 14px;
 }
 
-:host ::ng-deep .app-primeng-table .p-paginator .p-paginator-rpp-dropdown {
-    border-radius: 8px;
+/* Dropdown override */
+:host ::ng-deep .app-primeng-table .p-paginator .p-select {
     height: 32px;
-    font-size: 0.82rem;
-    order: 1; /* RPP dropdown at the beginning of the right group */
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+}
+
+:host ::ng-deep .app-primeng-table .p-paginator .p-select .p-select-label {
+    font-size: 12px;
+    padding: 4px 8px;
+    line-height: 24px;
+}
+
+/* ===================================================
+   SKELETON / LOADING STYLES
+=================================================== */
+.skeleton-row td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.skeleton-box {
+    height: 20px;
+    width: 100%;
+    background: #f1f5f9;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-box::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+    );
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ===================================================
+   EMPTY STATE
+=================================================== */
+.empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-text {
+    font-size: 16px;
+    font-weight: 500;
 }
