@@ -28,7 +28,7 @@ export interface TableColumn {
   sortable?: boolean;
   filterable?: boolean;
   filterType?: 'text' | 'dropdown';
-  filterOptions?: { label: string; value: any }[];
+  filterOptions?: { text: string; value: any }[];
   width?: string;
   align?: 'left' | 'center' | 'right';
   dateFormat?: string;

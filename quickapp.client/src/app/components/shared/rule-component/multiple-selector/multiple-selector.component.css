@@ -1,55 +1,102 @@
-/* Select All Header Styling */
+/* ===================================================
+   NG-SELECT PREMIUM WRAPPER
+=================================================== */
+:host ::ng-deep .ng-select {
+    font-family: 'Inter', sans-serif;
+}
+
+:host ::ng-deep .ng-select .ng-select-container {
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    min-height: 38px;
+    transition: all 0.2s ease;
+    background-color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: none;
+}
+
+:host ::ng-deep .ng-select.ng-select-focused .ng-select-container {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+:host ::ng-deep .ng-select.is-invalid .ng-select-container {
+    border-color: #ef4444;
+}
+
+/* ===================================================
+   EMPTY / NOT FOUND STATE
+=================================================== */
+.empty-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 12px;
+    color: #94a3b8;
+    text-align: center;
+    background-color: #fff;
+}
+
+.empty-state-icon {
+    font-size: 32px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+}
+
+.empty-state-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+    margin: 0;
+    text-transform: none;
+}
+
+.empty-state-subtext {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 4px;
+    text-transform: none;
+}
+
+/* ===================================================
+   SELECT ALL HEADER
+=================================================== */
 .select-all-container {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid #e9ecef;
-  background-color: #f8f9fa;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+    background-color: #f8fafc;
+    transition: all 0.2s ease;
 }
 
 .select-all-container:hover {
-  background-color: #e9ecef;
+    background-color: #f1f5f9;
 }
 
 .select-all-checkbox {
-  margin: 0 8px 0 0;
-  cursor: pointer;
-  transform: scale(1.1);
+    margin-right: 10px;
+    accent-color: #3b82f6;
 }
 
 .select-all-label {
-  font-weight: 500;
-  color: #495057;
-  cursor: pointer;
-  user-select: none;
+    font-size: 12px;
+    font-weight: 500;
+    color: #334155;
+    text-transform: none;
 }
 
-/* Disabled state */
-.select-all-container.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
+.form-group { margin-bottom: 0; }
+.control-label {
+    font-size: 12px;
+    text-transform: none;
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: block;
+    color: #334155;
 }
-
-.select-all-container.disabled .select-all-checkbox,
-.select-all-container.disabled .select-all-label {
-  cursor: not-allowed;
-}
-
-/* Custom styling for ng-select header */
-::ng-deep .ng-select .ng-dropdown-panel .ng-dropdown-header {
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none !important;
-}
-
-::ng-deep
-  .ng-select
-  .ng-dropdown-panel
-  .ng-dropdown-header
-  .select-all-container {
-  margin: 0;
-}
+.has-error { margin-top: 4px; }
+.tw-text-\[\#B91C1C\] { font-size: 11px; font-weight: 500; }

@@ -30,11 +30,13 @@
   padding: 8px 36px 8px 36px !important;
   border: none !important;
   background: transparent !important;
-  font-size: 0.875rem;
+  font-size: 12px;
+  font-weight: 500;
   color: #1e293b;
   outline: none !important;
   box-shadow: none !important;
   font-family: inherit;
+  text-transform: none;
 }
 
 .search-500-input::placeholder {
@@ -63,7 +65,8 @@
 
 :host-context(.table-filter-container) .search-500-input {
   padding: 5px 32px 5px 32px !important;
-  font-size: 0.825rem;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 :host-context(.table-filter-container) .search-500-icon {

@@ -53,7 +53,7 @@
                                 [items]="col.filterOptions || []"
                                 [placeholder]="'Tất cả'"
                                 [clearable]="true"
-                                [searchable]="false"
+                                [searchable]="true"
                                 (selectionChange)="dt.filter($event, col.field, 'equals')"
                             ></selector>
                         </div>
