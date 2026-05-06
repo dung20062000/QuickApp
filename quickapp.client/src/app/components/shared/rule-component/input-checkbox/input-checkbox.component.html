@@ -6,15 +6,15 @@
     </label>
 
     <!-- Checkbox Group Mode -->
-    <div *ngIf="options" class="checkbox-group" [class.inline-group]="inline" [class.disabled]="disabled || readonly">
+    <div *ngIf="options" class="checkbox-group" [class.inline-group]="inline" [class.disabled]="isDisabled">
         <div class="checkbox-wrapper" *ngFor="let option of options; let i = index" 
-             [class.disabled]="disabled || readonly || option.disabled">
+             [class.disabled]="isDisabled || option.disabled">
             <label [for]="id + '_' + i" class="checkbox-container">
                 <input
                     type="checkbox"
                     [id]="id + '_' + i"
                     [checked]="isOptionChecked(option.value)"
-                    [disabled]="disabled || readonly || option.disabled"
+                    [disabled]="isDisabled || option.disabled"
                     (change)="onOptionToggle($event, option.value)"
                     (focus)="onFocus($event)"
                     (blur)="onBlur($event)"
@@ -29,13 +29,13 @@
     </div>
 
     <!-- Single Checkbox Mode -->
-    <div *ngIf="!options" class="checkbox-wrapper single-mode" [class.disabled]="disabled || readonly" [class.has-error]="hasError">
+    <div *ngIf="!options" class="checkbox-wrapper single-mode" [class.disabled]="isDisabled" [class.has-error]="hasError">
         <label [for]="id" class="checkbox-container">
             <input
                 type="checkbox"
                 [id]="id"
                 [checked]="value"
-                [disabled]="disabled || readonly"
+                [disabled]="isDisabled"
                 (change)="onToggle($event)"
                 (focus)="onFocus($event)"
                 (blur)="onBlur($event)"

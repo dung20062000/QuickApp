@@ -110,7 +110,7 @@ export class InputCheckboxTestComponent implements OnInit {
           disabled: true,
           options: [
             { value: 'opt1', text: 'Lựa chọn 1' },
-            { value: 'opt2', text: 'Lựa chọn 2', disabled: true },
+            { value: 'opt2', text: 'Lựa chọn 2' },
           ],
           formControlName: 'disabledGroup',
         },

@@ -51,7 +51,7 @@ export class InputCheckboxComponent
   @Input() customClass: string = '';
   @Input() customValidationMessages: { [key: string]: string } = {};
   @Input() defaultValue: any = null;
-  @Input() disabled: boolean = false;
+  @Input() disabled: boolean = false; // Manual input
   @Input() options: CheckboxOption[] | null = null;
   @Input() inline: boolean = true;
 
@@ -61,6 +61,7 @@ export class InputCheckboxComponent
   @Output() checkboxBlur = new EventEmitter<any>();
 
   value: any = null;
+  private _formDisabled: boolean = false;
 
   private destroy$ = new Subject<void>();
   private onChange: (value: any) => void = () => {};
@@ -80,6 +81,13 @@ export class InputCheckboxComponent
     this.destroy$.complete();
   }
 
+  /**
+   * Final disabled state (combination of Input, Form state, and Readonly)
+   */
+  get isDisabled(): boolean {
+    return this.disabled || this._formDisabled || this.readonly;
+  }
+
   writeValue(value: any): void {
     if (value !== undefined && value !== null) {
       this.value = value;
@@ -97,14 +105,14 @@ export class InputCheckboxComponent
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this._formDisabled = isDisabled;
   }
 
   /**
    * Handle toggle for single checkbox
    */
   onToggle(event: Event): void {
-    if (this.disabled || this.readonly) return;
+    if (this.isDisabled) return;
     
     const target = event.target as HTMLInputElement;
     this.value = target.checked;
@@ -117,7 +125,7 @@ export class InputCheckboxComponent
    * Handle toggle for a specific option in a group
    */
   onOptionToggle(event: Event, optionValue: any): void {
-    if (this.disabled || this.readonly) return;
+    if (this.isDisabled) return;
 
     if (!Array.isArray(this.value)) {
       this.value = [];
