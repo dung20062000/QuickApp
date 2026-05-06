@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import {
   AppTableComponent,
   AppTableTemplateDirective,
+  TABLE_DEFAULT_PAGE_SIZE,
+  TABLE_PAGE_SIZE_OPTIONS,
   TableColumn,
 } from '../../shared/rule-component/app-table/app-table.component';
 import { AppButtonComponent } from '../../shared/rule-component/app-button/app-button.component';
@@ -37,6 +39,10 @@ export class AppTableTestComponent implements OnInit {
   isLoading = false;
   showEmpty = false;
 
+  // Pagination
+  rows = TABLE_DEFAULT_PAGE_SIZE;
+  rowsPerPageOptions = TABLE_PAGE_SIZE_OPTIONS;
+
   // --- Cột cơ bản ---
   basicColumns: TableColumn[] = [
     {
@@ -66,7 +72,9 @@ export class AppTableTestComponent implements OnInit {
       header: 'Ngày vào làm',
       type: 'date',
       sortable: true,
-      width: '130px',
+      filterable: true,
+      filterType: 'date-range',
+      width: '180px',
       align: 'center',
     },
     {

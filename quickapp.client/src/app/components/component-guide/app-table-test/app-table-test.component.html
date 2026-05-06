@@ -1,64 +1,46 @@
 <div class="table-test-page">
-    <div class="page-header">
-        <div class="header-info">
-            <h1 class="page-title">AppTableComponent</h1>
-            <p class="page-desc">Component bảng danh sách dùng chung — hỗ trợ Sort, Filter, Phân trang, Skeleton Loading và Empty State.</p>
-        </div>
-        <div class="header-actions">
-            <app-button leftIcon="hourglass_empty" variant="gray" (buttonClick)="toggleLoading()">
-                Giả lập Loading
-            </app-button>
-            <app-button leftIcon="table_rows" variant="blueLight" (buttonClick)="toggleEmpty()">
-                {{ showEmpty ? 'Hiện dữ liệu' : 'Dữ liệu trống' }}
-            </app-button>
-        </div>
+  <div class="page-header">
+    <div class="header-info">
+      <h1 class="page-title">AppTableComponent</h1>
+      <p class="page-desc">Component bảng danh sách dùng chung — hỗ trợ Sort, Filter, Phân trang, Skeleton Loading và
+        Empty State.</p>
     </div>
+    <div class="header-actions">
+      <app-button leftIcon="hourglass_empty" variant="gray" (buttonClick)="toggleLoading()">
+        Giả lập Loading
+      </app-button>
+      <app-button leftIcon="table_rows" variant="blueLight" (buttonClick)="toggleEmpty()">
+        {{ showEmpty ? 'Hiện dữ liệu' : 'Dữ liệu trống' }}
+      </app-button>
+    </div>
+  </div>
 
-    <!-- ============================================================
+  <!-- ============================================================
          DEMO 1: Bảng đầy đủ tính năng (Nhân viên)
     ============================================================ -->
-    <div class="demo-section">
-        <div class="demo-header">
-            <h3>Bảng Nhân viên (Đầy đủ tính năng)</h3>
-            <p>Tích hợp Sort, Text Filter, Dropdown Filter, phân trang và cột tùy biến (Actions, Badge trạng thái).</p>
-        </div>
-
-        <app-table
-            [data]="displayData"
-            [columns]="basicColumns"
-            [loading]="isLoading"
-            [rows]="5"
-            [rowsPerPageOptions]="[5, 10, 25]"
-            emptyMessage="Không tìm thấy nhân viên nào"
-        >
-            <!-- Custom Template cho cột "status" -->
-            <ng-template appTableTemplate="status" let-value let-row="row">
-                <span class="cell-badge"
-                    [class.badge-success]="value === 'active'"
-                    [class.badge-danger]="value === 'inactive'"
-                    [class.badge-warning]="value === 'pending'"
-                >
-                    {{ getStatusText(value) }}
-                </span>
-            </ng-template>
-
-            <!-- Custom Template cho cột "actions" -->
-            <ng-template appTableTemplate="actions" let-value let-row="row">
-                <div class="action-buttons">
-                    <app-icon-button
-                        icon="edit"
-                        variant="blueLight"
-                        toolTip="Chỉnh sửa"
-                        (buttonClick)="onEdit(row)"
-                    />
-                    <app-icon-button
-                        icon="delete"
-                        variant="redLight"
-                        toolTip="Xóa"
-                        (buttonClick)="onDelete(row)"
-                    />
-                </div>
-            </ng-template>
-        </app-table>
+  <div class="demo-section">
+    <div class="demo-header">
+      <h3>Bảng Nhân viên (Đầy đủ tính năng)</h3>
+      <p>Tích hợp Sort, Text Filter, Dropdown Filter, phân trang và cột tùy biến (Actions, Badge trạng thái).</p>
     </div>
+
+    <app-table [data]="displayData" [columns]="basicColumns" [loading]="isLoading" [rows]="rows"
+      [rowsPerPageOptions]="rowsPerPageOptions" emptyMessage="Không tìm thấy nhân viên nào">
+      <!-- Custom Template cho cột "status" -->
+      <ng-template appTableTemplate="status" let-value let-row="row">
+        <span class="cell-badge" [class.badge-success]="value === 'active'" [class.badge-danger]="value === 'inactive'"
+          [class.badge-warning]="value === 'pending'">
+          {{ getStatusText(value) }}
+        </span>
+      </ng-template>
+
+      <!-- Custom Template cho cột "actions" -->
+      <ng-template appTableTemplate="actions" let-value let-row="row">
+        <div class="action-buttons-table">
+          <app-icon-button icon="edit" variant="blueLight" toolTip="Chỉnh sửa" (buttonClick)="onEdit(row)" />
+          <app-icon-button icon="delete" variant="redLight" toolTip="Xóa" (buttonClick)="onDelete(row)" />
+        </div>
+      </ng-template>
+    </app-table>
+  </div>
 </div>

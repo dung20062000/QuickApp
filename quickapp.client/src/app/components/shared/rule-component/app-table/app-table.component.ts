@@ -17,6 +17,8 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { FormsModule } from '@angular/forms';
 import { Search500Component } from '../search-500/search-500.component';
 import { SelectorComponent } from '../selector/selector.component';
+import { DatePickerComponent } from '../date-picker/date-picker.component';
+import { DateRangePickerComponent, DateRange } from '../date-range-picker/date-range-picker.component';
 
 /**
  * Interface for table column configuration
@@ -27,7 +29,7 @@ export interface TableColumn {
   type?: 'text' | 'number' | 'date' | 'datetime' | 'badge' | 'custom';
   sortable?: boolean;
   filterable?: boolean;
-  filterType?: 'text' | 'dropdown';
+  filterType?: 'text' | 'dropdown' | 'date' | 'date-range';
   filterOptions?: { text: string; value: any }[];
   width?: string;
   align?: 'left' | 'center' | 'right';
@@ -64,6 +66,8 @@ export const TABLE_DEFAULT_PAGE_SIZE = 10;
     SkeletonModule,
     Search500Component,
     SelectorComponent,
+    DatePickerComponent,
+    DateRangePickerComponent,
   ],
 })
 export class AppTableComponent implements AfterContentInit, OnChanges {
@@ -146,5 +150,17 @@ export class AppTableComponent implements AfterContentInit, OnChanges {
 
   onTableChange(event: any): void {
     this.tableChange.emit(event);
+  }
+
+  onDateRangeFilter(range: DateRange | null, field: string, dt: Table): void {
+    if (!range || (!range.startDate && !range.endDate)) {
+      dt.filter(null, field, 'between');
+      return;
+    }
+
+    // Pass the range object to the filter. 
+    // We will use 'between' match mode which we can customize or use standard if p-table supports it.
+    // In many setups, we might need a custom filter function.
+    dt.filter([range.startDate, range.endDate], field, 'between');
   }
 }

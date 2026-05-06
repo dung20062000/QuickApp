@@ -1,16 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
-@use 'app/assets/styles/custom-variables' as *;
-@use 'bootstrap/scss/bootstrap' as *;
-@use '@angular/material' as mat;
-@use 'app/assets/styles/vertical-tabs';
-@use 'app/assets/styles/ngx-datatable';
-@use 'app/assets/styles/styles-vendor';
+@use "app/assets/styles/custom-variables" as *;
+@use "bootstrap/scss/bootstrap" as *;
+@use "@angular/material" as mat;
+@use "app/assets/styles/vertical-tabs";
+@use "app/assets/styles/ngx-datatable";
+@use "app/assets/styles/styles-vendor";
 
 @include mat.core();
 
-body, html {
-  height: 100%
+body,
+html {
+  height: 100%;
 }
 
 html[dir="rtl"] {
@@ -61,7 +62,8 @@ textarea.form-control.left-status,
 
     &.ng-select-focused {
       border-color: $form-feedback-valid-color;
-      box-shadow: 0 0 0 $input-focus-width rgba($form-feedback-valid-color, .25);
+      box-shadow: 0 0 0 $input-focus-width
+        rgba($form-feedback-valid-color, 0.25);
     }
 
     padding-right: $input-height-inner;
@@ -78,7 +80,8 @@ textarea.form-control.left-status,
 
     &.ng-select-focused {
       border-color: $form-feedback-invalid-color;
-      box-shadow: 0 0 0 $input-focus-width rgba($form-feedback-invalid-color, .25);
+      box-shadow: 0 0 0 $input-focus-width
+        rgba($form-feedback-invalid-color, 0.25);
     }
 
     padding-right: $input-height-inner;
@@ -108,13 +111,11 @@ textarea.form-control.left-status,
       // Avoid using mixin so we can pass custom focus shadow properly
       @if $enable-shadows {
         box-shadow: $input-box-shadow, $input-focus-box-shadow;
-      }
-      @else {
+      } @else {
         box-shadow: $input-focus-box-shadow;
       }
     }
   }
-
 
   &.pill-items {
     .ng-value-container .ng-value {
@@ -124,7 +125,7 @@ textarea.form-control.left-status,
     .ng-value-icon.right {
       border-left: none !important;
       padding: 1px 0 1px 3px !important;
-      font-weight: lighter
+      font-weight: lighter;
     }
 
     .ng-value-icon:hover {
@@ -188,7 +189,7 @@ textarea.form-control.left-status,
 
 .navbar .nav-item > a:hover,
 .nav li.toolbaritem a:hover {
-  color: #E03930;
+  color: #e03930;
 }
 
 .disabledContainer {
@@ -438,10 +439,15 @@ a.text-link,
 }
 
 .hr-separator {
-  opacity: 0.125
+  opacity: 0.125;
 }
 
-
+.action-buttons-table {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
 /* Bootstrap 5 tweak: do not underline links unless hovered over */
 /*a:not([class*="btn"]) {
   text-decoration: none;

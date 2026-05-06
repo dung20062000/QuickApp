@@ -56,6 +56,26 @@
                                 (selectionChange)="dt.filter($event, col.field, 'equals')"
                             ></selector>
                         </div>
+
+                        <!-- Date Filter -->
+                        <div *ngIf="col.filterType === 'date'" class="table-filter-container">
+                            <date-picker
+                                [label]="''"
+                                [placeholder]="'Chọn ngày...'"
+                                [showClearButton]="true"
+                                (dateChange)="dt.filter($event, col.field, 'dateIs')"
+                            ></date-picker>
+                        </div>
+
+                        <!-- Date Range Filter -->
+                        <div *ngIf="col.filterType === 'date-range'" class="table-filter-container">
+                            <date-range-picker
+                                [label]="''"
+                                [placeholder]="'Chọn khoảng...'"
+                                [showClearButton]="true"
+                                (dateRangeChange)="onDateRangeFilter($event, col.field, dt)"
+                            ></date-range-picker>
+                        </div>
                     </ng-container>
                 </th>
             </tr>
