@@ -7,6 +7,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuickApp.Core.Infrastructure;
 using QuickApp.Core.Models.Shop;
 using QuickApp.Core.Services.Shop.Interfaces;
 using QuickApp.Server.Authorization;
@@ -14,7 +15,7 @@ using QuickApp.Server.ViewModels.Shop;
 
 namespace QuickApp.Server.Controllers
 {
-    [ApiConventionType(typeof(DefaultApiConventions))]
+    [ApiConventionType(typeof(Microsoft.AspNetCore.Mvc.DefaultApiConventions))]
     [Route("api/restaurant-info")]
     public class RestaurantInfoController : BaseApiController
     {

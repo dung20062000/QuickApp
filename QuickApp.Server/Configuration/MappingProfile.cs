@@ -58,9 +58,9 @@ namespace QuickApp.Server.Configuration
                 .ReverseMap();
 
             CreateMap<Product, ProductVM>()
-                .ForMember(d => d.ImageUrls, map => map.MapFrom(s => DeserializeStringArray(s.ImageUrls)))
+                .ForMember(d => d.ProductCategoryName, map => map.MapFrom(s => s.ProductCategory.Name))
                 .ReverseMap()
-                .ForMember(d => d.ImageUrls, map => map.MapFrom(s => SerializeStringArray(s.ImageUrls)));
+                .ForMember(d => d.ProductCategory, map => map.Ignore());
 
             CreateMap<Order, OrderVM>()
                 .ReverseMap();
@@ -78,10 +78,11 @@ namespace QuickApp.Server.Configuration
                 .ForMember(d => d.IngredientsVi, map => map.MapFrom(s => DeserializeStringArray(s.IngredientsVi)));
 
             CreateMap<MenuItemVM, MenuItem>()
+                .ForMember(d => d.Product, map => map.Ignore())
+                .ForMember(d => d.Menu, map => map.Ignore())
                 .ForMember(d => d.ProductCategory, map => map.Ignore())
                 .ForMember(d => d.Ingredients, map => map.MapFrom(s => SerializeStringArray(s.Ingredients)))
                 .ForMember(d => d.IngredientsVi, map => map.MapFrom(s => SerializeStringArray(s.IngredientsVi)))
-                .ForMember(d => d.IsActive, map => map.Ignore())
                 .ForMember(d => d.CreatedBy, map => map.Ignore())
                 .ForMember(d => d.CreatedDate, map => map.Ignore())
                 .ForMember(d => d.UpdatedBy, map => map.Ignore())
@@ -112,6 +113,11 @@ namespace QuickApp.Server.Configuration
             CreateMap<ProductRequestServerDto, ProductSearchCoreRequest>();
             CreateMap<CategoryRequestServerDto, CategorySearchCoreRequest>();
             CreateMap<NhaCungCapRequestServerDto, NhaCungCapSearchCoreRequest>();
+            CreateMap<BlogPostRequestServerDto, BlogPostSearchCoreRequest>();
+
+            // BlogPost Mapping
+            CreateMap<AppBlogPost, BlogPostVM>().ReverseMap();
+            CreateMap<BlogPostRequestServerDto, AppBlogPost>();
         }
 
         // Helper methods for JSON serialization

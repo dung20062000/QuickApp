@@ -9,14 +9,14 @@ namespace QuickApp.Server.ViewModels.Shop
     public class MenuItemVM
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public string? NameVi { get; set; }
+        public required string DisplayName { get; set; }
+        public string? DisplayNameVi { get; set; }
         public string? Description { get; set; }
         public string? DescriptionVi { get; set; }
         public int ProductCategoryId { get; set; }
         public string? CategoryName { get; set; }
-        public decimal Price { get; set; }
-        public string? ImageUrl { get; set; }
+        public decimal? OverridePrice { get; set; }
+        public string? ImageUrls { get; set; }
         public bool IsPopular { get; set; }
         public bool IsNew { get; set; }
         public bool IsVegetarian { get; set; }
@@ -24,5 +24,6 @@ namespace QuickApp.Server.ViewModels.Shop
         public string[]? IngredientsVi { get; set; }
         public decimal Rating { get; set; }
         public int Reviews { get; set; }
+        public bool IsActive { get; set; }
     }
 }

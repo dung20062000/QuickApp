@@ -12,15 +12,15 @@ using QuickApp.Core.Infrastructure;
 namespace QuickApp.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260131123416_AddMenuAndRestaurantInfo")]
-    partial class AddMenuAndRestaurantInfo
+    [Migration("20260519084142_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "8.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -473,6 +473,62 @@ namespace QuickApp.Server.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("QuickApp.Core.Models.Shop.AppBlogPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("PublishedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ThumbnailImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsAvailable");
+
+                    b.HasIndex("PublishedDate");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("AppBlogPosts", (string)null);
+                });
+
             modelBuilder.Entity("QuickApp.Core.Models.Shop.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -526,6 +582,48 @@ namespace QuickApp.Server.Migrations
                     b.ToTable("AppCustomers", (string)null);
                 });
 
+            modelBuilder.Entity("QuickApp.Core.Models.Shop.Menu", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppMenus", (string)null);
+                });
+
             modelBuilder.Entity("QuickApp.Core.Models.Shop.MenuItem", b =>
                 {
                     b.Property<int>("Id")
@@ -549,9 +647,18 @@ namespace QuickApp.Server.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("DisplayNameVi")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ImageUrls")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("Ingredients")
                         .HasMaxLength(1000)
@@ -573,19 +680,16 @@ namespace QuickApp.Server.Migrations
                     b.Property<bool>("IsVegetarian")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<int>("MenuId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("NameVi")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<decimal>("Price")
+                    b.Property<decimal?>("OverridePrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Rating")
@@ -603,9 +707,11 @@ namespace QuickApp.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("MenuId");
 
                     b.HasIndex("ProductCategoryId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("AppMenuItems", (string)null);
                 });
@@ -768,15 +874,6 @@ namespace QuickApp.Server.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Icon")
-                        .HasMaxLength(256)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(256)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -1018,11 +1115,27 @@ namespace QuickApp.Server.Migrations
 
             modelBuilder.Entity("QuickApp.Core.Models.Shop.MenuItem", b =>
                 {
+                    b.HasOne("QuickApp.Core.Models.Shop.Menu", "Menu")
+                        .WithMany("MenuItems")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("QuickApp.Core.Models.Shop.ProductCategory", "ProductCategory")
-                        .WithMany()
+                        .WithMany("MenuItems")
                         .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("QuickApp.Core.Models.Shop.Product", "Product")
+                        .WithMany("MenuItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("Product");
 
                     b.Navigation("ProductCategory");
                 });
@@ -1114,6 +1227,11 @@ namespace QuickApp.Server.Migrations
                     b.Navigation("Orders");
                 });
 
+            modelBuilder.Entity("QuickApp.Core.Models.Shop.Menu", b =>
+                {
+                    b.Navigation("MenuItems");
+                });
+
             modelBuilder.Entity("QuickApp.Core.Models.Shop.Order", b =>
                 {
                     b.Navigation("OrderDetails");
@@ -1123,11 +1241,15 @@ namespace QuickApp.Server.Migrations
                 {
                     b.Navigation("Children");
 
+                    b.Navigation("MenuItems");
+
                     b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("QuickApp.Core.Models.Shop.ProductCategory", b =>
                 {
+                    b.Navigation("MenuItems");
+
                     b.Navigation("Products");
                 });
 #pragma warning restore 612, 618

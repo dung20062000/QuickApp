@@ -29,7 +29,7 @@ namespace QuickApp.Core.Services.Shop
                     .Include(m => m.ProductCategory)
                     .Where(m => m.IsActive)
                     .OrderBy(m => m.ProductCategoryId)
-                    .ThenBy(m => m.Name)
+                    .ThenBy(m => m.DisplayName)
                     .ToList();
 
                 return new BaseResponse<List<MenuItem>>
@@ -58,7 +58,7 @@ namespace QuickApp.Core.Services.Shop
                 var menuItems = _dbContext.MenuItems
                     .Include(m => m.ProductCategory)
                     .Where(m => m.ProductCategoryId == categoryId && m.IsActive)
-                    .OrderBy(m => m.Name)
+                    .OrderBy(m => m.DisplayName)
                     .ToList();
 
                 return new BaseResponse<List<MenuItem>>
@@ -92,7 +92,7 @@ namespace QuickApp.Core.Services.Shop
                 {
                     return new BaseResponse<MenuItem?>
                     {
-                        Message = "KhÙng tÏm th?y mÛn ?n",
+                        Message = "Khùng tùm th?y mùn ?n",
                         Status = ResponseStatus.NotFound,
                         Data = null
                     };
@@ -136,7 +136,7 @@ namespace QuickApp.Core.Services.Shop
                 
                 return new BaseResponse<MenuItem?>
                 {
-                    Message = "ThÍm mÛn th‡nh cÙng",
+                    Message = "Thùm mùn thùnh cùng",
                     Status = ResponseStatus.Success,
                     Data = menuItem
                 };
@@ -172,7 +172,7 @@ namespace QuickApp.Core.Services.Shop
                 
                 return new BaseResponse<MenuItem?>
                 {
-                    Message = "C?p nh?t mÛn ?n th‡nh cÙng",
+                    Message = "C?p nh?t mùn ?n thùnh cùng",
                     Status = ResponseStatus.Success,
                     Data = menuItem
                 };
@@ -209,7 +209,7 @@ namespace QuickApp.Core.Services.Shop
                 
                 return new BaseResponse<MenuItem?>
                 {
-                    Message = "XÛa mÛn ?n th‡nh cÙng",
+                    Message = "Xùa mùn ?n thùnh cùng",
                     Status = ResponseStatus.Success,
                     Data = menuItem
                 };

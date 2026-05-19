@@ -32,6 +32,10 @@ namespace QuickApp.Core.Infrastructure
 
         public DbSet<RestaurantInfo> RestaurantInfos { get; set; }
 
+        public DbSet<AppBlogPost> BlogPosts { get; set; }
+
+        public DbSet<Menu> Menus { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -77,8 +81,8 @@ namespace QuickApp.Core.Infrastructure
 
             builder.Entity<Product>().Property(p => p.Name).IsRequired().HasMaxLength(100);
             builder.Entity<Product>().HasIndex(p => p.Name);
-            builder.Entity<Product>().Property(p => p.Description).HasMaxLength(500);
-            builder.Entity<Product>().Property(p => p.Icon).IsUnicode(false).HasMaxLength(256);
+            //builder.Entity<Product>().Property(p => p.Description).HasMaxLength(500);
+            //builder.Entity<Product>().Property(p => p.Icon).IsUnicode(false).HasMaxLength(256);
             builder.Entity<Product>().HasOne(p => p.Parent).WithMany(p => p.Children).OnDelete(DeleteBehavior.Restrict);
             builder.Entity<Product>().Property(p => p.BuyingPrice).HasColumnType(priceDecimalType);
             builder.Entity<Product>().Property(p => p.SellingPrice).HasColumnType(priceDecimalType);
@@ -93,15 +97,32 @@ namespace QuickApp.Core.Infrastructure
             builder.Entity<OrderDetail>().ToTable($"{tablePrefix}{nameof(OrderDetails)}");
 
             // MenuItem configuration
-            builder.Entity<MenuItem>().Property(m => m.Name).IsRequired().HasMaxLength(200);
-            builder.Entity<MenuItem>().HasIndex(m => m.Name);
-            builder.Entity<MenuItem>().Property(m => m.Price).HasColumnType(priceDecimalType);
             builder.Entity<MenuItem>().Property(m => m.Rating).HasColumnType("decimal(3,1)");
+            builder.Entity<MenuItem>().Property(m => m.OverridePrice).HasColumnType("decimal(18,2)");
+            builder.Entity<MenuItem>().HasOne(m => m.Product)
+                .WithMany(p => p.MenuItems)
+                .HasForeignKey(m => m.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<MenuItem>().HasOne(m => m.Menu)
+                .WithMany(menu => menu.MenuItems)
+                .HasForeignKey(m => m.MenuId)
+                .OnDelete(DeleteBehavior.Cascade);
             builder.Entity<MenuItem>().ToTable($"{tablePrefix}{nameof(MenuItems)}");
 
             // RestaurantInfo configuration
             builder.Entity<RestaurantInfo>().Property(r => r.Name).IsRequired().HasMaxLength(200);
             builder.Entity<RestaurantInfo>().ToTable($"{tablePrefix}{nameof(RestaurantInfos)}");
+
+            // AppBlogPost configuration
+            builder.Entity<AppBlogPost>().Property(b => b.Title).IsRequired().HasMaxLength(255);
+            builder.Entity<AppBlogPost>().HasIndex(b => b.Slug).IsUnique();
+            builder.Entity<AppBlogPost>().HasIndex(b => b.PublishedDate);
+            builder.Entity<AppBlogPost>().HasIndex(b => b.IsAvailable);
+            builder.Entity<AppBlogPost>().ToTable($"{tablePrefix}{nameof(BlogPosts)}");
+
+            // Menu configuration
+            builder.Entity<Menu>().Property(m => m.Name).IsRequired().HasMaxLength(200);
+            builder.Entity<Menu>().ToTable($"{tablePrefix}{nameof(Menus)}");
         }
 
         public override int SaveChanges()

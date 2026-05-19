@@ -157,7 +157,6 @@ namespace QuickApp.Core.Infrastructure
                 var prod_1 = new Product
                 {
                     Name = "BMW M6",
-                    Description = "Yet another masterpiece from the world's best car manufacturer",
                     BuyingPrice = 109775,
                     SellingPrice = 114234,
                     UnitsInStock = 12,
@@ -168,7 +167,6 @@ namespace QuickApp.Core.Infrastructure
                 var prod_2 = new Product
                 {
                     Name = "Nissan Patrol",
-                    Description = "A true man's choice",
                     BuyingPrice = 78990,
                     SellingPrice = 86990,
                     UnitsInStock = 4,
@@ -243,62 +241,66 @@ namespace QuickApp.Core.Infrastructure
                 dbContext.ProductCategories.AddRange(cat1, cat2, cat3, cat4, cat5);
                 await dbContext.SaveChangesAsync();
 
-                // Menu Items
-                var menuItems = new List<MenuItem>
+                // Create a default Menu
+                var defaultMenu = new Menu
                 {
-                    // Nigiri Sushi
-                    new() { Name = "Salmon Nigiri", NameVi = "Nigiri Cá Hồi", Description = "Fresh Norwegian salmon on seasoned rice",
-                        DescriptionVi = "Cá hồi Na Uy tươi trên cơm trộn giấm", ProductCategory = cat1, Price = 45000,
-                        Ingredients = "[\"Salmon\",\"Sushi Rice\",\"Wasabi\"]", IngredientsVi = "[\"Cá hồi\",\"Cơm sushi\",\"Wasabi\"]",
-                        IsPopular = true, Rating = 4.8m, Reviews = 124 },
-                    
-                    new() { Name = "Tuna Nigiri", NameVi = "Nigiri Cá Ngừ", Description = "Premium bluefin tuna",
-                        DescriptionVi = "Cá ngừ vây xanh cao cấp", ProductCategory = cat1, Price = 55000,
-                        Ingredients = "[\"Tuna\",\"Sushi Rice\",\"Wasabi\"]", IngredientsVi = "[\"Cá ngừ\",\"Cơm sushi\",\"Wasabi\"]",
-                        IsPopular = true, Rating = 4.9m, Reviews = 98 },
+                    Name = "Main Menu",
+                    Description = "Main restaurant menu",
+                    IsActive = true
+                };
+                dbContext.Menus.Add(defaultMenu);
+                await dbContext.SaveChangesAsync();
 
-                    // Maki Rolls
-                    new() { Name = "California Roll", NameVi = "Maki California", Description = "Crab, avocado, cucumber",
-                        DescriptionVi = "Cua, bơ, dưa chuột", ProductCategory = cat2, Price = 75000,
-                        Ingredients = "[\"Crab Stick\",\"Avocado\",\"Cucumber\",\"Tobiko\"]",
-                        IngredientsVi = "[\"Thanh cua\",\"Bơ\",\"Dưa chuột\",\"Trứng cá\"]",
-                        IsPopular = true, Rating = 4.7m, Reviews = 156 },
-
-                    new() { Name = "Spicy Tuna Roll", NameVi = "Maki Cá Ngừ Cay", Description = "Tuna with spicy mayo",
-                        DescriptionVi = "Cá ngừ với sốt mayonnaise cay", ProductCategory = cat2, Price = 85000,
-                        Ingredients = "[\"Tuna\",\"Spicy Mayo\",\"Cucumber\",\"Sesame\"]",
-                        IngredientsVi = "[\"Cá ngừ\",\"Sốt mayo cay\",\"Dưa chuột\",\"Mè\"]",
-                        IsPopular = true, Rating = 4.8m, Reviews = 143 },
-
-                    // Sashimi
-                    new() { Name = "Salmon Sashimi", NameVi = "Sashimi Cá Hồi", Description = "6 pieces of fresh salmon",
-                        DescriptionVi = "6 miếng cá hồi tươi", ProductCategory = cat3, Price = 95000,
-                        Ingredients = "[\"Premium Salmon\"]", IngredientsVi = "[\"Cá hồi cao cấp\"]",
-                        IsPopular = true, Rating = 4.9m, Reviews = 201 },
-
-                    // Special Rolls
-                    new() { Name = "Dragon Roll", NameVi = "Maki Rồng", Description = "Eel, avocado topped with eel sauce",
-                        DescriptionVi = "Lươn, bơ phủ sốt lươn", ProductCategory = cat4, Price = 120000,
-                        Ingredients = "[\"Eel\",\"Avocado\",\"Cucumber\",\"Eel Sauce\"]",
-                        IngredientsVi = "[\"Lươn\",\"Bơ\",\"Dưa chuột\",\"Sốt lươn\"]",
-                        IsPopular = true, Rating = 4.9m, Reviews = 112 },
-
-                    new() { Name = "Rainbow Roll", NameVi = "Maki Cầu Vồng", Description = "California roll topped with assorted fish",
-                        DescriptionVi = "Maki California phủ các loại cá", ProductCategory = cat4, Price = 130000,
-                        Ingredients = "[\"Salmon\",\"Tuna\",\"Avocado\",\"Crab\"]",
-                        IngredientsVi = "[\"Cá hồi\",\"Cá ngừ\",\"Bơ\",\"Cua\"]",
-                        IsPopular = true, IsNew = true, Rating = 4.8m, Reviews = 95 },
-
-                    // Vegetarian
-                    new() { Name = "Avocado Roll", NameVi = "Maki Bơ", Description = "Fresh avocado with sesame",
-                        DescriptionVi = "Bơ tươi với mè", ProductCategory = cat5, Price = 50000,
-                        Ingredients = "[\"Avocado\",\"Sesame\",\"Sushi Rice\"]",
-                        IngredientsVi = "[\"Bơ\",\"Mè\",\"Cơm sushi\"]",
-                        IsVegetarian = true, Rating = 4.5m, Reviews = 56 }
+                // Create Products and MenuItems
+                var menuItemData = new List<(string Name, string DisplayName, string DisplayNameVi, string Description, string DescriptionVi, ProductCategory Category, decimal Price, string Ingredients, string IngredientsVi, bool IsPopular, bool IsNew, bool IsVegetarian, decimal Rating)>
+                {
+                    ("Salmon Nigiri", "Salmon Nigiri", "Nigiri Ca Hoi", "Fresh Norwegian salmon on seasoned rice", "Ca hoi Na Uy tuoi tren com tron giam", cat1, 45000m, "[\"Salmon\",\"Sushi Rice\",\"Wasabi\"]", "[\"Ca hoi\",\"Com sushi\",\"Wasabi\"]", true, false, false, 4.8m),
+                    ("Tuna Nigiri", "Tuna Nigiri", "Nigiri Ca Ngu", "Premium bluefin tuna", "Ca ngu vay xanh cao cap", cat1, 55000m, "[\"Tuna\",\"Sushi Rice\",\"Wasabi\"]", "[\"Ca ngu\",\"Com sushi\",\"Wasabi\"]", true, false, false, 4.9m),
+                    ("California Roll", "California Roll", "Maki California", "Crab, avocado, cucumber", "Cua, bo, dua chuot", cat2, 75000m, "[\"Crab Stick\",\"Avocado\",\"Cucumber\",\"Tobiko\"]", "[\"Thanh cua\",\"Bo\",\"Dua chuot\",\"Trung ca\"]", true, false, false, 4.7m),
+                    ("Spicy Tuna Roll", "Spicy Tuna Roll", "Maki Ca Ngu Cay", "Tuna with spicy mayo", "Ca ngu voi sot mayonnaise cay", cat2, 85000m, "[\"Tuna\",\"Spicy Mayo\",\"Cucumber\",\"Sesame\"]", "[\"Ca ngu\",\"Sot mayo cay\",\"Dua chuot\",\"Me\"]", true, false, false, 4.8m),
+                    ("Salmon Sashimi", "Salmon Sashimi", "Sashimi Ca Hoi", "6 pieces of fresh salmon", "6 mieng ca hoi tuoi", cat3, 95000m, "[\"Premium Salmon\"]", "[\"Ca hoi cao cap\"]", true, false, false, 4.9m),
+                    ("Dragon Roll", "Dragon Roll", "Maki Rong", "Eel, avocado topped with eel sauce", "Luon, bo phu sot luon", cat4, 120000m, "[\"Eel\",\"Avocado\",\"Cucumber\",\"Eel Sauce\"]", "[\"Luon\",\"Bo\",\"Dua chuot\",\"Sot luon\"]", true, false, false, 4.9m),
+                    ("Rainbow Roll", "Rainbow Roll", "Maki Cau Vong", "California roll topped with assorted fish", "Maki California phu cac loai ca", cat4, 130000m, "[\"Salmon\",\"Tuna\",\"Avocado\",\"Crab\"]", "[\"Ca hoi\",\"Ca ngu\",\"Bo\",\"Cua\"]", true, true, false, 4.8m),
+                    ("Avocado Roll", "Avocado Roll", "Maki Bo", "Fresh avocado with sesame", "Bo tuoi voi me", cat5, 50000m, "[\"Avocado\",\"Sesame\",\"Sushi Rice\"]", "[\"Bo\",\"Me\",\"Com sushi\"]", false, false, true, 4.5m)
                 };
 
-                dbContext.MenuItems.AddRange(menuItems);
-                await dbContext.SaveChangesAsync();
+                foreach (var item in menuItemData)
+                {
+                    var product = new Product
+                    {
+                        Name = item.Name,
+                        BuyingPrice = item.Price * 0.6m,
+                        SellingPrice = item.Price,
+                        UnitsInStock = 100,
+                        IsActive = true,
+                        IsDiscontinued = false,
+                        ProductCategory = item.Category
+                    };
+                    dbContext.Products.Add(product);
+                    await dbContext.SaveChangesAsync();
+
+                    var menuItem = new MenuItem
+                    {
+                        Product = product,
+                        Menu = defaultMenu,
+                        ProductCategory = item.Category,
+                        DisplayName = item.DisplayName,
+                        DisplayNameVi = item.DisplayNameVi,
+                        Description = item.Description,
+                        DescriptionVi = item.DescriptionVi,
+                        OverridePrice = item.Price,
+                        Ingredients = item.Ingredients,
+                        IngredientsVi = item.IngredientsVi,
+                        IsPopular = item.IsPopular,
+                        IsNew = item.IsNew,
+                        IsVegetarian = item.IsVegetarian,
+                        Rating = item.Rating,
+                        Reviews = 0,
+                        IsActive = true
+                    };
+                    dbContext.MenuItems.Add(menuItem);
+                    await dbContext.SaveChangesAsync();
+                }
 
                 logger.LogInformation("Menu data seeding completed");
             }
@@ -312,11 +314,11 @@ namespace QuickApp.Core.Infrastructure
                 {
                     Name = "Muc Sushi House",
                     Description = "Experience authentic Japanese cuisine with our chef's special creations. Fresh ingredients, traditional techniques, and modern presentation.",
-                    DescriptionVi = "Trải nghiệm ẩm thực Nhật Bản chính thống với những sáng tạo đặc biệt của đầu bếp. Nguyên liệu tươi ngon, kỹ thuật truyền thống và cách trình bày hiện đại.",
+                    DescriptionVi = "Trai nghiem am thuc Nhat Ban chinh thong voi nhung sang tao dac biet cua dau bep. Nguyen lieu tuoi ngon, ky thuat truyen thong va cach trinh bay hien dai.",
                     Phone = "+84 123 456 789",
                     Email = "info@mucsushi.vn",
                     Address = "123 Nguyen Hue Street, District 1, Ho Chi Minh City",
-                    AddressVi = "123 Đường Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh",
+                    AddressVi = "123 Duong Nguyen Hue, Quan 1, TP. Ho Chi Minh",
                     OpenHours = "Mon-Sun: 10:00 AM - 10:00 PM",
                     OpenHoursVi = "T2-CN: 10:00 - 22:00",
                     Facebook = "https://facebook.com/mucsushi",

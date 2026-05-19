@@ -6,11 +6,33 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QuickApp.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class create : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AppBlogPosts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ThumbnailImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PublishedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppBlogPosts", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AppCustomers",
                 columns: table => new
@@ -34,6 +56,26 @@ namespace QuickApp.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppMenus",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    BranchId = table.Column<int>(type: "int", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppMenus", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppProductCategories",
                 columns: table => new
                 {
@@ -50,6 +92,36 @@ namespace QuickApp.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppProductCategories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppRestaurantInfos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    DescriptionVi = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    AddressVi = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    OpenHours = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    OpenHoursVi = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Facebook = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Instagram = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Twitter = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    LogoUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppRestaurantInfos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -105,6 +177,30 @@ namespace QuickApp.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NhaCungCaps",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaNhaCungCap = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenNhaCungCap = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DiaChi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoDienThoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenNguoiLienHe = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GhiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThai = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NhaCungCaps", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OpenIddictApplications",
                 columns: table => new
                 {
@@ -156,8 +252,6 @@ namespace QuickApp.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    Icon = table.Column<string>(type: "varchar(256)", unicode: false, maxLength: 256, nullable: true),
                     BuyingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SellingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     UnitsInStock = table.Column<int>(type: "int", nullable: false),
@@ -349,6 +443,57 @@ namespace QuickApp.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppMenuItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    MenuId = table.Column<int>(type: "int", nullable: false),
+                    ProductCategoryId = table.Column<int>(type: "int", nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DisplayNameVi = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    DescriptionVi = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    OverridePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ImageUrls = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    IsPopular = table.Column<bool>(type: "bit", nullable: false),
+                    IsNew = table.Column<bool>(type: "bit", nullable: false),
+                    IsVegetarian = table.Column<bool>(type: "bit", nullable: false),
+                    Ingredients = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    IngredientsVi = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Rating = table.Column<decimal>(type: "decimal(3,1)", nullable: false),
+                    Reviews = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppMenuItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppMenuItems_AppMenus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "AppMenus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppMenuItems_AppProductCategories_ProductCategoryId",
+                        column: x => x.ProductCategoryId,
+                        principalTable: "AppProductCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppMenuItems_AppProducts_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "AppProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppOrderDetails",
                 columns: table => new
                 {
@@ -415,9 +560,40 @@ namespace QuickApp.Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppBlogPosts_IsAvailable",
+                table: "AppBlogPosts",
+                column: "IsAvailable");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppBlogPosts_PublishedDate",
+                table: "AppBlogPosts",
+                column: "PublishedDate");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppBlogPosts_Slug",
+                table: "AppBlogPosts",
+                column: "Slug",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AppCustomers_Name",
                 table: "AppCustomers",
                 column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppMenuItems_MenuId",
+                table: "AppMenuItems",
+                column: "MenuId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppMenuItems_ProductCategoryId",
+                table: "AppMenuItems",
+                column: "ProductCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppMenuItems_ProductId",
+                table: "AppMenuItems",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppOrderDetails_OrderId",
@@ -534,7 +710,16 @@ namespace QuickApp.Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AppBlogPosts");
+
+            migrationBuilder.DropTable(
+                name: "AppMenuItems");
+
+            migrationBuilder.DropTable(
                 name: "AppOrderDetails");
+
+            migrationBuilder.DropTable(
+                name: "AppRestaurantInfos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -552,10 +737,16 @@ namespace QuickApp.Server.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "NhaCungCaps");
+
+            migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictTokens");
+
+            migrationBuilder.DropTable(
+                name: "AppMenus");
 
             migrationBuilder.DropTable(
                 name: "AppOrders");

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuickApp.Core.CoreDtos.Request.Shop;
+using QuickApp.Core.Infrastructure;
 using QuickApp.Core.Models.Shop;
 using QuickApp.Core.Services.Shop;
 using QuickApp.Core.Services.Shop.Interfaces;
@@ -12,7 +13,7 @@ using QuickApp.Server.ViewModels.Shop;
 
 namespace QuickApp.Server.Controllers
 {
-    [ApiConventionType(typeof(DefaultApiConventions))]
+    [ApiConventionType(typeof(Microsoft.AspNetCore.Mvc.DefaultApiConventions))]
     [Route("api/nhacungcap")]
     [Authorize]
     public class NhaCungCapController : BaseApiController

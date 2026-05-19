@@ -9,7 +9,7 @@ using QuickApp.Server.ViewModels.Shop;
 
 namespace QuickApp.Server.Controllers
 {
-    [ApiConventionType(typeof(DefaultApiConventions))]
+    [ApiConventionType(typeof(Microsoft.AspNetCore.Mvc.DefaultApiConventions))]
     [Route("api/categories")]
     [Authorize]
     public class CategoryController : BaseApiController
