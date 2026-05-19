@@ -1,0 +1,240 @@
+<div class="blog-post-detail-wrapper" [class.loading]="isLoading">
+  <!-- Loading Overlay -->
+  @if (isLoading) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+  }
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-title">
+      <h1 class="page-title">{{ pageTitle }}</h1>
+    </div>
+    <div class="header-actions">
+      @if (mode === 'view' && blogPostId) {
+        <app-icon-button
+          variant="greenLight"
+          size="md"
+          icon="edit"
+          toolTip="Chỉnh sửa"
+          (buttonClick)="onEdit()"
+        ></app-icon-button>
+        <app-icon-button
+          variant="redLight"
+          size="md"
+          icon="delete"
+          toolTip="Xóa"
+          (buttonClick)="onDelete()"
+        ></app-icon-button>
+      }
+      <app-icon-button
+        variant="gray"
+        size="md"
+        icon="arrow_back"
+        toolTip="Quay lại"
+        (buttonClick)="onBack()"
+      ></app-icon-button>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form [formGroup]="form" (ngSubmit)="onSave()" class="blog-post-form" [class.read-only]="isReadOnly">
+    <div class="form-grid">
+      <!-- Left Column: Content -->
+      <div class="form-main">
+        <!-- Title -->
+        <div class="form-group">
+          @if (isReadOnly) {
+            <label class="form-label required">Tiêu đề</label>
+            <div class="field-value">{{ form.get('title')?.value }}</div>
+          } @else {
+            <app-input-varchar
+              formControlName="title"
+              [label]="'Tiêu đề'"
+              [placeholder]="'Nhập tiêu đề bài viết...'"
+              [required]="true"
+              [submitted]="submitted"
+              [maxLength]="500"
+              [control]="form.get('title')!"
+            ></app-input-varchar>
+          }
+        </div>
+
+        <!-- Slug -->
+        <div class="form-group">
+          @if (isReadOnly) {
+            <label class="form-label">Slug</label>
+            <div class="field-value">{{ form.get('slug')?.value || '—' }}</div>
+          } @else {
+            <app-input-varchar
+              formControlName="slug"
+              [label]="'Slug'"
+              [placeholder]="'Tu dong tao neu de trong'"
+              [submitted]="submitted"
+              [maxLength]="500"
+              [control]="form.get('slug')!"
+            ></app-input-varchar>
+          }
+        </div>
+
+        <!-- Content -->
+        <div class="form-group">
+          @if (isReadOnly) {
+            <label class="form-label required">Nội dung</label>
+            <div class="content-preview" [innerHTML]="form.get('content')?.value"></div>
+            <button
+              type="button"
+              class="preview-btn"
+              (click)="onPreview()"
+            >
+              <i class="fa fa-eye"></i> Xem trước nội dung
+            </button>
+          } @else {
+            <input-textarea
+              formControlName="content"
+              [label]="'Nội dung'"
+              [placeholder]="'Nhập nội dung bài viết (HTML) ...'"
+              [required]="true"
+              [submitted]="submitted"
+              [rows]="12"
+              [maxLength]="10000"
+              [control]="form.get('content')!"
+            ></input-textarea>
+          }
+        </div>
+      </div>
+
+      <!-- Right Column: Meta & Thumbnail -->
+      <div class="form-sidebar">
+        <!-- Status -->
+        <div class="sidebar-card">
+          <h3 class="card-title">Trạng thái</h3>
+          <div class="form-group no-margin">
+            @if (isReadOnly) {
+              <span class="cell-badge" [ngClass]="form.get('isAvailable')?.value ? 'badge-success' : 'badge-secondary'">
+                {{ form.get('isAvailable')?.value ? 'Hoạt động' : 'Không hoạt động' }}
+              </span>
+            } @else {
+              <input-checkbox
+                formControlName="isAvailable"
+                [label]="'Hoạt động'"
+                [defaultValue]="true"
+                [control]="form.get('isAvailable')!"
+              ></input-checkbox>
+            }
+          </div>
+        </div>
+
+        <!-- Published Date -->
+        <div class="sidebar-card">
+          <h3 class="card-title">Ngày đăng</h3>
+          <div class="form-group no-margin">
+            @if (isReadOnly) {
+              <div class="field-value">
+                {{ form.get('publishedDate')?.value ? (form.get('publishedDate')?.value | date:'dd/MM/yyyy') : '—' }}
+              </div>
+            } @else {
+              <date-picker
+                formControlName="publishedDate"
+                [label]="'Ngày đăng'"
+                [placeholder]="'Chọn ngày...'"
+                [showClearButton]="true"
+                [control]="form.get('publishedDate')!"
+              ></date-picker>
+            }
+          </div>
+        </div>
+
+        <!-- Thumbnail -->
+        <div class="sidebar-card">
+          <h3 class="card-title">Hình đại diện</h3>
+          <div class="thumbnail-upload-area">
+            @if (thumbnailPreviewUrl) {
+              <div class="thumbnail-preview-wrapper">
+                <img
+                  [src]="thumbnailPreviewUrl"
+                  alt="Thumbnail preview"
+                  class="thumbnail-preview-img"
+                  (error)="onImageError($event)"
+                />
+                @if (!isReadOnly) {
+                  <button
+                    type="button"
+                    class="remove-thumbnail-btn"
+                    (click)="onRemoveThumbnail()"
+                  >
+                    <i class="fa fa-times"></i>
+                  </button>
+                }
+              </div>
+            }
+
+            @if (!isReadOnly) {
+              <div class="upload-placeholder" [class.has-preview]="thumbnailPreviewUrl">
+                @if (!thumbnailPreviewUrl) {
+                  <i class="fa fa-cloud-upload-alt upload-icon"></i>
+                  <p class="upload-text">Chọn hình ảnh</p>
+                  <p class="upload-hint">JPG, PNG, WEBP (tối đa 10MB)</p>
+                }
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="file-input"
+                  (change)="onThumbnailSelected($event)"
+                />
+              </div>
+            }
+
+            @if (!thumbnailPreviewUrl && !isReadOnly) {
+              <p class="no-thumbnail-hint">Chưa có hình đại diện</p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    @if (!isReadOnly) {
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="onBack()"
+          [disabled]="isSaving"
+        >
+          Hủy
+        </button>
+        <button
+          type="submit"
+          class="btn-save"
+          [disabled]="isSaving"
+          [class.loading]="isSaving"
+        >
+          @if (isSaving) {
+            <span class="spinner-small"></span> Đang lưu...
+          } @else {
+            <i class="fa fa-save"></i> Lưu bài viết
+          }
+        </button>
+      </div>
+    }
+  </form>
+</div>
+
+<!-- Preview Dialog -->
+<p-dialog
+  [(visible)]="previewDialogVisible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '900px', maxWidth: '95vw' }"
+  header="Xem trước nội dung"
+  styleClass="preview-dialog"
+>
+  <div class="preview-dialog-content" [innerHTML]="previewContent"></div>
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Đóng" class="p-button-text" (click)="previewDialogVisible = false"></button>
+  </ng-template>
+</p-dialog>

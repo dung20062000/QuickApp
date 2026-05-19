@@ -48,6 +48,16 @@ export class EndpointBase {
     return { headers };
   }
 
+  // Request headers for file uploads - Không set Content-Type để browser tự thêm boundary
+  protected get fileUploadRequestHeaders(): { headers: HttpHeaders | Record<string, string | string[]> } {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.accessToken}`,
+      Accept: 'application/json, text/plain, */*'
+    });
+
+    return { headers };
+  }
+
   public refreshLogin(): Observable<User> {
     return this.authService.refreshLogin().pipe(
       catchError((error: ServerError) => {

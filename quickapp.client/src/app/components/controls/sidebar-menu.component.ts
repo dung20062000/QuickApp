@@ -82,6 +82,11 @@ export class SidebarMenuComponent implements OnInit {
             icon: 'fa fa-utensils',
             routerLink: '/management/shop/menu-management'
           },
+          {
+            label: 'mainMenu.Categories.BlogPosts',
+            icon: 'fa fa-newspaper',
+            routerLink: '/management/shop/blog-posts'
+          },
         ]
       },
       {

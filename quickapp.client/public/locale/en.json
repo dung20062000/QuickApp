@@ -34,7 +34,8 @@
       "Restaurant": "Restaurant Information",
       "MenuItems": "Menu Items",
       "Management": "Management",
-      "Settings": "Settings"
+      "Settings": "Settings",
+      "BlogPosts": "Blog Posts"
     }
   },
   "pageHeader": {
@@ -396,6 +397,7 @@
     "Detail": "Detail",
     "CreateNew": "Create New",
     "List": "List",
-    "MenuItems": "Menu Items"
+    "MenuItems": "Menu Items",
+    "BlogPosts": "Blog Posts"
   }
 }

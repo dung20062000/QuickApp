@@ -1,0 +1,91 @@
+<div class="blog-post-list-wrapper">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-title">
+      <h1 class="page-title">Quản lý Bài viết</h1>
+      <p class="page-subtitle">Danh sách các bài viết trên blog</p>
+    </div>
+    <div class="header-actions">
+      <app-button
+        variant="blue"
+        leftIcon="add"
+        size="md"
+        title="Thêm bài viết mới"
+        (buttonClick)="onCreate()"
+      >Thêm bài viết mới</app-button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <app-table
+    [data]="blogPosts"
+    [columns]="columns"
+    [loading]="loading"
+    [totalRecords]="totalRecords"
+    [rows]="rows"
+    [paginator]="true"
+    [dataKey]="'id'"
+    [skeletonRows]="5"
+    (tableChange)="onTableChange($event)"
+    emptyMessage="Không tìm thấy bài viết nào"
+  >
+    <!-- Thumbnail Image Column -->
+    <ng-template appTableTemplate="thumbnailImage" let-value let-row="row">
+      <div class="thumbnail-cell">
+        @if (getImageUrl(row); as imgUrl) {
+          <img
+            [src]="imgUrl"
+            [alt]="row.title"
+            class="thumbnail-img"
+            (error)="onImageError($event)"
+          />
+        } @else {
+          <div class="thumbnail-placeholder">
+            <i class="fa fa-image"></i>
+          </div>
+        }
+      </div>
+    </ng-template>
+
+    <!-- Title Column - truncated -->
+    <ng-template appTableTemplate="title" let-value let-row="row">
+      <div class="title-cell" [title]="value">
+        {{ value }}
+      </div>
+    </ng-template>
+
+    <!-- Status Badge Column -->
+    <ng-template appTableTemplate="isAvailable" let-value let-row="row">
+      <span class="cell-badge" [ngClass]="value ? 'badge-success' : 'badge-secondary'">
+        {{ value ? 'Hoạt động' : 'Không hoạt động' }}
+      </span>
+    </ng-template>
+
+    <!-- Actions Column -->
+    <ng-template appTableTemplate="actions" let-value let-row="row">
+      <div class="actions-cell">
+        <app-icon-button
+          variant="blueLight"
+          size="sm"
+          icon="visibility"
+          toolTip="Xem chi tiết"
+          (buttonClick)="onView(row)"
+        ></app-icon-button>
+        <app-icon-button
+          variant="greenLight"
+          size="sm"
+          icon="edit"
+          toolTip="Chỉnh sửa"
+          (buttonClick)="onEdit(row)"
+        ></app-icon-button>
+        <app-icon-button
+          variant="redLight"
+          size="sm"
+          icon="delete"
+          toolTip="Xóa"
+          (buttonClick)="onDelete(row)"
+        ></app-icon-button>
+      </div>
+    </ng-template>
+  </app-table>
+</div>

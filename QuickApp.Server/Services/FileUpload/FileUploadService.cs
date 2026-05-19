@@ -210,13 +210,23 @@ namespace QuickApp.Server.Services.FileUpload
 
         private string GetUploadPath(string relativePath)
         {
+            if (string.IsNullOrEmpty(_environment.WebRootPath))
+            {
+                _logger.LogWarning("WebRootPath is null or empty. Using current directory.");
+                return Path.GetFullPath(relativePath);
+            }
             return Path.Combine(_environment.WebRootPath, relativePath.TrimStart('/'));
         }
 
         private string GetPhysicalPath(string relativeUrl)
         {
-            var relativePath = relativeUrl.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString());
-            return Path.Combine(_environment.WebRootPath, relativePath);
+            var relativePathClean = relativeUrl.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString());
+            if (string.IsNullOrEmpty(_environment.WebRootPath))
+            {
+                _logger.LogWarning("WebRootPath is null or empty. Using current directory.");
+                return Path.GetFullPath(relativePathClean);
+            }
+            return Path.Combine(_environment.WebRootPath, relativePathClean);
         }
 
         private void EnsureDirectoryExists(string path)

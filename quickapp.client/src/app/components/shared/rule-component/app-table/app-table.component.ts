@@ -158,7 +158,7 @@ export class AppTableComponent implements AfterContentInit, OnChanges {
       return;
     }
 
-    // Pass the range object to the filter. 
+    // Pass the range object to the filter.
     // We will use 'between' match mode which we can customize or use standard if p-table supports it.
     // In many setups, we might need a custom filter function.
     dt.filter([range.startDate, range.endDate], field, 'between');

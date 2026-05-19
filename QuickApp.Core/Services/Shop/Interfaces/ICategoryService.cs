@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace QuickApp.Core.Services.Shop.Interfaces
 {
-    public interface ICategoryService
-    {
-        BaseResponse<List<ProductCategory>> GetAllCategory(CategorySearchCoreRequest request);
-        BaseResponse<ProductCategory?> GetCategoryById(int id);
-        Task<BaseResponse<ProductCategory?>> CreateProductAsync(ProductCategory category);
-        Task<BaseResponse<ProductCategory?>> UpdateProductAsync(ProductCategory category);
-        Task<BaseResponse<ProductCategory?>> DeleteProductAsync(ProductCategory category);
-    }
+ public interface ICategoryService
+ {
+ BaseResponse<List<ProductCategory>> GetAllCategory(CategorySearchCoreRequest request);
+ BaseResponse<ProductCategory?> GetCategoryById(int id);
+ Task<BaseResponse<ProductCategory?>> CreateCategoryAsync(ProductCategory category);
+ Task<BaseResponse<ProductCategory?>> UpdateCategoryAsync(ProductCategory category);
+ Task<BaseResponse<ProductCategory?>> DeleteCategoryAsync(int id);
+ }
 }

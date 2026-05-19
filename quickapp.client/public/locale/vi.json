@@ -34,7 +34,8 @@
       "Restaurant": "Thông tin cơ sở",
       "MenuItems": "Thực đơn",
       "Management": "Quản lý",
-      "Settings": "Cài đặt"
+      "Settings": "Cài đặt",
+      "BlogPosts": "Bài viết"
     }
 
   },
@@ -397,6 +398,7 @@
     "Detail": "Chi tiết",
     "CreateNew": "Tạo mới",
     "List": "Danh sách",
-    "MenuItems": "Thực đơn"
+    "MenuItems": "Thực đơn",
+    "BlogPosts": "Bài viết"
   }
 }

@@ -114,6 +114,50 @@ export const routes: Routes = [
               }
             }
           },
+          {
+            path: 'blog-posts',
+            loadComponent: () => import('./components/blog-posts/blog-post-list/blog-post-list.component').then(m => m.BlogPostListComponent),
+            title: 'Quản lý Bài viết',
+            data: {
+              breadcrumb: {
+                translateKey: 'BlogPosts',
+                icon: 'fa fa-newspaper'
+              }
+            }
+          },
+          {
+            path: 'blog-posts/create',
+            loadComponent: () => import('./components/blog-posts/blog-post-detail/blog-post-detail.component').then(m => m.BlogPostDetailComponent),
+            title: 'Tạo bài viết mới',
+            data: {
+              breadcrumb: {
+                translateKey: 'CreateNew',
+                icon: 'fa fa-plus-circle'
+              }
+            }
+          },
+          {
+            path: 'blog-posts/view/:id',
+            loadComponent: () => import('./components/blog-posts/blog-post-detail/blog-post-detail.component').then(m => m.BlogPostDetailComponent),
+            title: 'Chi tiết bài viết',
+            data: {
+              breadcrumb: {
+                translateKey: 'Detail',
+                icon: 'fa fa-info-circle'
+              }
+            }
+          },
+          {
+            path: 'blog-posts/edit/:id',
+            loadComponent: () => import('./components/blog-posts/blog-post-detail/blog-post-detail.component').then(m => m.BlogPostDetailComponent),
+            title: 'Chỉnh sửa bài viết',
+            data: {
+              breadcrumb: {
+                translateKey: 'Edit',
+                icon: 'fa fa-edit'
+              }
+            }
+          },
         ]
       }
     ]

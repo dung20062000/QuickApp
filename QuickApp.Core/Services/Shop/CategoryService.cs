@@ -85,7 +85,7 @@ namespace QuickApp.Core.Services.Shop
                 };
             }
         }
-        public async Task<BaseResponse<ProductCategory?>> CreateProductAsync(ProductCategory category)
+        public async Task<BaseResponse<ProductCategory?>> CreateCategoryAsync(ProductCategory category)
         {
             if (category == null)
             {
@@ -120,7 +120,7 @@ namespace QuickApp.Core.Services.Shop
                 };
             }
         }
-        public async Task<BaseResponse<ProductCategory?>> UpdateProductAsync(ProductCategory category)
+        public async Task<BaseResponse<ProductCategory?>> UpdateCategoryAsync(ProductCategory category)
         {
             if (category == null)
             {
@@ -155,20 +155,32 @@ namespace QuickApp.Core.Services.Shop
                 };
             }
         }
-        public async Task<BaseResponse<ProductCategory?>> DeleteProductAsync(ProductCategory category)
+        public async Task<BaseResponse<ProductCategory?>> DeleteCategoryAsync(int id)
         {
-            if (category == null)
+            if (id <= 0)
             {
                 return new BaseResponse<ProductCategory?>
                 {
                     Data = null,
-                    Message = "Dữ liệu danh mục không được để trống.",
+                    Message = "ID danh mục không hợp lệ.",
                     Status = ResponseStatus.Fail,
 
                 };
             }
             try
             {
+                var category = await _dbContext.ProductCategories.FindAsync(id);
+                if (category == null)
+                {
+                    return new BaseResponse<ProductCategory?>
+                    {
+                        Data = null,
+                        Message = "Không tìm thấy danh mục.",
+                        Status = ResponseStatus.NotFound,
+
+                    };
+                }
+                
                 _dbContext.ProductCategories.Remove(category);
                 await _dbContext.SaveChangesAsync();
                 return new BaseResponse<ProductCategory?>

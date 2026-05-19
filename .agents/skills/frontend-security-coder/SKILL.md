@@ -137,6 +137,82 @@ this.form = this.fb.group({
 if (this.form.invalid) return;
 ```
 
+### Image Upload Security
+
+```typescript
+// Validate file type and size before upload
+onThumbnailSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input.files || input.files.length === 0) return;
+
+  const file = input.files[0];
+  // Validate MIME type
+  if (!file.type.startsWith('image/')) {
+    this.alertService.showMessage('Lỗi', 'Vui lòng chọn file hình ảnh', MessageSeverity.warn);
+    return;
+  }
+  // Validate size (10MB limit matches backend)
+  if (file.size > 10 * 1024 * 1024) {
+    this.alertService.showMessage('Lỗi', 'Kích thước hình ảnh không được vượt quá 10MB', MessageSeverity.warn);
+    return;
+  }
+
+  this.selectedThumbnailFile = file;
+  this.thumbnailPreviewUrl = URL.createObjectURL(file);
+}
+```
+
+### Multipart FormData Pattern (ASP.NET Core multipart/form-data)
+
+```typescript
+// Backend sends [FromForm] — send FormData with multipart encoding
+private buildFormData(): FormData {
+  const formData = new FormData();
+  const values = this.form.value;
+
+  formData.append('title', values.title ?? '');
+  formData.append('content', values.content ?? '');
+  if (values.slug) formData.append('slug', values.slug);
+  formData.append('isAvailable', String(values.isAvailable ?? true));
+  if (values.publishedDate) {
+    formData.append('publishedDate', new Date(values.publishedDate).toISOString());
+  }
+  if (this.selectedThumbnailFile) {
+    formData.append('thumbnail', this.selectedThumbnailFile);
+  }
+  if (this.deleteThumbnail) {
+    formData.append('deleteThumbnail', 'true');
+  }
+  return formData;
+}
+
+// In service — no Content-Type header, browser sets it automatically with boundary
+create(formData: FormData): Observable<SomeResponse> {
+  return this.http.post<SomeResponse>(this.apiUrl, formData, this.requestHeaders);
+}
+```
+
+### Confirm Dialog Pattern (Reusable)
+
+```typescript
+// Use ConfirmDialogService for delete confirmations
+import { ConfirmDialogService } from '../../../services/confirm-dialog.service';
+
+constructor(private confirmDialogService: ConfirmDialogService) {}
+
+onDelete(item: SomeItem): void {
+  this.confirmDialogService.showConfirm({
+    title: 'Xác nhận xóa',
+    message: `Bạn có chắc chắn muốn xóa "${item.name}"?`,
+    confirmText: 'Xóa',
+    cancelText: 'Hủy',
+    icon: 'danger', // 'warning' | 'danger' | 'info' | 'question'
+  }).subscribe(confirmed => {
+    if (confirmed) this.executeDelete(item);
+  });
+}
+```
+
 ## Checklist
 
 - [ ] All protected routes have AuthGuard
@@ -148,6 +224,8 @@ if (this.form.invalid) return;
 - [ ] No sensitive data in URL query params
 - [ ] Tokens never stored in localStorage (only sessionStorage or server-side)
 - [ ] Redirect URLs validated before navigation
+- [ ] File uploads validate type and size client-side before sending
+- [ ] FormData used for multipart/form-data (no JSON Content-Type header)
 
 ## When to Use
 

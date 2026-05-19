@@ -113,9 +113,8 @@ namespace QuickApp.Server.Configuration
             CreateMap<ProductRequestServerDto, ProductSearchCoreRequest>();
             CreateMap<CategoryRequestServerDto, CategorySearchCoreRequest>();
             CreateMap<NhaCungCapRequestServerDto, NhaCungCapSearchCoreRequest>();
-            CreateMap<BlogPostRequestServerDto, BlogPostSearchCoreRequest>();
 
-            // BlogPost Mapping
+            // BlogPost ViewModel Mapping
             CreateMap<AppBlogPost, BlogPostVM>().ReverseMap();
             CreateMap<BlogPostRequestServerDto, AppBlogPost>();
         }

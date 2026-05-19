@@ -2,14 +2,13 @@ using QuickApp.Core.Infrastructure;
 
 namespace QuickApp.Server.ServerDtos.Request.Shop
 {
-#nullable enable
     public class BlogPostRequestServerDto : BaseRequest
     {
-        public string Title { get; set; } = string.Empty;
+        public string? Title { get; set; }
 
-        public string Slug { get; set; } = string.Empty;
+        public string? Slug { get; set; }
 
-        public string Content { get; set; } = string.Empty;
+        public string? Content { get; set; }
 
         public string? ThumbnailImage { get; set; }
 
@@ -17,5 +16,4 @@ namespace QuickApp.Server.ServerDtos.Request.Shop
 
         public bool IsAvailable { get; set; }
     }
-#nullable restore
 }

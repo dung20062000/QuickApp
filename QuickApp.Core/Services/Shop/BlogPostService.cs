@@ -38,8 +38,8 @@ namespace QuickApp.Core.Services.Shop
             slug = Regex.Replace(slug, @"[\s-]+", "-").Trim('-');
 
             var existingSlugs = await _dbContext.BlogPosts
-                .Where(b => b.Slug.StartsWith(slug))
-                .Select(b => b.Slug)
+                .Where(b => b.Slug != null && b.Slug.StartsWith(slug))
+                .Select(b => b.Slug!)
                 .ToListAsync();
 
             if (!existingSlugs.Contains(slug))
@@ -65,19 +65,19 @@ namespace QuickApp.Core.Services.Shop
                 if (!string.IsNullOrWhiteSpace(request.Title))
                 {
                     var keyword = request.Title.Trim().ToLower();
-                    query = query.Where(b => b.Title.ToLower().Contains(keyword));
+                    query = query.Where(b => b.Title != null && b.Title.ToLower().Contains(keyword));
                 }
 
                 if (!string.IsNullOrWhiteSpace(request.Slug))
                 {
                     var keyword = request.Slug.Trim().ToLower();
-                    query = query.Where(b => b.Slug.ToLower().Contains(keyword));
+                    query = query.Where(b => b.Slug != null && b.Slug.ToLower().Contains(keyword));
                 }
 
                 if (!string.IsNullOrWhiteSpace(request.Content))
                 {
                     var keyword = request.Content.Trim().ToLower();
-                    query = query.Where(b => b.Content.ToLower().Contains(keyword));
+                    query = query.Where(b => b.Content != null && b.Content.ToLower().Contains(keyword));
                 }
 
                 if (request.PublishedDateFrom.HasValue)
@@ -97,10 +97,11 @@ namespace QuickApp.Core.Services.Shop
 
                 var totalRecords = query.Count();
 
+                var page = request.PageIndex > 0 ? request.PageIndex - 1 : 0;
                 var dataFilter = query
-                    .OrderByDescending(b => b.PublishedDate)
+                    .OrderByDescending(b => b.CreatedDate)
                     .ThenByDescending(b => b.Id)
-                    .Skip((request.PageIndex - 1) * request.PageSize)
+                    .Skip(page * request.PageSize)
                     .Take(request.PageSize)
                     .ToList();
 
@@ -171,7 +172,10 @@ namespace QuickApp.Core.Services.Shop
 
             try
             {
-                blogPost.Slug = await GenerateSlugAsync(blogPost.Title);
+                if (string.IsNullOrWhiteSpace(blogPost.Slug))
+                {
+                    blogPost.Slug = await GenerateSlugAsync(blogPost.Title);
+                }
                 _dbContext.BlogPosts.Add(blogPost);
                 await _dbContext.SaveChangesAsync();
 

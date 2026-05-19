@@ -41,7 +41,14 @@ namespace QuickApp.Server.Controllers
         [HttpGet]
         public IActionResult GetAll([FromQuery] BlogPostRequestServerDto request)
         {
-            var searchRequest = _mapper.Map<BlogPostSearchCoreRequest>(request);
+            var searchRequest = new BlogPostSearchCoreRequest
+            {
+                Title = request.Title,
+                Slug = request.Slug,
+                Content = request.Content,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
+            };
             var resp = _blogPostService.GetAllBlogPosts(searchRequest);
             var vms = _mapper.Map<List<BlogPostVM>>(resp.Data ?? new List<AppBlogPost>());
             var result = new BaseResponse<List<BlogPostVM>>
@@ -80,18 +87,12 @@ namespace QuickApp.Server.Controllers
         [Authorize(AuthPolicies.ManageAllUsersPolicy)]
         [Consumes("multipart/form-data")]
         [RequestSizeLimit(10 * 1024 * 1024)] // 10MB
-        public async Task<IActionResult> CreateBlogPost(
-            [FromForm] string title,
-            [FromForm] string content,
-            [FromForm] string? slug,
-            [FromForm] bool isAvailable,
-            [FromForm] DateTime? publishedDate,
-            [FromForm] IFormFile? thumbnail)
+        public async Task<IActionResult> CreateBlogPost([FromForm] CreateBlogPostDto dto)
         {
             try
             {
                 // Validate required fields
-                if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(content))
+                if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
                 {
                     return BadRequest(new BaseResponse<BlogPostVM>
                     {
@@ -104,9 +105,9 @@ namespace QuickApp.Server.Controllers
                 string? thumbnailUrl = null;
 
                 // Upload thumbnail if provided
-                if (thumbnail != null && thumbnail.Length > 0)
+                if (dto.Thumbnail != null && dto.Thumbnail.Length > 0)
                 {
-                    var uploadResult = await _fileUploadService.UploadThumbnailAsync(thumbnail);
+                    var uploadResult = await _fileUploadService.UploadThumbnailAsync(dto.Thumbnail);
                     if (!uploadResult.Success)
                     {
                         return BadRequest(new BaseResponse<BlogPostVM>
@@ -120,19 +121,20 @@ namespace QuickApp.Server.Controllers
                 }
 
                 // Generate slug if not provided
+                var slug = dto.Slug;
                 if (string.IsNullOrWhiteSpace(slug))
                 {
-                    slug = await _blogPostService.GenerateSlugAsync(title);
+                    slug = await _blogPostService.GenerateSlugAsync(dto.Title);
                 }
 
                 var blogPost = new AppBlogPost
                 {
-                    Title = title,
+                    Title = dto.Title,
                     Slug = slug,
-                    Content = content,
+                    Content = dto.Content,
                     ThumbnailImage = thumbnailUrl,
-                    IsAvailable = isAvailable,
-                    PublishedDate = publishedDate
+                    IsAvailable = dto.IsAvailable,
+                    PublishedDate = dto.PublishedDate
                 };
 
                 var resp = await _blogPostService.CreateBlogPostAsync(blogPost);
@@ -175,15 +177,7 @@ namespace QuickApp.Server.Controllers
         [Authorize(AuthPolicies.ManageAllUsersPolicy)]
         [Consumes("multipart/form-data")]
         [RequestSizeLimit(10 * 1024 * 1024)] // 10MB
-        public async Task<IActionResult> UpdateBlogPost(
-            int id,
-            [FromForm] string? title,
-            [FromForm] string? content,
-            [FromForm] string? slug,
-            [FromForm] bool? isAvailable,
-            [FromForm] DateTime? publishedDate,
-            [FromForm] IFormFile? thumbnail,
-            [FromForm] bool deleteThumbnail = false)
+        public async Task<IActionResult> UpdateBlogPost(int id, [FromForm] UpdateBlogPostDto dto)
         {
             try
             {
@@ -203,15 +197,15 @@ namespace QuickApp.Server.Controllers
                 string? newThumbnailUrl = null;
 
                 // Handle thumbnail update
-                if (deleteThumbnail && string.IsNullOrEmpty(thumbnail?.FileName))
+                if (dto.DeleteThumbnail && dto.Thumbnail == null)
                 {
                     // Delete thumbnail
                     newThumbnailUrl = null;
                 }
-                else if (thumbnail != null && thumbnail.Length > 0)
+                else if (dto.Thumbnail != null && dto.Thumbnail.Length > 0)
                 {
                     // Upload new thumbnail
-                    var uploadResult = await _fileUploadService.UploadThumbnailAsync(thumbnail);
+                    var uploadResult = await _fileUploadService.UploadThumbnailAsync(dto.Thumbnail);
                     if (!uploadResult.Success)
                     {
                         return BadRequest(new BaseResponse<BlogPostVM>
@@ -225,19 +219,19 @@ namespace QuickApp.Server.Controllers
                 }
 
                 // Update fields
-                if (!string.IsNullOrWhiteSpace(title))
-                    blogPost.Title = title;
-                if (!string.IsNullOrWhiteSpace(content))
-                    blogPost.Content = content;
-                if (!string.IsNullOrWhiteSpace(slug))
-                    blogPost.Slug = slug;
-                if (isAvailable.HasValue)
-                    blogPost.IsAvailable = isAvailable.Value;
-                if (publishedDate.HasValue)
-                    blogPost.PublishedDate = publishedDate;
+                if (!string.IsNullOrWhiteSpace(dto.Title))
+                    blogPost.Title = dto.Title;
+                if (!string.IsNullOrWhiteSpace(dto.Content))
+                    blogPost.Content = dto.Content;
+                if (!string.IsNullOrWhiteSpace(dto.Slug))
+                    blogPost.Slug = dto.Slug;
+                if (dto.IsAvailable.HasValue)
+                    blogPost.IsAvailable = dto.IsAvailable.Value;
+                if (dto.PublishedDate.HasValue)
+                    blogPost.PublishedDate = dto.PublishedDate;
                 
                 // Update thumbnail
-                if (newThumbnailUrl != null || deleteThumbnail)
+                if (newThumbnailUrl != null || dto.DeleteThumbnail)
                 {
                     blogPost.ThumbnailImage = newThumbnailUrl;
                 }
