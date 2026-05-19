@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { BreadcrumbComponent } from '../controls/breadcrumb.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-management-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, BreadcrumbComponent],
+  imports: [CommonModule, RouterOutlet, BreadcrumbComponent, ConfirmDialogComponent],
   template: `
     <div class="management-layout">
       <!-- Breadcrumb -->
@@ -17,6 +18,9 @@ import { BreadcrumbComponent } from '../controls/breadcrumb.component';
         <router-outlet></router-outlet>
       </div>
     </div>
+
+    <!-- Global Confirm Dialog -->
+    <app-confirm-dialog></app-confirm-dialog>
   `,
   styles: [`
     .management-layout {
