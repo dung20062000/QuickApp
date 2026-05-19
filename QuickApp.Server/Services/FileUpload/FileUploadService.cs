@@ -27,24 +27,19 @@ namespace QuickApp.Server.Services.FileUpload
             if (files == null || files.Count == 0)
             {
                 result.Success = false;
-                result.Message = "No files provided";
+                result.Message = "Khong co file nao duoc cung cap";
                 return result;
             }
 
-            // Check max files count
             if (files.Count > options.MaxFilesCount)
             {
                 result.Success = false;
-                result.Message = $"Maximum {options.MaxFilesCount} files allowed";
+                result.Message = $"Chi cho phep toi da {options.MaxFilesCount} file(s)";
                 return result;
             }
 
-            // Create upload directory if not exists
-            var uploadPath = Path.Combine(_environment.WebRootPath, options.UploadPath);
-            if (!Directory.Exists(uploadPath))
-            {
-                Directory.CreateDirectory(uploadPath);
-            }
+            var uploadPath = GetUploadPath(options.UploadPath);
+            EnsureDirectoryExists(uploadPath);
 
             foreach (var file in files)
             {
@@ -52,27 +47,22 @@ namespace QuickApp.Server.Services.FileUpload
                 if (!validation.IsValid)
                 {
                     result.Errors.Add($"{file.FileName}: {validation.ErrorMessage}");
+                    _logger.LogWarning("File validation failed: {FileName} - {Error}", file.FileName, validation.ErrorMessage);
                     continue;
                 }
 
                 try
                 {
-                    var fileName = options.GenerateUniqueFileName
-                        ? GenerateUniqueFileName(file.FileName)
-                        : file.FileName;
-
+                    var fileName = GenerateUniqueFileName(file.FileName, options.GenerateUniqueFileName);
                     var filePath = Path.Combine(uploadPath, fileName);
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-
+                    await SaveFileAsync(file, filePath);
+                    
+                    var relativeUrl = $"/{options.UploadPath.Replace("\\", "/")}/{fileName}";
                     result.UploadedFiles.Add(fileName);
-                    // Generate URL: /uploads/shop/products/filename.jpg
-                    result.FileUrls.Add($"/{options.UploadPath.Replace("\\", "/")}/{fileName}");
-
-                    _logger.LogInformation("File uploaded successfully: {FileName}", fileName);
+                    result.FileUrls.Add(relativeUrl);
+                    
+                    _logger.LogInformation("File uploaded: {FileName} -> {Path}", fileName, relativeUrl);
                 }
                 catch (Exception ex)
                 {
@@ -83,41 +73,64 @@ namespace QuickApp.Server.Services.FileUpload
 
             result.Success = result.UploadedFiles.Count > 0;
             result.Message = result.Success
-                ? $"Successfully uploaded {result.UploadedFiles.Count} file(s)"
-                : "Failed to upload files";
+                ? $"Tai len thanh cong {result.UploadedFiles.Count} file(s)"
+                : "Loi khi tai len file(s)";
 
             return result;
         }
 
         public async Task<FileUploadResult> UploadFileAsync(IFormFile file, FileUploadOptions options)
         {
+            if (file == null || file.Length == 0)
+            {
+                return new FileUploadResult
+                {
+                    Success = false,
+                    Message = "File is empty"
+                };
+            }
+
             var files = new FormFileCollection { file };
             return await UploadFilesAsync(files, options);
         }
 
-        public Task<bool> DeleteFileAsync(string fileUrl)
+        public async Task<FileUploadResult> UploadThumbnailAsync(IFormFile file, string subPath = "thumbnails")
+        {
+            var options = FileUploadOptions.Thumbnail();
+            options.UploadPath = Path.Combine("uploads", "blogposts", subPath);
+            return await UploadFileAsync(file, options);
+        }
+
+        public async Task<FileUploadResult> UploadDocumentAsync(IFormFile file, string subPath = "documents")
+        {
+            var options = FileUploadOptions.Documents();
+            options.UploadPath = Path.Combine("uploads", subPath);
+            return await UploadFileAsync(file, options);
+        }
+
+        public async Task<bool> DeleteFileAsync(string fileUrl)
         {
             try
             {
-                // Convert URL to physical path
-                // e.g., /uploads/shop/products/file.jpg -> wwwroot/uploads/shop/products/file.jpg
-                var relativePath = fileUrl.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString());
-                var filePath = Path.Combine(_environment.WebRootPath, relativePath);
+                if (string.IsNullOrWhiteSpace(fileUrl))
+                    return false;
 
+                var filePath = GetPhysicalPath(fileUrl);
+                
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
-                    _logger.LogInformation("File deleted successfully: {FileUrl}", fileUrl);
-                    return Task.FromResult(true);
+                    _logger.LogInformation("File deleted: {FileUrl}", fileUrl);
+                    return true;
                 }
 
                 _logger.LogWarning("File not found for deletion: {FileUrl}", fileUrl);
-                return Task.FromResult(false);
+                return false;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting file: {FileUrl}", fileUrl);
-                return Task.FromResult(false);
+                return false;
             }
         }
 
@@ -135,49 +148,134 @@ namespace QuickApp.Server.Services.FileUpload
 
         public (bool IsValid, string? ErrorMessage) ValidateFile(IFormFile file, FileUploadOptions options)
         {
-            // Check if file is null or empty
             if (file == null || file.Length == 0)
-            {
-                return (false, "File is empty");
-            }
+                return (false, "File rong hoac khong ton tai");
 
-            // Check file size
             if (file.Length > options.MaxFileSize)
             {
-                var maxSizeMB = options.MaxFileSize / 1024.0 / 1024.0;
-                return (false, $"File size exceeds maximum allowed size of {maxSizeMB:F2} MB");
+                var maxSizeMB = options.MaxFileSize / (1024.0 * 1024.0);
+                return (false, $"Kich thuoc file vuot qua gioi han {maxSizeMB:F2} MB");
             }
 
-            // Check file extension
-            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            var extension = Path.GetExtension(file.FileName)?.ToLowerInvariant();
+            if (string.IsNullOrEmpty(extension))
+                return (false, "File khong co phan mo rong");
+
             if (!options.AllowedExtensions.Contains(extension))
             {
-                return (false, $"File type '{extension}' is not allowed. Allowed types: {string.Join(", ", options.AllowedExtensions)}");
+                return (false, $"Loai file '{extension}' khong duoc cho phep. Cho phep: {string.Join(", ", options.AllowedExtensions)}");
             }
 
-            // Additional security check: validate content type
-            var allowedContentTypes = new[] { "image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp" };
-            if (!allowedContentTypes.Contains(file.ContentType.ToLowerInvariant()))
+            var contentType = file.ContentType?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(contentType) && 
+                !options.AllowedContentTypes.Contains(contentType) &&
+                !IsSafeContentType(contentType, extension))
             {
-                return (false, $"Invalid content type: {file.ContentType}");
+                _logger.LogWarning("Content type mismatch for {Extension}: {ContentType}", extension, contentType);
             }
 
             return (true, null);
         }
 
-        private string GenerateUniqueFileName(string originalFileName)
+        /// <summary>
+        /// Get file info (size, extension, etc.) without saving
+        /// </summary>
+        public FileInfo GetFileInfo(IFormFile file)
         {
-            var extension = Path.GetExtension(originalFileName);
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFileName);
-            
-            // Sanitize filename: remove special characters
-            fileNameWithoutExtension = string.Join("", fileNameWithoutExtension.Split(Path.GetInvalidFileNameChars()));
-            
-            // Generate unique name: timestamp_guid_originalname.ext
-            var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
-            var guid = Guid.NewGuid().ToString("N").Substring(0, 8);
-            
-            return $"{timestamp}_{guid}_{fileNameWithoutExtension}{extension}";
+            return new FileInfo
+            {
+                FileName = file.FileName,
+                Extension = Path.GetExtension(file.FileName)?.ToLowerInvariant() ?? "",
+                SizeInBytes = file.Length,
+                ContentType = file.ContentType,
+                IsImage = IsImageFile(Path.GetExtension(file.FileName))
+            };
         }
+
+        /// <summary>
+        /// Get all files in a directory
+        /// </summary>
+        public List<string> GetFiles(string relativePath)
+        {
+            var fullPath = GetPhysicalPath(relativePath);
+            if (!Directory.Exists(fullPath))
+                return new List<string>();
+
+            return Directory.GetFiles(fullPath)
+                .Select(f => $"/{relativePath.TrimStart('/').Replace("\\", "/")}/{Path.GetFileName(f)}")
+                .ToList();
+        }
+
+        #region Private Methods
+
+        private string GetUploadPath(string relativePath)
+        {
+            return Path.Combine(_environment.WebRootPath, relativePath.TrimStart('/'));
+        }
+
+        private string GetPhysicalPath(string relativeUrl)
+        {
+            var relativePath = relativeUrl.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString());
+            return Path.Combine(_environment.WebRootPath, relativePath);
+        }
+
+        private void EnsureDirectoryExists(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                _logger.LogInformation("Created upload directory: {Path}", path);
+            }
+        }
+
+        private async Task SaveFileAsync(IFormFile file, string filePath)
+        {
+            await using var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 
+                bufferSize: 81920, useAsync: true);
+            await file.CopyToAsync(stream);
+        }
+
+        private string GenerateUniqueFileName(string originalFileName, bool generateUnique)
+        {
+            var extension = Path.GetExtension(originalFileName)?.ToLowerInvariant() ?? "";
+            var baseName = Path.GetFileNameWithoutExtension(originalFileName);
+
+            if (generateUnique)
+            {
+                var safeName = SanitizeFileName(baseName);
+                var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+                var guid = Guid.NewGuid().ToString("N")[..8];
+                return $"{timestamp}_{guid}_{safeName}{extension}";
+            }
+
+            return SanitizeFileName(originalFileName);
+        }
+
+        private string SanitizeFileName(string fileName)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            var sanitized = string.Join("_", fileName.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries));
+            return string.IsNullOrEmpty(sanitized) ? "file" : sanitized;
+        }
+
+        private bool IsImageFile(string? extension)
+        {
+            if (string.IsNullOrEmpty(extension)) return false;
+            var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".bmp", ".ico" };
+            return imageExtensions.Contains(extension.ToLowerInvariant());
+        }
+
+        private bool IsSafeContentType(string contentType, string extension)
+        {
+            var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".bmp", ".ico" };
+            var knownImageTypes = new[] { "image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml" };
+            
+            if (imageExtensions.Contains(extension) && knownImageTypes.Any(t => contentType.Contains(t.Split('/').Last())))
+                return true;
+                
+            return false;
+        }
+
+        #endregion
     }
 }
