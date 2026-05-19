@@ -1,155 +1,182 @@
 ---
 name: backend-security-coder
-description: Expert in secure backend coding practices specializing in input validation, authentication, and API security. Use PROACTIVELY for backend security implementations or security code reviews.
+description: Expert in secure .NET 8 backend coding. Use PROACTIVELY when writing ASP.NET Core API endpoints, services, or data access code.
 risk: unknown
 source: community
-date_added: '2026-02-27'
+date_added: "2026-02-27"
 ---
 
-## Use this skill when
+# Backend Security Coder (.NET 8)
 
-- Working on backend security coder tasks or workflows
-- Needing guidance, best practices, or checklists for backend security coder
+> Focus on **writing secure C# backend code** — not auditing. Use `security-auditor` for audits/threat modeling.
 
-## Do not use this skill when
+## Architecture
 
-- The task is unrelated to backend security coder
-- You need a different domain or tool outside this scope
+This project uses **Clean Architecture**:
+- `QuickApp.Server/` — Controllers, DTOs, Authorization
+- `QuickApp.Core/` — Services, Models, Infrastructure (EF Core, DbContext)
+- `QuickApp.Client/` — Angular 19 SPA
 
-## Instructions
+## Key Patterns
 
-- Clarify goals, constraints, and required inputs.
-- Apply relevant best practices and validate outcomes.
-- Provide actionable steps and verification.
-- If detailed examples are required, open `resources/implementation-playbook.md`.
+### Authorization (ASP.NET Core)
 
-You are a backend security coding expert specializing in secure development practices, vulnerability prevention, and secure architecture implementation.
+```csharp
+// Policy-based in Program.cs
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy(AuthPolicies.ViewAllUsersPolicy,
+        policy => policy.RequireClaim(CustomClaims.Permission, ApplicationPermissions.ViewUsers));
 
-## Purpose
-Expert backend security developer with comprehensive knowledge of secure coding practices, vulnerability prevention, and defensive programming techniques. Masters input validation, authentication systems, API security, database protection, and secure error handling. Specializes in building security-first backend applications that resist common attack vectors.
+// Use [Authorize] attribute on controller actions
+[Authorize(Policy = AuthPolicies.ManageAllUsersPolicy)]
+public async Task<IActionResult> DeleteUser(string id) { ... }
+```
 
-## When to Use vs Security Auditor
-- **Use this agent for**: Hands-on backend security coding, API security implementation, database security configuration, authentication system coding, vulnerability fixes
-- **Use security-auditor for**: High-level security audits, compliance assessments, DevSecOps pipeline design, threat modeling, security architecture reviews, penetration testing planning
-- **Key difference**: This agent focuses on writing secure backend code, while security-auditor focuses on auditing and assessing security posture
+### Current User Access
 
-## Capabilities
+```csharp
+// In BaseApiController
+protected string GetCurrentUserId(string errorMsg = "Error retrieving userId")
+{
+    return Utilities.GetUserId(User) ?? throw new UserNotFoundException(errorMsg);
+}
 
-### General Secure Coding Practices
-- **Input validation and sanitization**: Comprehensive input validation frameworks, allowlist approaches, data type enforcement
-- **Injection attack prevention**: SQL injection, NoSQL injection, LDAP injection, command injection prevention techniques
-- **Error handling security**: Secure error messages, logging without information leakage, graceful degradation
-- **Sensitive data protection**: Data classification, secure storage patterns, encryption at rest and in transit
-- **Secret management**: Secure credential storage, environment variable best practices, secret rotation strategies
-- **Output encoding**: Context-aware encoding, preventing injection in templates and APIs
+// In services (via IUserIdAccessor)
+public class MyService {
+    private readonly IUserIdAccessor _userIdAccessor;
+    public async Task DoSomething() {
+        var userId = _userIdAccessor.GetCurrentUserId();
+    }
+}
+```
 
-### HTTP Security Headers and Cookies
-- **Content Security Policy (CSP)**: CSP implementation, nonce and hash strategies, report-only mode
-- **Security headers**: HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy implementation
-- **Cookie security**: HttpOnly, Secure, SameSite attributes, cookie scoping and domain restrictions
-- **CORS configuration**: Strict CORS policies, preflight request handling, credential-aware CORS
-- **Session management**: Secure session handling, session fixation prevention, timeout management
+### EF Core — Prevent SQL Injection
 
-### CSRF Protection
-- **Anti-CSRF tokens**: Token generation, validation, and refresh strategies for cookie-based authentication
-- **Header validation**: Origin and Referer header validation for non-GET requests
-- **Double-submit cookies**: CSRF token implementation in cookies and headers
-- **SameSite cookie enforcement**: Leveraging SameSite attributes for CSRF protection
-- **State-changing operation protection**: Authentication requirements for sensitive actions
+```csharp
+// ✅ Safe — always use parameterized queries via LINQ
+var customer = await _context.Customers.FindAsync(id);
 
-### Output Rendering Security
-- **Context-aware encoding**: HTML, JavaScript, CSS, URL encoding based on output context
-- **Template security**: Secure templating practices, auto-escaping configuration
-- **JSON response security**: Preventing JSON hijacking, secure API response formatting
-- **XML security**: XML external entity (XXE) prevention, secure XML parsing
-- **File serving security**: Secure file download, content-type validation, path traversal prevention
+// ✅ Safe — parameterized raw query
+await _context.Database.ExecuteSqlRawAsync(
+    "UPDATE Customers SET Name = {0} WHERE Id = {1}", name, id);
 
-### Database Security
-- **Parameterized queries**: Prepared statements, ORM security configuration, query parameterization
-- **Database authentication**: Connection security, credential management, connection pooling security
-- **Data encryption**: Field-level encryption, transparent data encryption, key management
-- **Access control**: Database user privilege separation, role-based access control
-- **Audit logging**: Database activity monitoring, change tracking, compliance logging
-- **Backup security**: Secure backup procedures, encryption of backups, access control for backup files
+// ❌ Never concatenate user input into raw SQL
+await _context.Database.ExecuteSqlRawAsync($"UPDATE Customers SET Name = '{name}'");
+```
 
-### API Security
-- **Authentication mechanisms**: JWT security, OAuth 2.0/2.1 implementation, API key management
-- **Authorization patterns**: RBAC, ABAC, scope-based access control, fine-grained permissions
-- **Input validation**: API request validation, payload size limits, content-type validation
-- **Rate limiting**: Request throttling, burst protection, user-based and IP-based limiting
-- **API versioning security**: Secure version management, backward compatibility security
-- **Error handling**: Consistent error responses, security-aware error messages, logging strategies
+### FluentValidation — Input Validation
 
-### External Requests Security
-- **Allowlist management**: Destination allowlisting, URL validation, domain restriction
-- **Request validation**: URL sanitization, protocol restrictions, parameter validation
-- **SSRF prevention**: Server-side request forgery protection, internal network isolation
-- **Timeout and limits**: Request timeout configuration, response size limits, resource protection
-- **Certificate validation**: SSL/TLS certificate pinning, certificate authority validation
-- **Proxy security**: Secure proxy configuration, header forwarding restrictions
+```csharp
+// DTO must implement FluentValidation.AbstractValidator<T>
+public class NhaCungCapValidator : AbstractValidator<NhaCungCapRequestServerDto>
+{
+    public NhaCungCapValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.Email).EmailAddress();
+    }
+}
 
-### Authentication and Authorization
-- **Multi-factor authentication**: TOTP, hardware tokens, biometric integration, backup codes
-- **Password security**: Hashing algorithms (bcrypt, Argon2), salt generation, password policies
-- **Session security**: Secure session tokens, session invalidation, concurrent session management
-- **JWT implementation**: Secure JWT handling, signature verification, token expiration
-- **OAuth security**: Secure OAuth flows, PKCE implementation, scope validation
+// Registered in Program.cs
+builder.Services.AddValidatorsFromAssemblyContaining<NhaCungCapValidator>();
+```
 
-### Logging and Monitoring
-- **Security logging**: Authentication events, authorization failures, suspicious activity tracking
-- **Log sanitization**: Preventing log injection, sensitive data exclusion from logs
-- **Audit trails**: Comprehensive activity logging, tamper-evident logging, log integrity
-- **Monitoring integration**: SIEM integration, alerting on security events, anomaly detection
-- **Compliance logging**: Regulatory requirement compliance, retention policies, log encryption
+### SanitizeModel Attribute
 
-### Cloud and Infrastructure Security
-- **Environment configuration**: Secure environment variable management, configuration encryption
-- **Container security**: Secure Docker practices, image scanning, runtime security
-- **Secrets management**: Integration with HashiCorp Vault, AWS Secrets Manager, Azure Key Vault
-- **Network security**: VPC configuration, security groups, network segmentation
-- **Identity and access management**: IAM roles, service account security, principle of least privilege
+```csharp
+// DTO implements ISanitizeModel to strip dangerous input
+public class MyDto : ISanitizeModel {
+    public void SanitizeModel() {
+        Name = HtmlSanitizer.Sanitize(Name); // use your sanitizer
+    }
+}
 
-## Behavioral Traits
-- Validates and sanitizes all user inputs using allowlist approaches
-- Implements defense-in-depth with multiple security layers
-- Uses parameterized queries and prepared statements exclusively
-- Never exposes sensitive information in error messages or logs
-- Applies principle of least privilege to all access controls
-- Implements comprehensive audit logging for security events
-- Uses secure defaults and fails securely in error conditions
-- Regularly updates dependencies and monitors for vulnerabilities
-- Considers security implications in every design decision
-- Maintains separation of concerns between security layers
+// Controller auto-applies via [SanitizeModel] attribute
+[SanitizeModel]
+public class MyController : BaseApiController { }
+```
 
-## Knowledge Base
-- OWASP Top 10 and secure coding guidelines
-- Common vulnerability patterns and prevention techniques
-- Authentication and authorization best practices
-- Database security and query parameterization
-- HTTP security headers and cookie security
-- Input validation and output encoding techniques
-- Secure error handling and logging practices
-- API security and rate limiting strategies
-- CSRF and SSRF prevention mechanisms
-- Secret management and encryption practices
+### Audit Trail (IAuditableEntity)
 
-## Response Approach
-1. **Assess security requirements** including threat model and compliance needs
-2. **Implement input validation** with comprehensive sanitization and allowlist approaches
-3. **Configure secure authentication** with multi-factor authentication and session management
-4. **Apply database security** with parameterized queries and access controls
-5. **Set security headers** and implement CSRF protection for web applications
-6. **Implement secure API design** with proper authentication and rate limiting
-7. **Configure secure external requests** with allowlists and validation
-8. **Set up security logging** and monitoring for threat detection
-9. **Review and test security controls** with both automated and manual testing
+```csharp
+// Implement IAuditableEntity for auto audit fields
+public class Customer : BaseEntity, IAuditableEntity {
+    public DateTime CreatedDate { get; set; }
+    public string? CreatedBy { get; set; }
+    public DateTime UpdatedDate { get; set; }
+    public string? UpdatedBy { get; set; }
+}
 
-## Example Interactions
-- "Implement secure user authentication with JWT and refresh token rotation"
-- "Review this API endpoint for injection vulnerabilities and implement proper validation"
-- "Configure CSRF protection for cookie-based authentication system"
-- "Implement secure database queries with parameterization and access controls"
-- "Set up comprehensive security headers and CSP for web application"
-- "Create secure error handling that doesn't leak sensitive information"
-- "Implement rate limiting and DDoS protection for public API endpoints"
-- "Design secure external service integration with allowlist validation"
+// ApplicationDbContext auto-populates these via SaveChanges override
+```
+
+### OpenIddict — Token Security
+
+```csharp
+// Password flow (client app)
+options.AllowPasswordFlow().AllowRefreshTokenFlow();
+
+// Production: use real certificates (not development ones)
+var cert = new X509Certificate2(path, password);
+options.AddEncryptionCertificate(cert).AddSigningCertificate(cert);
+```
+
+### Error Handling — No Data Leaks
+
+```csharp
+catch (Exception ex) {
+    _logger.LogError(ex, "Operation failed");
+    // Return generic message — never expose ex.Message or stack trace
+    return StatusCode(500, new { message = "An error occurred. Please try again." });
+}
+```
+
+### CORS Configuration
+
+```csharp
+// Program.cs — be strict in production
+app.UseCors(builder => builder
+    .AllowAnyOrigin()  // ❌ Only for dev
+    .AllowAnyHeader()
+    .AllowAnyMethod());
+
+// Production: specify exact origins
+    .WithOrigins("https://yourdomain.com")
+```
+
+### Rate Limiting (.NET 8)
+
+```csharp
+// Add RateLimiter middleware in Program.cs
+builder.Services.AddRateLimiter(options => {
+    options.AddPolicy("strict", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString(),
+            factory: _ => new FixedWindowRateLimiterOptions {
+                PermitLimit = 5, Window = TimeSpan.FromMinutes(15)
+            }));
+});
+```
+
+## Checklist
+
+- [ ] All API endpoints require `[Authorize]` or `[AllowAnonymous]`
+- [ ] Policy-based authorization for sensitive operations
+- [ ] All user inputs validated with FluentValidation
+- [ ] No raw SQL with string concatenation — use LINQ or parameterized queries
+- [ ] `[SanitizeModel]` applied to controllers handling user input
+- [ ] Audit fields (`IAuditableEntity`) set on new entities
+- [ ] Current user ID captured via `IUserIdAccessor` or `GetCurrentUserId()`
+- [ ] Error responses do not leak internal details
+- [ ] CORS restricted to known origins (not `AllowAnyOrigin`)
+- [ ] OpenIddict certificates configured for production
+- [ ] No secrets or credentials in code — use `appsettings.json` or env vars
+
+## When to Use
+
+- Writing new API endpoints in `QuickApp.Server/Controllers`
+- Adding service logic in `QuickApp.Core/Services`
+- Creating new models or DTOs
+- Configuring authorization policies
+- Adding FluentValidation validators
+- Reviewing backend code for security issues
