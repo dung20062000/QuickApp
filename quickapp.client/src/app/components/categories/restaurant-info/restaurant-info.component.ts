@@ -1,8 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
-import { RestaurantInfo, RestaurantInfoResponse } from '../../../models/sushi-menu.model';
+import {
+  RestaurantInfo,
+  RestaurantInfoResponse,
+} from '../../../models/sushi-menu.model';
 import { SushiMenuService } from '../../../services/sushi-menu.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 
@@ -11,10 +19,9 @@ import { AlertService, MessageSeverity } from '../../../services/alert.service';
   templateUrl: './restaurant-info.component.html',
   styleUrls: ['./restaurant-info.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class RestaurantInfoComponent implements OnInit {
-
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private sushiMenuService = inject(SushiMenuService);
@@ -43,7 +50,8 @@ export class RestaurantInfoComponent implements OnInit {
       openHoursVi: ['', [Validators.required]],
       facebook: [''],
       instagram: [''],
-      twitter: ['']
+      twitter: [''],
+      tiktok: [''],
     });
   }
 
@@ -66,22 +74,31 @@ export class RestaurantInfoComponent implements OnInit {
           openHoursVi: info.openHoursVi,
           facebook: info.socialMedia?.facebook || '',
           instagram: info.socialMedia?.instagram || '',
-          twitter: info.socialMedia?.twitter || ''
+          twitter: info.socialMedia?.twitter || '',
+          tiktok: info.socialMedia?.tiktok || '',
         });
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading restaurant info:', error);
-        this.alertService.showMessage('Error', 'Failed to load restaurant information', MessageSeverity.error);
+        this.alertService.showMessage(
+          'Error',
+          'Failed to load restaurant information',
+          MessageSeverity.error,
+        );
         this.isLoading = false;
-      }
+      },
     });
   }
 
   onSubmit(): void {
     if (this.restaurantForm.invalid) {
-      this.alertService.showMessage('Validation Error', 'Please fill in all required fields correctly', MessageSeverity.warn);
-      Object.keys(this.restaurantForm.controls).forEach(key => {
+      this.alertService.showMessage(
+        'Validation Error',
+        'Please fill in all required fields correctly',
+        MessageSeverity.warn,
+      );
+      Object.keys(this.restaurantForm.controls).forEach((key) => {
         this.restaurantForm.get(key)?.markAsTouched();
       });
       return;
@@ -103,16 +120,23 @@ export class RestaurantInfoComponent implements OnInit {
       socialMedia: {
         facebook: formValue.facebook || undefined,
         instagram: formValue.instagram || undefined,
-        twitter: formValue.twitter || undefined
-      }
+        twitter: formValue.twitter || undefined,
+        tiktok: formValue.tiktok || undefined,
+      },
     };
 
-    // TODO: Implement save API when backend ready
-    setTimeout(() => {
-      this.alertService.showMessage('Success', 'Restaurant information updated successfully', MessageSeverity.success);
-      this.isSaving = false;
-      console.log('Saved data:', restaurantData);
-    }, 1000);
+    // this.sushiMenuService.saveRestaurantInfo(restaurantData).subscribe({
+    //   next: (response: any) => {
+    //     this.alertService.showMessage('Success', 'Restaurant information updated successfully', MessageSeverity.success);
+    //     this.isSaving = false;
+    //     console.log('Saved data:', restaurantData);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error saving restaurant info:', error);
+    //     this.alertService.showMessage('Error', 'Failed to save restaurant information', MessageSeverity.error);
+    //     this.isSaving = false;
+    //   }
+    // });
   }
 
   switchTab(tab: 'basic' | 'contact' | 'social'): void {

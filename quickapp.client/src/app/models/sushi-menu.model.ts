@@ -13,8 +13,8 @@ export interface SushiMenuItem {
   nameVi: string;
   description: string;
   descriptionVi: string;
-  productCategoryId: number;  // API trả về productCategoryId, không phải categoryId
-  categoryName: string;        // Tên category từ API
+  productCategoryId: number; // API trả về productCategoryId, không phải categoryId
+  categoryName: string; // Tên category từ API
   price: number;
   imageUrl: string | null;
   isPopular: boolean;
@@ -58,6 +58,7 @@ export interface RestaurantInfo {
     facebook?: string;
     instagram?: string;
     twitter?: string;
+    tiktok?: string;
   };
 }
 

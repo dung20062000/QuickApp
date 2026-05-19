@@ -1,4 +1,4 @@
-// ---------------------------------------
+Ôªø// ---------------------------------------
 // Email: quickapp@ebenmonney.com
 // Templates: www.ebenmonney.com/templates
 // (c) 2024 www.ebenmonney.com/mit-license
@@ -32,7 +32,7 @@ namespace QuickApp.Core.Services.Shop
                 {
                     return new BaseResponse<RestaurantInfo?>
                     {
-                        Message = "KhÙng tÏm th?y thÙng tin nh‡ h‡ng",
+                        Message = "Kh√¥ng t√¨m th·∫•yy th√¥ng tin nh√† h√†ng",
                         Status = ResponseStatus.NotFound,
                         Data = null
                     };
@@ -76,7 +76,7 @@ namespace QuickApp.Core.Services.Shop
                 
                 return new BaseResponse<RestaurantInfo?>
                 {
-                    Message = "C?p nh?t thÙng tin nh‡ h‡ng th‡nh cÙng",
+                    Message = "C?p nh?t th√¥ng tin nh√† h√†ng th√†nh c√¥ng",
                     Status = ResponseStatus.Success,
                     Data = restaurantInfo
                 };
