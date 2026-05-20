@@ -73,18 +73,22 @@
 }
 
 :host ::ng-deep .table-filter-container .ng-select .ng-select-container {
-  height: 32px !important;
-  min-height: 32px !important;
+  height: 36px !important;
+  min-height: 36px !important;
   border-radius: 6px !important;
   border: 1px solid #cbd5e1 !important;
   background: #fff !important;
 }
 
 :host ::ng-deep .table-filter-container .search-input-wrapper input {
-  height: 32px !important;
+  height: 36px !important;
   padding: 4px 30px 4px 12px !important;
   border-radius: 6px !important;
 }
+:host ::ng-deep .filter-th  {
+  padding: 8px 16px !important;
+}
+
 
 /* Date Picker Compact Mode Overrides */
 :host ::ng-deep .table-filter-container date-picker .input-group,
@@ -96,7 +100,7 @@
 
 :host ::ng-deep .table-filter-container date-picker .form-control,
 :host ::ng-deep .table-filter-container date-range-picker .form-control {
-  height: 32px !important;
+  height: 36px !important;
   padding: 4px 36px 4px 12px !important;
   border-radius: 6px !important;
   border: 1px solid #cbd5e1 !important;

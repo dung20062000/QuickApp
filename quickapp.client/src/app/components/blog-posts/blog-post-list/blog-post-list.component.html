@@ -1,19 +1,20 @@
 <div class="blog-post-list-wrapper">
-  <!-- Header -->
+  <!-- Page Header -->
   <div class="page-header">
     <div class="header-title">
-      <h1 class="page-title">Quản lý Bài viết</h1>
+      <h1 class="page-title">
+        <span class="material-symbols-outlined" style="font-size: 22px; color: #183883;">article</span>
+        Quản lý Bài viết
+      </h1>
       <p class="page-subtitle">Danh sách các bài viết trên blog</p>
     </div>
-    <div class="header-actions">
-      <app-button
-        variant="blue"
-        leftIcon="add"
-        size="md"
-        title="Thêm bài viết mới"
-        (buttonClick)="onCreate()"
-      >Thêm bài viết mới</app-button>
-    </div>
+    <app-button
+      variant="blue"
+      leftIcon="add"
+      size="md"
+      title="Thêm bài viết mới"
+      (buttonClick)="onCreate()"
+    >Thêm bài viết mới</app-button>
   </div>
 
   <!-- Table -->
@@ -29,6 +30,11 @@
     (tableChange)="onTableChange($event)"
     emptyMessage="Không tìm thấy bài viết nào"
   >
+    <!-- STT Column -->
+    <ng-template appTableTemplate="id" let-value let-row="row" let-i="$index">
+      <div class="stt-cell">{{ getStt(i) }}</div>
+    </ng-template>
+
     <!-- Thumbnail Image Column -->
     <ng-template appTableTemplate="thumbnailImage" let-value let-row="row">
       <div class="thumbnail-cell">
@@ -41,23 +47,22 @@
           />
         } @else {
           <div class="thumbnail-placeholder">
-            <i class="fa fa-image"></i>
+            <span class="material-symbols-outlined">image</span>
           </div>
         }
       </div>
     </ng-template>
 
-    <!-- Title Column - truncated -->
+    <!-- Title Column -->
     <ng-template appTableTemplate="title" let-value let-row="row">
-      <div class="title-cell" [title]="value">
-        {{ value }}
-      </div>
+      <div class="title-cell" [title]="value">{{ value }}</div>
     </ng-template>
 
     <!-- Status Badge Column -->
     <ng-template appTableTemplate="isAvailable" let-value let-row="row">
-      <span class="cell-badge" [ngClass]="value ? 'badge-success' : 'badge-secondary'">
-        {{ value ? 'Hoạt động' : 'Không hoạt động' }}
+      <span class="cell-badge" [ngClass]="getStatusClass(value)">
+        <span class="badge-dot"></span>
+        {{ getStatusLabel(value) }}
       </span>
     </ng-template>
 

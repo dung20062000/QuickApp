@@ -16,6 +16,10 @@ namespace QuickApp.Core.CoreDtos.Request.Shop
         public DateTime? PublishedDateTo { get; set; }
 
         public bool? IsAvailable { get; set; }
+
+        public string? SortField { get; set; }
+
+        public int SortOrder { get; set; } = -1; // -1 = desc, 1 = asc
     }
 #nullable restore
 }

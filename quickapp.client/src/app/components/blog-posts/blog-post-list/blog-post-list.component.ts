@@ -1,9 +1,9 @@
-// BlogPost List Component - Master list with table, search, and actions
+// BlogPost List Component - uses app-table shared component
 
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AppTableComponent, TableColumn } from '../../shared/rule-component/app-table/app-table.component';
+import { AppTableComponent, AppTableTemplateDirective, TableColumn } from '../../shared/rule-component/app-table/app-table.component';
 import { AppIconButtonComponent } from '../../shared/rule-component/app-icon-button/app-icon-button.component';
 import { BlogPostService } from '../../../services/blog-post.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
@@ -19,11 +19,12 @@ import { AppButtonComponent } from '../../shared/rule-component/app-button/app-b
   imports: [
     CommonModule,
     AppTableComponent,
+    AppTableTemplateDirective,
     AppIconButtonComponent,
     AppButtonComponent,
   ],
 })
-export class BlogPostListComponent implements OnInit {
+export class BlogPostListComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private blogPostService = inject(BlogPostService);
   private alertService = inject(AlertService);
@@ -35,12 +36,20 @@ export class BlogPostListComponent implements OnInit {
   rows = 10;
   pageIndex = 0;
 
+  sortField = 'createdDate';
+  sortOrder = -1;
+
+  filterTitle = '';
+  filterSlug = '';
+  filterPublishedDate: Date | null = null;
+  filterIsAvailable: boolean | null = null;
+
   columns: TableColumn[] = [
     {
       field: 'id',
-      header: 'ID',
+      header: 'STT',
       type: 'number',
-      sortable: true,
+      sortable: false,
       width: '60px',
       align: 'center',
     },
@@ -48,7 +57,7 @@ export class BlogPostListComponent implements OnInit {
       field: 'thumbnailImage',
       header: 'Hình ảnh',
       type: 'custom',
-      width: '90px',
+      width: '80px',
       align: 'center',
       sortable: false,
     },
@@ -64,7 +73,7 @@ export class BlogPostListComponent implements OnInit {
       field: 'slug',
       header: 'Slug',
       type: 'text',
-      sortable: true,
+      sortable: false,
       filterable: true,
       filterType: 'text',
     },
@@ -74,60 +83,74 @@ export class BlogPostListComponent implements OnInit {
       type: 'date',
       sortable: true,
       dateFormat: 'dd/MM/yyyy',
+      width: '120px',
+      filterable: true,
+      filterType: 'date',
     },
     {
       field: 'isAvailable',
       header: 'Trạng thái',
-      type: 'badge',
+      type: 'custom',
       sortable: true,
+      width: '130px',
+      align: 'center',
       filterable: true,
       filterType: 'dropdown',
       filterOptions: [
         { text: 'Hoạt động', value: true },
         { text: 'Không hoạt động', value: false },
       ],
-      badgeClass: (value: boolean) => (value ? 'badge-success' : 'badge-secondary'),
-      width: '140px',
-      align: 'center',
-    },
-    {
-      field: 'createdDate',
-      header: 'Ngày tạo',
-      type: 'datetime',
-      sortable: true,
-      dateFormat: 'dd/MM/yyyy HH:mm',
     },
     {
       field: 'actions',
       header: 'Thao tác',
       type: 'custom',
-      width: '150px',
+      width: '130px',
       align: 'center',
       sortable: false,
     },
   ];
 
+  private searchTimeout: any;
+  private currentRequest: any;
+
   ngOnInit(): void {
     this.loadBlogPosts();
   }
 
+  ngOnDestroy(): void {
+    clearTimeout(this.searchTimeout);
+    if (this.currentRequest) {
+      this.currentRequest.unsubscribe();
+    }
+  }
+
   loadBlogPosts(): void {
     this.loading = true;
-    const request = {
+
+    if (this.currentRequest) {
+      this.currentRequest.unsubscribe();
+    }
+
+    const request: any = {
       pageIndex: this.pageIndex,
       pageSize: this.rows,
-      sortField: 'createdDate',
-      sortOrder: -1,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
     };
 
-    this.blogPostService.getAll(request).subscribe({
+    if (this.filterTitle) request.title = this.filterTitle;
+    if (this.filterSlug) request.slug = this.filterSlug;
+    if (this.filterPublishedDate) request.publishedDate = this.filterPublishedDate;
+    if (this.filterIsAvailable !== null) request.isAvailable = this.filterIsAvailable;
+
+    this.currentRequest = this.blogPostService.getAll(request).subscribe({
       next: (response) => {
         this.blogPosts = response.data ?? [];
         this.totalRecords = response.totalRecords ?? 0;
         this.loading = false;
       },
-      error: (error) => {
-        console.error('Error loading blog posts:', error);
+      error: () => {
         this.alertService.showMessage(
           'Lỗi',
           'Không thể tải danh sách bài viết',
@@ -139,8 +162,41 @@ export class BlogPostListComponent implements OnInit {
   }
 
   onTableChange(event: any): void {
-    this.pageIndex = event.page ?? 0;
-    this.rows = event.rows ?? 10;
+    if (event.filters) {
+      const filters = event.filters;
+      if (filters['title']?.length) this.filterTitle = filters['title'][0].value || '';
+      else this.filterTitle = '';
+      if (filters['slug']?.length) this.filterSlug = filters['slug'][0].value || '';
+      else this.filterSlug = '';
+      if (filters['publishedDate']?.length) this.filterPublishedDate = filters['publishedDate'][0].value || null;
+      else this.filterPublishedDate = null;
+      if (filters['isAvailable']?.length) this.filterIsAvailable = filters['isAvailable'][0].value ?? null;
+      else this.filterIsAvailable = null;
+      this.pageIndex = 0;
+      this.loadBlogPosts();
+      return;
+    }
+    if (event.page !== undefined) {
+      this.pageIndex = event.page;
+    }
+    if (event.rows !== undefined) {
+      this.rows = event.rows;
+    }
+    if (event.sortField !== undefined) {
+      this.sortField = event.sortField;
+    }
+    if (event.sortOrder !== undefined) {
+      this.sortOrder = event.sortOrder === 'asc' ? 1 : -1;
+    }
+    this.loadBlogPosts();
+  }
+
+  onFilterChange(event: any, field: string): void {
+    if (field === 'title') this.filterTitle = event?.target?.value || '';
+    if (field === 'slug') this.filterSlug = event?.target?.value || '';
+    if (field === 'publishedDate') this.filterPublishedDate = event || null;
+    if (field === 'isAvailable') this.filterIsAvailable = event ?? null;
+    this.pageIndex = 0;
     this.loadBlogPosts();
   }
 
@@ -172,27 +228,14 @@ export class BlogPostListComponent implements OnInit {
     this.blogPostService.delete(blogPost.id).subscribe({
       next: (response) => {
         if (response.status === 1 || response.status === 200) {
-          this.alertService.showMessage(
-            'Thành công',
-            'Xóa bài viết thành công',
-            MessageSeverity.success,
-          );
+          this.alertService.showMessage('Thành công', 'Xóa bài viết thành công', MessageSeverity.success);
           this.loadBlogPosts();
         } else {
-          this.alertService.showMessage(
-            'Lỗi',
-            response.message || 'Xóa bài viết thất bại',
-            MessageSeverity.error,
-          );
+          this.alertService.showMessage('Lỗi', response.message || 'Xóa bài viết thất bại', MessageSeverity.error);
         }
       },
-      error: (error) => {
-        console.error('Error deleting blog post:', error);
-        this.alertService.showMessage(
-          'Lỗi',
-          'Không thể xóa bài viết',
-          MessageSeverity.error,
-        );
+      error: () => {
+        this.alertService.showMessage('Lỗi', 'Không thể xóa bài viết', MessageSeverity.error);
       },
     });
   }
@@ -201,20 +244,27 @@ export class BlogPostListComponent implements OnInit {
     this.router.navigate(['/management/shop/blog-posts/create']);
   }
 
-  getThumbnailUrl(blogPost: BlogPost): string | null {
-    return blogPost.thumbnailImage ?? null;
+  getImageUrl(blogPost: BlogPost): string | null {
+    const thumb = blogPost.thumbnailImage;
+    if (!thumb) return null;
+    if (thumb.startsWith('http')) return thumb;
+    return `${window.location.origin}${thumb}`;
   }
 
-  getImageUrl(blogPost: BlogPost): string {
-    const thumb = blogPost.thumbnailImage;
-    if (!thumb) return '';
-    if (thumb.startsWith('http')) return thumb;
-    // Trả về URL đầy đủ từ server
-    return `${window.location.origin}${thumb}`;
+  getStt(index: number): number {
+    return this.pageIndex * this.rows + index + 1;
+  }
+
+  getStatusClass(value: boolean): string {
+    return value ? 'badge-success' : 'badge-secondary';
+  }
+
+  getStatusLabel(value: boolean): string {
+    return value ? 'Hoạt động' : 'Không hoạt động';
   }
 
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = 'assets/images/placeholder.png';
+    img.removeAttribute('src');
   }
 }

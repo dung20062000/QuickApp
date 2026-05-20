@@ -14,6 +14,10 @@ namespace QuickApp.Server.ServerDtos.Request.Shop
 
         public DateTime? PublishedDate { get; set; }
 
-        public bool IsAvailable { get; set; }
+        public bool? IsAvailable { get; set; }
+
+        public string? SortField { get; set; }
+
+        public int SortOrder { get; set; } = -1;
     }
 }

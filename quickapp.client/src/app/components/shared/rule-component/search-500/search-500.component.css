@@ -65,8 +65,10 @@
 
 :host-context(.table-filter-container) .search-500-input {
   padding: 5px 32px 5px 32px !important;
+  height: 36px !important;
   font-size: 12px;
   font-weight: 500;
+
 }
 
 :host-context(.table-filter-container) .search-500-icon {

@@ -4,6 +4,7 @@
         [value]="loading ? skeletonArray : data"
         [columns]="columns"
         [dataKey]="dataKey"
+        [lazy]="true"
         [paginator]="paginator && !loading && data && data.length > 0"
         [rows]="rows"
         [rowsPerPageOptions]="rowsPerPageOptions"
@@ -17,6 +18,7 @@
         [paginatorDropdownAppendTo]="'body'"
         (onPage)="onTableChange($event)"
         (onSort)="onTableChange($event)"
+        (onFilter)="onTableChange($event)"
     >
         <!-- ============ HEADER ============ -->
         <ng-template pTemplate="header" let-columns>
@@ -40,12 +42,12 @@
                         <!-- Text Filter -->
                         <div *ngIf="!col.filterType || col.filterType === 'text'" class="table-filter-container">
                             <search-500
-                                [placeholder]="'Lọc...'"
+                                [placeholder]="'Nhập...'"
                                 [showClearButton]="true"
                                 (inputConfirm)="dt.filter($event, col.field, 'contains')"
                             ></search-500>
                         </div>
-                        
+
                         <!-- Dropdown Filter -->
                         <div *ngIf="col.filterType === 'dropdown'" class="table-filter-container">
                             <selector
@@ -82,7 +84,7 @@
         </ng-template>
 
         <!-- ============ BODY ============ -->
-        <ng-template pTemplate="body" let-row let-columns="columns">
+        <ng-template pTemplate="body" let-row let-columns="columns" let-i="rowIndex">
             <!-- Skeleton Rows (When loading) -->
             <tr *ngIf="loading" class="skeleton-row">
                 <td *ngFor="let col of columns">
@@ -100,7 +102,7 @@
                     <!-- Custom Template -->
                     <ng-container *ngIf="templateMap[col.field]; else defaultCell">
                         <ng-container
-                            *ngTemplateOutlet="templateMap[col.field]; context: { $implicit: getCellValue(row, col.field), row: row }"
+                            *ngTemplateOutlet="templateMap[col.field]; context: { $implicit: getCellValue(row, col.field), row: row, $index: i }"
                         ></ng-container>
                     </ng-container>
 

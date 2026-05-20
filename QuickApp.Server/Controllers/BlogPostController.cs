@@ -47,7 +47,10 @@ namespace QuickApp.Server.Controllers
                 Slug = request.Slug,
                 Content = request.Content,
                 PageIndex = request.PageIndex,
-                PageSize = request.PageSize
+                PageSize = request.PageSize,
+                IsAvailable = request.IsAvailable,
+                SortField = request.SortField,
+                SortOrder = request.SortOrder
             };
             var resp = _blogPostService.GetAllBlogPosts(searchRequest);
             var vms = _mapper.Map<List<BlogPostVM>>(resp.Data ?? new List<AppBlogPost>());

@@ -84,8 +84,9 @@ export class AppTableComponent implements AfterContentInit, OnChanges {
   @Input() skeletonRows: number = 5;
 
   @Output() tableChange = new EventEmitter<any>();
+  @Output() tableFilter = new EventEmitter<any>();
 
-  @ContentChildren(AppTableTemplateDirective)
+  @ContentChildren(AppTableTemplateDirective, { descendants: true })
   templates!: QueryList<AppTableTemplateDirective>;
 
   templateMap: { [key: string]: TemplateRef<any> } = {};
@@ -100,6 +101,9 @@ export class AppTableComponent implements AfterContentInit, OnChanges {
   ngAfterContentInit(): void {
     this.updateTemplateMap();
     this.skeletonArray = Array.from({ length: this.skeletonRows }).map((_, i) => ({ [this.dataKey]: `skeleton_${i}` }));
+    this.templates.changes.subscribe(() => {
+      this.updateTemplateMap();
+    });
   }
 
   private updateTemplateMap(): void {
@@ -150,6 +154,10 @@ export class AppTableComponent implements AfterContentInit, OnChanges {
 
   onTableChange(event: any): void {
     this.tableChange.emit(event);
+  }
+
+  onFilterChange(event: any): void {
+    this.tableFilter.emit(event);
   }
 
   onDateRangeFilter(range: DateRange | null, field: string, dt: Table): void {

@@ -56,6 +56,21 @@ namespace QuickApp.Core.Services.Shop
             return newSlug;
         }
 
+        private static IQueryable<AppBlogPost> ApplySorting(IQueryable<AppBlogPost> query, string? sortField, int sortOrder)
+        {
+            var isDesc = sortOrder != 1;
+
+            return sortField?.ToLowerInvariant() switch
+            {
+                "title" => isDesc ? query.OrderByDescending(b => b.Title) : query.OrderBy(b => b.Title),
+                "slug" => isDesc ? query.OrderByDescending(b => b.Slug) : query.OrderBy(b => b.Slug),
+                "publisheddate" => isDesc ? query.OrderByDescending(b => b.PublishedDate) : query.OrderBy(b => b.PublishedDate),
+                "isavailable" => isDesc ? query.OrderByDescending(b => b.IsAvailable) : query.OrderBy(b => b.IsAvailable),
+                "createddate" => isDesc ? query.OrderByDescending(b => b.CreatedDate) : query.OrderBy(b => b.CreatedDate),
+                _ => query.OrderByDescending(b => b.CreatedDate).ThenByDescending(b => b.Id),
+            };
+        }
+
         public BaseResponse<List<AppBlogPost>> GetAllBlogPosts(BlogPostSearchCoreRequest request)
         {
             try
@@ -97,10 +112,12 @@ namespace QuickApp.Core.Services.Shop
 
                 var totalRecords = query.Count();
 
-                var page = request.PageIndex > 0 ? request.PageIndex - 1 : 0;
+                var page = request.PageIndex;
+
+                // Apply sorting
+                query = ApplySorting(query, request.SortField, request.SortOrder);
+
                 var dataFilter = query
-                    .OrderByDescending(b => b.CreatedDate)
-                    .ThenByDescending(b => b.Id)
                     .Skip(page * request.PageSize)
                     .Take(request.PageSize)
                     .ToList();

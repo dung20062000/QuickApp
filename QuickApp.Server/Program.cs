@@ -42,7 +42,11 @@ var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationsAssembly));
+    options.UseSqlServer(connectionString, b =>
+    {
+        b.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null);
+        b.MigrationsAssembly(migrationsAssembly);
+    });
     options.UseOpenIddict();
 });
 
