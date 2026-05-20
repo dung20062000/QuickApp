@@ -1,96 +1,149 @@
 <div class="blog-post-list-wrapper">
-  <!-- Page Header -->
+  <!-- PageHeader -->
   <div class="page-header">
-    <div class="header-title">
-      <h1 class="page-title">
-        <span class="material-symbols-outlined" style="font-size: 22px; color: #183883;">article</span>
-        Quản lý Bài viết
-      </h1>
-      <p class="page-subtitle">Danh sách các bài viết trên blog</p>
+    <div class="header-content">
+      <h1 class="page-title">Quản lý Bài viết</h1>
+      <!-- <p class="page-subtitle">Quản lý danh sách các bài viết trên blog của bạn.</p> -->
     </div>
-    <app-button
-      variant="blue"
-      leftIcon="add"
-      size="md"
-      title="Thêm bài viết mới"
-      (buttonClick)="onCreate()"
-    >Thêm bài viết mới</app-button>
+    <app-button variant="indigo" size="lg" leftIcon="add" (buttonClick)="onCreate()">
+      Thêm bài viết mới
+    </app-button>
   </div>
 
-  <!-- Table -->
-  <app-table
-    [data]="blogPosts"
-    [columns]="columns"
-    [loading]="loading"
-    [totalRecords]="totalRecords"
-    [rows]="rows"
-    [paginator]="true"
-    [dataKey]="'id'"
-    [skeletonRows]="5"
-    (tableChange)="onTableChange($event)"
-    emptyMessage="Không tìm thấy bài viết nào"
-  >
-    <!-- STT Column -->
-    <ng-template appTableTemplate="id" let-value let-row="row" let-i="$index">
-      <div class="stt-cell">{{ getStt(i) }}</div>
-    </ng-template>
-
-    <!-- Thumbnail Image Column -->
-    <ng-template appTableTemplate="thumbnailImage" let-value let-row="row">
-      <div class="thumbnail-cell">
-        @if (getImageUrl(row); as imgUrl) {
-          <img
-            [src]="imgUrl"
-            [alt]="row.title"
-            class="thumbnail-img"
-            (error)="onImageError($event)"
-          />
-        } @else {
-          <div class="thumbnail-placeholder">
-            <span class="material-symbols-outlined">image</span>
-          </div>
-        }
+  <!-- Toolbar + Filter Panel wrapper (overflow: visible so dropdowns are not clipped) -->
+  <div class="filter-toolbar-wrapper">
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-wrapper">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Tìm kiếm theo tiêu đề hoặc slug..."
+          [(ngModel)]="searchKeyword"
+          (keyup.enter)="onSearch()"
+          (ngModelChange)="onSearchInputChange($event)"
+        />
+        <button
+          *ngIf="searchKeyword"
+          class="search-clear"
+          (click)="clearSearch()"
+          title="Xóa tìm kiếm"
+        >
+          <span class="material-symbols-outlined">close</span>
+        </button>
       </div>
-    </ng-template>
 
-    <!-- Title Column -->
-    <ng-template appTableTemplate="title" let-value let-row="row">
-      <div class="title-cell" [title]="value">{{ value }}</div>
-    </ng-template>
+      <app-button
+        variant="ghostIndigo"
+        size="md"
+        leftIcon="filter_list"
+        [additionalClass]="filterPanelExpanded ? 'active' : ''"
+        (buttonClick)="toggleFilterPanel()"
+      >
+        Bộ lọc nâng cao
+        <span class="filter-badge" *ngIf="activeFilterCount > 0">{{ activeFilterCount }}</span>
+      </app-button>
+    </div>
 
-    <!-- Status Badge Column -->
-    <ng-template appTableTemplate="isAvailable" let-value let-row="row">
-      <span class="cell-badge" [ngClass]="getStatusClass(value)">
-        <span class="badge-dot"></span>
-        {{ getStatusLabel(value) }}
-      </span>
-    </ng-template>
+    <!-- Filter Panel -->
+    <div class="filter-panel" [class.expanded]="filterPanelExpanded">
+      <div class="filter-panel-inner">
+        <date-picker
+          class="filter-date"
+          label=""
+          placeholder="Ngày đăng"
+          [showClearButton]="true"
+          [(ngModel)]="filterPublishedDate"
+          (dateChange)="onFilterDateChange($event)"
+        ></date-picker>
 
-    <!-- Actions Column -->
-    <ng-template appTableTemplate="actions" let-value let-row="row">
-      <div class="actions-cell">
-        <app-icon-button
-          variant="blueLight"
-          size="sm"
-          icon="visibility"
-          toolTip="Xem chi tiết"
-          (buttonClick)="onView(row)"
-        ></app-icon-button>
-        <app-icon-button
-          variant="greenLight"
-          size="sm"
-          icon="edit"
-          toolTip="Chỉnh sửa"
-          (buttonClick)="onEdit(row)"
-        ></app-icon-button>
-        <app-icon-button
-          variant="redLight"
-          size="sm"
-          icon="delete"
-          toolTip="Xóa"
-          (buttonClick)="onDelete(row)"
-        ></app-icon-button>
+        <selector
+          class="filter-status"
+          [items]="statusOptions"
+          placeholder="Trạng thái"
+          [clearable]="true"
+          [searchable]="false"
+          [(ngModel)]="filterIsAvailable"
+          (selectionChange)="onFilterStatusChange($event)"
+        ></selector>
+
+        <app-button variant="ghostRed" size="md" leftIcon="filter_alt_off" (buttonClick)="clearAllFilters()">
+          Đặt lại
+        </app-button>
       </div>
-    </ng-template>
-  </app-table>
+    </div>
+  </div>
+
+  <!-- MainCard (Table only) -->
+  <div class="main-card">
+    <!-- Table -->
+    <app-table
+      [data]="blogPosts"
+      [columns]="columns"
+      [loading]="loading"
+      [totalRecords]="totalRecords"
+      [rows]="rows"
+      [paginator]="true"
+      [dataKey]="'id'"
+      [skeletonRows]="5"
+      (tableChange)="onTableChange($event)"
+      (rowHover)="onRowHover($event)"
+      emptyMessage="Không tìm thấy bài viết nào"
+    >
+      <!-- STT Column -->
+      <ng-template appTableTemplate="id" let-value let-row="row" let-i="$index">
+        <div class="stt-cell">{{ getStt(i) }}</div>
+      </ng-template>
+
+      <!-- Thumbnail Column -->
+      <ng-template appTableTemplate="thumbnailImage" let-value let-row="row">
+        <div class="thumbnail-cell">
+          @if (getImageUrl(row); as imgUrl) {
+            <img [src]="imgUrl" [alt]="row.title" class="thumbnail-img" (error)="onImageError($event)" />
+          } @else {
+            <div class="thumbnail-placeholder">
+              <span class="material-symbols-outlined">image</span>
+            </div>
+          }
+        </div>
+      </ng-template>
+
+      <!-- Title + Slug Column -->
+      <ng-template appTableTemplate="title" let-value let-row="row">
+        <div class="post-info-cell">
+          <span class="post-title" [title]="value">{{ value }}</span>
+          <span class="post-slug" *ngIf="row.slug">{{ row.slug }}</span>
+        </div>
+      </ng-template>
+
+      <!-- Date Column -->
+      <ng-template appTableTemplate="publishedDate" let-value let-row="row">
+        <div class="date-cell">{{ formatDate(value) }}</div>
+      </ng-template>
+
+      <!-- Status Badge Column -->
+      <ng-template appTableTemplate="isAvailable" let-value let-row="row">
+        <span class="status-badge" [class.is-active]="value">
+          <span class="status-dot"></span>
+          {{ getStatusLabel(value) }}
+        </span>
+      </ng-template>
+
+      <!-- Actions Column (always rendered, shown on row hover via CSS) -->
+      <ng-template appTableTemplate="actions" let-value let-row="row">
+        <div class="actions-cell" [class.row-hovered]="hoveredRowId === row.id">
+          <button class="action-btn view-btn" title="Xem chi tiết" (click)="onView(row)">
+            <span class="material-symbols-outlined">visibility</span>
+          </button>
+          <button class="action-btn edit-btn" title="Chỉnh sửa" (click)="onEdit(row)">
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+          <button class="action-btn delete-btn" title="Xóa" (click)="onDelete(row)">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+        </div>
+      </ng-template>
+    </app-table>
+  </div>
 </div>

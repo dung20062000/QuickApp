@@ -12,13 +12,8 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule, Table } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { SkeletonModule } from 'primeng/skeleton';
-import { FormsModule } from '@angular/forms';
-import { Search500Component } from '../search-500/search-500.component';
-import { SelectorComponent } from '../selector/selector.component';
-import { DatePickerComponent } from '../date-picker/date-picker.component';
-import { DateRangePickerComponent, DateRange } from '../date-range-picker/date-range-picker.component';
 
 /**
  * Interface for table column configuration
@@ -28,15 +23,16 @@ export interface TableColumn {
   header: string;
   type?: 'text' | 'number' | 'date' | 'datetime' | 'badge' | 'custom';
   sortable?: boolean;
-  filterable?: boolean;
-  filterType?: 'text' | 'dropdown' | 'date' | 'date-range';
-  filterOptions?: { text: string; value: any }[];
   width?: string;
+  minWidth?: string;
   align?: 'left' | 'center' | 'right';
   dateFormat?: string;
   headerClass?: string;
   cellClass?: string;
   badgeClass?: (value: any, row: any) => string;
+  filterable?: boolean;
+  filterType?: 'text' | 'dropdown' | 'date' | 'date-range';
+  filterOptions?: { text: string; value: any }[];
 }
 
 /**
@@ -61,13 +57,8 @@ export const TABLE_DEFAULT_PAGE_SIZE = 10;
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     TableModule,
     SkeletonModule,
-    Search500Component,
-    SelectorComponent,
-    DatePickerComponent,
-    DateRangePickerComponent,
   ],
 })
 export class AppTableComponent implements AfterContentInit, OnChanges {
@@ -84,13 +75,14 @@ export class AppTableComponent implements AfterContentInit, OnChanges {
   @Input() skeletonRows: number = 5;
 
   @Output() tableChange = new EventEmitter<any>();
-  @Output() tableFilter = new EventEmitter<any>();
+  @Output() rowHover = new EventEmitter<any>();
 
   @ContentChildren(AppTableTemplateDirective, { descendants: true })
   templates!: QueryList<AppTableTemplateDirective>;
 
   templateMap: { [key: string]: TemplateRef<any> } = {};
   skeletonArray: any[] = [];
+  hoveredRowId: any = null;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['skeletonRows']) {
@@ -143,32 +135,16 @@ export class AppTableComponent implements AfterContentInit, OnChanges {
     return Number(value).toLocaleString('vi-VN');
   }
 
-  get hasAnyFilter(): boolean {
-    return this.columns && this.columns.some((col) => col.filterable);
-  }
-
-  onFilter(event: Event, field: string, dt: Table): void {
-    const value = (event.target as HTMLInputElement).value;
-    dt.filter(value, field, 'contains');
-  }
-
   onTableChange(event: any): void {
     this.tableChange.emit(event);
   }
 
-  onFilterChange(event: any): void {
-    this.tableFilter.emit(event);
+  onRowHover(rowId: any): void {
+    this.hoveredRowId = rowId;
+    this.rowHover.emit(rowId);
   }
 
-  onDateRangeFilter(range: DateRange | null, field: string, dt: Table): void {
-    if (!range || (!range.startDate && !range.endDate)) {
-      dt.filter(null, field, 'between');
-      return;
-    }
-
-    // Pass the range object to the filter.
-    // We will use 'between' match mode which we can customize or use standard if p-table supports it.
-    // In many setups, we might need a custom filter function.
-    dt.filter([range.startDate, range.endDate], field, 'between');
+  onRowLeave(): void {
+    this.hoveredRowId = null;
   }
 }

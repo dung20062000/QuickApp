@@ -88,6 +88,10 @@
               {
                 "input": "src/app/assets/themes/united.scss",
                 "inject": false
+              },
+              {
+                "input": "src/app/assets/themes/clean.scss",
+                "inject": false
               }
             ],
             "stylePreprocessorOptions": {
@@ -221,6 +225,10 @@
               },
               {
                 "input": "src/app/assets/themes/united.scss",
+                "inject": false
+              },
+              {
+                "input": "src/app/assets/themes/clean.scss",
                 "inject": false
               }
             ],

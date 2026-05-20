@@ -282,6 +282,7 @@
     "LumenTheme": "Lumen",
     "MintyTheme": "Minty",
     "PulseTheme": "Pulse",
+    "CleanTheme": "Clean",
     "ThemeHint": "Select the default color theme for your account",
     "DashboardStatistics": "Dashboard Statistics:",
     "DashboardStatisticsHint": "Show demo graph widget on the dashboard",

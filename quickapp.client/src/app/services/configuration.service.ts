@@ -101,7 +101,7 @@ export class ConfigurationService {
   public static readonly defaultLanguage = 'en';
   public static readonly defaultHomeUrl = '/';
   public static readonly adminHomeUrl = '/admin';
-  public static readonly defaultThemeId = 1;
+  public static readonly defaultThemeId = 15;
   public static readonly defaultShowDashboardStatistics = true;
   public static readonly defaultShowDashboardNotifications = true;
   public static readonly defaultShowDashboardTodo = false;
@@ -247,7 +247,7 @@ export class ConfigurationService {
   }
 
   private resetTheme() {
-    this.themeManager.installTheme();
+    this.themeManager.installTheme(this.themeManager.getDefaultTheme());
     this._themeId = null;
   }
 

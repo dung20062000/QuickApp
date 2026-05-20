@@ -17,7 +17,6 @@ export class ThemeManager {
       id: 1,
       name: 'Default',
       href: 'bootstrap.css',
-      isDefault: true,
       background: '#007bff',
       color: '#fff'
     },
@@ -114,7 +113,16 @@ export class ThemeManager {
       background: '#B58900',
       color: '#002B36',
       isDark: true
-    }
+    },
+    {
+      id: 15,
+      name: 'Clean',
+      href: 'clean.css',
+      isDefault: true,
+      background: '#ffffff',
+      color: '#212529',
+      isDark: false
+    },
   ];
 
   public installTheme(theme?: AppTheme) {

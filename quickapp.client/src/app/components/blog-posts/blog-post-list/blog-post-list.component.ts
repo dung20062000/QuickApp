@@ -1,15 +1,17 @@
-// BlogPost List Component - uses app-table shared component
+// BlogPost List Component
 
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppTableComponent, AppTableTemplateDirective, TableColumn } from '../../shared/rule-component/app-table/app-table.component';
-import { AppIconButtonComponent } from '../../shared/rule-component/app-icon-button/app-icon-button.component';
+import { AppButtonComponent } from '../../shared/rule-component/app-button/app-button.component';
 import { BlogPostService } from '../../../services/blog-post.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { ConfirmDialogService } from '../../../services/confirm-dialog.service';
 import { BlogPost } from '../../../models/blog-post.model';
-import { AppButtonComponent } from '../../shared/rule-component/app-button/app-button.component';
+import { DatePickerComponent } from '../../shared/rule-component/date-picker/date-picker.component';
+import { SelectorComponent } from '../../shared/rule-component/selector/selector.component';
 
 @Component({
   selector: 'app-blog-post-list',
@@ -18,10 +20,12 @@ import { AppButtonComponent } from '../../shared/rule-component/app-button/app-b
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     AppTableComponent,
     AppTableTemplateDirective,
-    AppIconButtonComponent,
     AppButtonComponent,
+    DatePickerComponent,
+    SelectorComponent,
   ],
 })
 export class BlogPostListComponent implements OnInit, OnDestroy {
@@ -39,10 +43,27 @@ export class BlogPostListComponent implements OnInit, OnDestroy {
   sortField = 'createdDate';
   sortOrder = -1;
 
-  filterTitle = '';
-  filterSlug = '';
+  searchKeyword = '';
   filterPublishedDate: Date | null = null;
   filterIsAvailable: boolean | null = null;
+  filterPanelExpanded = false;
+  hoveredRowId: number | null = null;
+
+  private searchTimeout: any;
+  private currentRequest: any;
+
+  statusOptions = [
+    { text: 'Hoạt động', value: true },
+    { text: 'Không hoạt động', value: false },
+  ];
+
+  get activeFilterCount(): number {
+    let count = 0;
+    if (this.searchKeyword) count++;
+    if (this.filterPublishedDate) count++;
+    if (this.filterIsAvailable !== null) count++;
+    return count;
+  }
 
   columns: TableColumn[] = [
     {
@@ -50,69 +71,49 @@ export class BlogPostListComponent implements OnInit, OnDestroy {
       header: 'STT',
       type: 'number',
       sortable: false,
-      width: '60px',
+      width: '64px',
       align: 'center',
     },
     {
       field: 'thumbnailImage',
-      header: 'Hình ảnh',
+      header: '',
       type: 'custom',
-      width: '80px',
+      width: '64px',
       align: 'center',
       sortable: false,
     },
     {
       field: 'title',
-      header: 'Tiêu đề',
-      type: 'text',
+      header: 'BÀI VIẾT',
+      type: 'custom',
       sortable: true,
-      filterable: true,
-      filterType: 'text',
-    },
-    {
-      field: 'slug',
-      header: 'Slug',
-      type: 'text',
-      sortable: false,
-      filterable: true,
-      filterType: 'text',
+      minWidth: '280px',
     },
     {
       field: 'publishedDate',
-      header: 'Ngày đăng',
-      type: 'date',
+      header: 'NGÀY ĐĂNG',
+      type: 'custom',
       sortable: true,
-      dateFormat: 'dd/MM/yyyy',
-      width: '120px',
-      filterable: true,
-      filterType: 'date',
+      width: '130px',
+      align: 'center',
     },
     {
       field: 'isAvailable',
-      header: 'Trạng thái',
+      header: 'TRẠNG THÁI',
       type: 'custom',
       sortable: true,
-      width: '130px',
+      width: '150px',
       align: 'center',
-      filterable: true,
-      filterType: 'dropdown',
-      filterOptions: [
-        { text: 'Hoạt động', value: true },
-        { text: 'Không hoạt động', value: false },
-      ],
     },
     {
       field: 'actions',
-      header: 'Thao tác',
+      header: '',
       type: 'custom',
-      width: '130px',
-      align: 'center',
+      width: '120px',
+      align: 'right',
       sortable: false,
     },
   ];
-
-  private searchTimeout: any;
-  private currentRequest: any;
 
   ngOnInit(): void {
     this.loadBlogPosts();
@@ -139,8 +140,7 @@ export class BlogPostListComponent implements OnInit, OnDestroy {
       sortOrder: this.sortOrder,
     };
 
-    if (this.filterTitle) request.title = this.filterTitle;
-    if (this.filterSlug) request.slug = this.filterSlug;
+    if (this.searchKeyword) request.search = this.searchKeyword;
     if (this.filterPublishedDate) request.publishedDate = this.filterPublishedDate;
     if (this.filterIsAvailable !== null) request.isAvailable = this.filterIsAvailable;
 
@@ -162,20 +162,6 @@ export class BlogPostListComponent implements OnInit, OnDestroy {
   }
 
   onTableChange(event: any): void {
-    if (event.filters) {
-      const filters = event.filters;
-      if (filters['title']?.length) this.filterTitle = filters['title'][0].value || '';
-      else this.filterTitle = '';
-      if (filters['slug']?.length) this.filterSlug = filters['slug'][0].value || '';
-      else this.filterSlug = '';
-      if (filters['publishedDate']?.length) this.filterPublishedDate = filters['publishedDate'][0].value || null;
-      else this.filterPublishedDate = null;
-      if (filters['isAvailable']?.length) this.filterIsAvailable = filters['isAvailable'][0].value ?? null;
-      else this.filterIsAvailable = null;
-      this.pageIndex = 0;
-      this.loadBlogPosts();
-      return;
-    }
     if (event.page !== undefined) {
       this.pageIndex = event.page;
     }
@@ -191,11 +177,50 @@ export class BlogPostListComponent implements OnInit, OnDestroy {
     this.loadBlogPosts();
   }
 
-  onFilterChange(event: any, field: string): void {
-    if (field === 'title') this.filterTitle = event?.target?.value || '';
-    if (field === 'slug') this.filterSlug = event?.target?.value || '';
-    if (field === 'publishedDate') this.filterPublishedDate = event || null;
-    if (field === 'isAvailable') this.filterIsAvailable = event ?? null;
+  onSearch(): void {
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.pageIndex = 0;
+      this.loadBlogPosts();
+    }, 400);
+  }
+
+  onSearchInputChange(value: string): void {
+    this.searchKeyword = value;
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.pageIndex = 0;
+      this.loadBlogPosts();
+    }, 600);
+  }
+
+  clearSearch(): void {
+    this.searchKeyword = '';
+    clearTimeout(this.searchTimeout);
+    this.pageIndex = 0;
+    this.loadBlogPosts();
+  }
+
+  toggleFilterPanel(): void {
+    this.filterPanelExpanded = !this.filterPanelExpanded;
+  }
+
+  onFilterDateChange(value: Date | null): void {
+    this.filterPublishedDate = value;
+    this.pageIndex = 0;
+    this.loadBlogPosts();
+  }
+
+  onFilterStatusChange(value: boolean | null): void {
+    this.filterIsAvailable = value ?? null;
+    this.pageIndex = 0;
+    this.loadBlogPosts();
+  }
+
+  clearAllFilters(): void {
+    this.searchKeyword = '';
+    this.filterPublishedDate = null;
+    this.filterIsAvailable = null;
     this.pageIndex = 0;
     this.loadBlogPosts();
   }
@@ -244,6 +269,10 @@ export class BlogPostListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/management/shop/blog-posts/create']);
   }
 
+  onRowHover(rowId: number | null): void {
+    this.hoveredRowId = rowId;
+  }
+
   getImageUrl(blogPost: BlogPost): string | null {
     const thumb = blogPost.thumbnailImage;
     if (!thumb) return null;
@@ -255,8 +284,11 @@ export class BlogPostListComponent implements OnInit, OnDestroy {
     return this.pageIndex * this.rows + index + 1;
   }
 
-  getStatusClass(value: boolean): string {
-    return value ? 'badge-success' : 'badge-secondary';
+  formatDate(value: any): string {
+    if (!value) return '—';
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return '—';
+    return date.toLocaleDateString('vi-VN');
   }
 
   getStatusLabel(value: boolean): string {

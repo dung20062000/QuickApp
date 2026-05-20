@@ -21,7 +21,10 @@ export class AppButtonComponent {
     | 'greenLight'
     | 'gray'
     | 'ghost'
-    | 'ghostBlue' = 'blue';
+    | 'ghostBlue'
+    | 'indigo'
+    | 'ghostIndigo'
+    | 'ghostRed' = 'blue';
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
   @Input() disabled: boolean = false;
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
