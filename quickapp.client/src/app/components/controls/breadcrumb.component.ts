@@ -23,7 +23,7 @@ import { BreadcrumbService, Breadcrumb } from '../../services/breadcrumb.service
         @for (breadcrumb of breadcrumbs$ | async; track breadcrumb.url; let isLast = $last) {
           @if (isLast) {
             <li style="color:#1e293b;font-weight:500;font-size:14px;display:flex;align-items:center;padding:0 6px;">
-              <span style="color:#cbd5e1;margin:0 2px;font-size:16px;font-weight:300;">›</span>
+              <span style="color:#cbd5e1;margin:0 2px;font-size:16px;font-weight:300;">/ </span>
               @if (breadcrumb.icon) {
                 <i [class]="breadcrumb.icon" style="margin-right:4px;font-size:13px;"></i>
               }
@@ -31,7 +31,7 @@ import { BreadcrumbService, Breadcrumb } from '../../services/breadcrumb.service
             </li>
           } @else {
             <li style="display:flex;align-items:center;font-size:14px;">
-              <span style="color:#cbd5e1;margin:0 2px;font-size:16px;font-weight:300;">›</span>
+              <span style="color:#cbd5e1;margin:0 2px;font-size:16px;font-weight:300;">/ </span>
               <a [routerLink]="breadcrumb.url"
                  style="color:#64748b;text-decoration:none;font-weight:400;transition:color 0.2s;display:flex;align-items:center;"
                  (mouseenter)="$any($event.target).style.color = '#2563eb'"

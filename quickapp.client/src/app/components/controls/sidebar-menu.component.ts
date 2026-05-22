@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, inject, Input, Output, EventEmitter, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -24,11 +24,15 @@ interface MenuItem {
 export class SidebarMenuComponent implements OnInit {
   @Input() isCollapsed = false;
   @Output() menuItemClick = new EventEmitter<void>();
+  @ViewChildren('menuItemEl') menuItemElements!: QueryList<ElementRef>;
 
   private accountService = inject(AccountService);
   private router = inject(Router);
 
   menuItems: MenuItem[] = [];
+  hoveredItem: MenuItem | null = null;
+  tooltipTop = 0;
+  private hoverTimeout: any;
 
   ngOnInit(): void {
     this.buildMenu();
@@ -112,12 +116,88 @@ export class SidebarMenuComponent implements OnInit {
     }
   }
 
+  onMenuItemHover(item: MenuItem, event: MouseEvent): void {
+    if (!item.items || item.items.length === 0 || !this.isCollapsed) return;
+    
+    clearTimeout(this.hoverTimeout);
+    this.hoverTimeout = setTimeout(() => {
+      this.hoveredItem = item;
+      this.calculateTooltipPosition(item);
+    }, 150);
+  }
+
+  onMenuItemLeave(event: MouseEvent): void {
+    clearTimeout(this.hoverTimeout);
+    
+    this.hoverTimeout = setTimeout(() => {
+      this.hoveredItem = null;
+    }, 200);
+  }
+
+  private calculateTooltipPosition(item: MenuItem): void {
+    if (typeof window === 'undefined') return;
+    
+    const sidebarHeight = window.innerHeight;
+    const menuItemHeight = 48;
+    const submenuItemHeight = 40;
+    const tooltipPadding = 8;
+    
+    // Find the menu item element by matching the label
+    const menuItemEls = Array.from(document.querySelectorAll('.sidebar-menu .menu-item'));
+    let menuItemEl: HTMLElement | null = null;
+    
+    for (const el of menuItemEls) {
+      const title = el.getAttribute('data-label');
+      if (title === item.label) {
+        menuItemEl = el as HTMLElement;
+        break;
+      }
+    }
+    
+    if (!menuItemEl) {
+      this.tooltipTop = 72;
+      return;
+    }
+    
+    const rect = menuItemEl.getBoundingClientRect();
+    const itemTop = rect.top;
+    
+    const submenuCount = item.items?.length || 0;
+    const tooltipHeight = submenuCount * submenuItemHeight + (tooltipPadding * 2);
+    
+    const spaceBelow = sidebarHeight - itemTop;
+    const spaceAbove = itemTop;
+    
+    if (spaceBelow >= tooltipHeight + 20) {
+      this.tooltipTop = itemTop;
+    } else if (spaceAbove >= tooltipHeight + 20) {
+      this.tooltipTop = itemTop - tooltipHeight + menuItemHeight;
+    } else {
+      this.tooltipTop = 72;
+    }
+  }
+
   isActiveRoute(routerLink: string): boolean {
     return this.router.isActive(routerLink, {
       paths: 'subset',
       queryParams: 'subset',
       fragment: 'ignored',
       matrixParams: 'ignored'
+    });
+  }
+
+  hasActiveChild(item: MenuItem): boolean {
+    if (!item.items) return false;
+    return item.items.some(subItem => {
+      if (subItem.routerLink) {
+        return this.router.isActive(subItem.routerLink, {
+          paths: 'subset',
+          queryParams: 'subset',
+          fragment: 'ignored',
+          matrixParams: 'ignored'
+        });
+      }
+      return this.hasActiveChild(subItem);
     });
   }
 }

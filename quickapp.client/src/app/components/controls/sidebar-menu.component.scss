@@ -116,6 +116,96 @@ $header-height: 64px;
     .submenu {
       display: none;
     }
+
+    // Hover tooltip submenu styles
+    .submenu-tooltip {
+      position: fixed;
+      left: 72px;
+      background-color: var(--sidebar-bg);
+      border: 1px solid var(--sidebar-border);
+      border-radius: 10px;
+      padding: 8px 0;
+      min-width: 180px;
+      box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+      z-index: 1001;
+      list-style: none;
+      margin: 0;
+      opacity: 0;
+      transform: translateX(-10px);
+      animation: tooltipFadeIn 0.2s ease forwards;
+      pointer-events: auto;
+
+      // Arrow pointing to menu item
+      &::before {
+        content: '';
+        position: absolute;
+        left: -8px;
+        top: 14px;
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 8px solid var(--sidebar-border);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 15px;
+        width: 0;
+        height: 0;
+        border-top: 7px solid transparent;
+        border-bottom: 7px solid transparent;
+        border-right: 7px solid var(--sidebar-bg);
+      }
+
+      @keyframes tooltipFadeIn {
+        from {
+          opacity: 0;
+          transform: translateX(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .submenu-tooltip-item {
+        .submenu-tooltip-link {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 16px;
+          color: var(--sidebar-text);
+          text-decoration: none;
+          transition: all 0.15s ease;
+          cursor: pointer;
+          font-size: 13px;
+
+          i {
+            font-size: 14px;
+            width: 18px;
+            text-align: center;
+            flex-shrink: 0;
+          }
+
+          &:hover {
+            background-color: var(--sidebar-hover-bg);
+            color: #f1f5f9;
+          }
+
+          &.active {
+            background-color: var(--sidebar-active-bg);
+            color: var(--sidebar-active-text);
+
+            i {
+              color: var(--sidebar-active-text);
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -173,47 +263,64 @@ $header-height: 64px;
   border-radius: 10px;
   margin-bottom: 2px;
 
-  i {
-    font-size: 18px;
-    width: 24px;
-    text-align: center;
-    flex-shrink: 0;
-    color: inherit;
-  }
+      i {
+        font-size: 18px;
+        width: 24px;
+        text-align: center;
+        flex-shrink: 0;
+        color: inherit;
+      }
 
-  .menu-label {
-    margin-left: 12px;
-    flex: 1;
-    font-size: 14px;
-    font-weight: 500;
-    transition: opacity $transition-duration ease, width $transition-duration ease;
-  }
+      .menu-label {
+        margin-left: 12px;
+        flex: 1;
+        font-size: 14px;
+        font-weight: 500;
+        transition: opacity $transition-duration ease, width $transition-duration ease;
+      }
 
-  .submenu-arrow {
-    margin-left: auto;
-    font-size: 12px;
-    transition: transform 0.2s ease, opacity $transition-duration ease;
-  }
+      .submenu-arrow {
+        margin-left: auto;
+        font-size: 12px;
+        transition: transform 0.2s ease, opacity $transition-duration ease;
+      }
 
-  &:hover {
-    background-color: var(--sidebar-hover-bg);
-    color: #f1f5f9;
-  }
+      &:hover {
+        background-color: var(--sidebar-hover-bg);
+        color: #f1f5f9;
+      }
 
-  &.active {
-    background-color: var(--sidebar-active-bg);
-    color: var(--sidebar-active-text);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      &.active,
+      &.child-active {
+        background-color: var(--sidebar-active-bg);
+        color: var(--sidebar-active-text);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 
-    i {
-      color: var(--sidebar-active-text);
+        i {
+          color: var(--sidebar-active-text);
+        }
+
+        .menu-label {
+          font-weight: 600;
+        }
+      }
+
+      // When collapsed + has active child, show active indicator
+      &.child-active {
+        // Small dot indicator when collapsed
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 3px;
+          height: 24px;
+          background-color: var(--sidebar-active-bg);
+          border-radius: 0 4px 4px 0;
+        }
+      }
     }
-
-    .menu-label {
-      font-weight: 600;
-    }
-  }
-}
 
 .submenu {
   list-style: none;
@@ -260,7 +367,7 @@ $header-height: 64px;
       font-weight: 500;
 
       i {
-        color: var(--sidebar-active-bg);
+        color: var(--sidebar-active-text);
       }
     }
   }

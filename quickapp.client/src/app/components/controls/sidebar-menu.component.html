@@ -11,7 +11,10 @@
     <ul class="menu-list">
       @for (item of menuItems; track item.label) {
         @if (hasPermission(item.permission)) {
-          <li class="menu-item" [class.has-submenu]="item.items && item.items.length > 0">
+          <li class="menu-item" [class.has-submenu]="item.items && item.items.length > 0"
+              [attr.data-label]="item.label"
+              (mouseenter)="onMenuItemHover(item, $event)"
+              (mouseleave)="onMenuItemLeave($event)">
             @if (item.routerLink) {
               <a
                 [routerLink]="item.routerLink"
@@ -28,6 +31,7 @@
             } @else {
               <a
                 class="menu-link"
+                [class.child-active]="hasActiveChild(item)"
                 (click)="toggleSubmenu(item)"
                 [title]="item.label | translate">
                 <i [class]="item.icon"></i>
@@ -54,6 +58,27 @@
                           [title]="subItem.label | translate">
                           <i [class]="subItem.icon"></i>
                           <span class="submenu-label">{{ subItem.label | translate }}</span>
+                        </a>
+                      </li>
+                    }
+                  }
+                </ul>
+              }
+
+              <!-- Hover tooltip submenu when collapsed -->
+              @if (item.items && item.items.length > 0 && isCollapsed && hoveredItem === item) {
+                <ul class="submenu-tooltip" [style.top.px]="tooltipTop">
+                  @for (subItem of item.items; track subItem.label) {
+                    @if (hasPermission(subItem.permission)) {
+                      <li class="submenu-tooltip-item">
+                        <a
+                          [routerLink]="subItem.routerLink"
+                          routerLinkActive="active"
+                          class="submenu-tooltip-link"
+                          (click)="onMenuItemClick()"
+                          [title]="subItem.label | translate">
+                          <i [class]="subItem.icon"></i>
+                          <span>{{ subItem.label | translate }}</span>
                         </a>
                       </li>
                     }
