@@ -1,18 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { BreadcrumbComponent } from '../controls/breadcrumb.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-management-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, BreadcrumbComponent, ConfirmDialogComponent],
+  imports: [CommonModule, RouterOutlet, ConfirmDialogComponent],
   template: `
     <div class="management-layout">
-      <!-- Breadcrumb -->
-      <app-breadcrumb></app-breadcrumb>
-
       <!-- Child Routes Content -->
       <div class="management-content">
         <router-outlet></router-outlet>
@@ -24,7 +20,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
   `,
   styles: [`
     .management-layout {
-      padding: 20px;
+      padding: 0;
       min-height: calc(100vh - 120px);
     }
 
@@ -45,7 +41,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 
     @media (max-width: 767px) {
       .management-layout {
-        padding: 15px;
+        padding: 0;
       }
     }
   `]

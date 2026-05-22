@@ -121,7 +121,7 @@ export const routes: Routes = [
             data: {
               breadcrumb: {
                 translateKey: 'BlogPosts',
-                icon: 'fa fa-newspaper'
+                // icon: 'fa fa-newspaper'
               }
             }
           },
@@ -132,7 +132,7 @@ export const routes: Routes = [
             data: {
               breadcrumb: {
                 translateKey: 'CreateNew',
-                icon: 'fa fa-plus-circle'
+                // icon: 'fa fa-plus-circle'
               }
             }
           },
@@ -143,7 +143,7 @@ export const routes: Routes = [
             data: {
               breadcrumb: {
                 translateKey: 'Detail',
-                icon: 'fa fa-info-circle'
+                // icon: 'fa fa-info-circle'
               }
             }
           },
@@ -154,7 +154,7 @@ export const routes: Routes = [
             data: {
               breadcrumb: {
                 translateKey: 'Edit',
-                icon: 'fa fa-edit'
+                // icon: 'fa fa-edit'
               }
             }
           },

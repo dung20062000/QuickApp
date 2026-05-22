@@ -1,4 +1,12 @@
 <nav class="sidebar-menu" [class.collapsed]="isCollapsed">
+  <!-- Logo + Brand Header -->
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <i class="fa fa-cube"></i>
+    </div>
+    <span class="sidebar-brand-text">QuickApp</span>
+  </div>
+
   <div class="menu-wrapper">
     <ul class="menu-list">
       @for (item of menuItems; track item.label) {
@@ -57,5 +65,15 @@
         }
       }
     </ul>
+  </div>
+
+  <!-- Sidebar Footer with Collapse Button -->
+  <div class="sidebar-footer">
+    <button class="collapse-btn" (click)="menuItemClick.emit()">
+      <i class="fa" [class.fa-angle-left]="!isCollapsed" [class.fa-angle-right]="isCollapsed"></i>
+      @if (!isCollapsed) {
+        <span>Thu gọn</span>
+      }
+    </button>
   </div>
 </nav>

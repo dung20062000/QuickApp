@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, inject, Renderer2 } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } from '@angular/router';
+import { Router, RouterLink, RouterOutlet, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,6 +19,7 @@ import { Permissions } from './models/permission.model';
 import { LoginComponent } from './components/login/login.component';
 import { NotificationsViewerComponent } from './components/controls/notifications-viewer.component';
 import { SidebarMenuComponent } from './components/controls/sidebar-menu.component';
+import { BreadcrumbComponent } from './components/controls/breadcrumb.component';
 
 declare let alertify: Alertify;
 
@@ -27,8 +28,8 @@ declare let alertify: Alertify;
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
     imports: [
-        ToastaModule, RouterLink, RouterLinkActive, NgbCollapseModule, NgbPopover, NotificationsViewerComponent,
-        RouterOutlet, TranslateModule, SidebarMenuComponent
+        ToastaModule, RouterLink, NgbCollapseModule, NgbPopover, NotificationsViewerComponent,
+        RouterOutlet, TranslateModule, SidebarMenuComponent, BreadcrumbComponent
     ]
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -45,12 +46,13 @@ export class AppComponent implements OnInit, OnDestroy {
   renderer = inject(Renderer2);
 
   isMenuCollapsed = true;
-  isSidebarCollapsed = false; // Sidebar state
+  isSidebarCollapsed = false;
   isAppLoaded = false;
   isUserLoggedIn = false;
   newNotificationCount = 0;
   appTitle = 'MucSushi Management';
   isSushiHomePage = false;
+  isLoginPage = false;
 
   stickyToasties: number[] = [];
 
@@ -93,7 +95,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.isSidebarCollapsed = true;
     }
 
-    // Check if current route is sushi-home
+    // Check current route
     this.checkRoute();
 
     // Listen to route changes
@@ -156,6 +158,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private checkRoute() {
     // Ẩn navbar cũ khi ở trang sushi-home (trang public)
     this.isSushiHomePage = this.router.url === '/' || this.router.url.startsWith('/?');
+    // Kiểm tra trang login
+    this.isLoginPage = this.router.url === '/login';
   }
 
   private unsubscribeNotifications() {
@@ -346,6 +350,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   get fullName(): string {
     return this.authService.currentUser?.fullName ?? '';
+  }
+
+  get userInitials(): string {
+    const name = this.fullName || this.userName;
+    if (!name) return '?';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
   }
 
   get canViewCustomers() {

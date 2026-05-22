@@ -26,7 +26,7 @@ $enable-shadows: true;
 @import 'app-theme';
 
 // =============================================
-// HEADER — White background, bottom border
+// HEADER — White background, modern header
 // =============================================
 .app-component {
   .app-header {
@@ -45,31 +45,71 @@ $enable-shadows: true;
     .header-right {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
     }
 
-    // Toggle sidebar button — slate ghost pill
+    // Toggle sidebar button — modern rounded button
     .sidebar-toggle-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       border: none;
-      background: transparent;
+      background: #f1f5f9;
       color: #64748b;
       cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
+      transition: all 0.2s ease;
       flex-shrink: 0;
 
       &:hover {
-        background-color: #f1f5f9;
+        background-color: #e2e8f0;
         color: #1e293b;
       }
 
       i {
         font-size: 18px;
+      }
+    }
+
+    // Search bar
+    .header-search {
+      .search-icon {
+        color: #94a3b8;
+      }
+
+      .search-input {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        color: #1e293b;
+
+        &:focus {
+          border-color: #3b82f6;
+          background: #ffffff;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+      }
+    }
+
+    // Theme toggle button
+    .theme-toggle-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: none;
+      background: #f1f5f9;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #e2e8f0;
+        color: #1e293b;
       }
     }
 
@@ -100,7 +140,7 @@ $enable-shadows: true;
           transition: color 0.2s;
 
           &:hover {
-            color: $primary;
+            color: #3b82f6;
           }
         }
 
@@ -127,32 +167,32 @@ $enable-shadows: true;
     .user-pill {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 12px 6px 6px;
-      border-radius: 24px;
+      gap: 10px;
+      padding: 6px 14px 6px 6px;
+      border-radius: 12px;
       border: 1px solid #e2e8f0;
       background: #f8fafc;
       cursor: pointer;
-      transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+      transition: all 0.2s ease;
       text-decoration: none;
       color: #1e293b;
 
       &:hover {
         background: #f1f5f9;
         border-color: #cbd5e1;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       }
 
       .user-avatar {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: $primary;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
         color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 600;
         flex-shrink: 0;
         text-transform: uppercase;
@@ -162,27 +202,32 @@ $enable-shadows: true;
         font-size: 14px;
         font-weight: 500;
         color: #1e293b;
-        max-width: 140px;
+        max-width: 120px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+
+      .user-chevron {
+        font-size: 12px;
+        color: #94a3b8;
+      }
     }
 
-    // Notification bell — circular ghost button
+    // Notification bell
     .notif-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       border: none;
       background: transparent;
       color: #64748b;
       cursor: pointer;
       position: relative;
-      transition: background-color 0.2s, color 0.2s;
+      transition: all 0.2s ease;
       text-decoration: none;
 
       &:hover {
@@ -192,15 +237,15 @@ $enable-shadows: true;
 
       .notif-badge {
         position: absolute;
-        top: 4px;
-        right: 4px;
-        min-width: 16px;
-        height: 16px;
-        padding: 0 4px;
-        border-radius: 8px;
+        top: 6px;
+        right: 6px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: 9px;
         background-color: #ef4444;
         color: #fff;
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 600;
         display: flex;
         align-items: center;
@@ -214,14 +259,14 @@ $enable-shadows: true;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       border: none;
       background: transparent;
       color: #64748b;
       cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
+      transition: all 0.2s ease;
 
       &:hover {
         background-color: #fef2f2;
@@ -233,7 +278,7 @@ $enable-shadows: true;
       }
     }
 
-    // Navbar brand (logo area — only used on non-management pages)
+    // Navbar brand (logo area)
     .navbar-brand {
       color: #1e293b;
       font-weight: 600;
@@ -247,7 +292,6 @@ $enable-shadows: true;
       }
     }
 
-    // Override navbar defaults (old styles)
     .navbar {
       background-color: #ffffff;
       border-bottom: 1px solid #e2e8f0;
@@ -256,30 +300,33 @@ $enable-shadows: true;
 }
 
 // =============================================
-// SIDEBAR — Slate dark background
+// SIDEBAR — Full height dark sidebar
 // =============================================
 .app-component {
   .sidebar-menu {
-    background-color: #1e293b;    // Slate-800
-    border-right: 1px solid #334155;
+    background-color: #0f172a;
+    border-right: none;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
 
     .sidebar-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 12px;
+      padding: 20px;
+      border-bottom: 1px solid #1e293b;
+      min-height: 72px;
 
       .sidebar-logo {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        background: $primary;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
         overflow: hidden;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 
         img {
           width: 100%;
@@ -289,17 +336,18 @@ $enable-shadows: true;
 
         i {
           color: #fff;
-          font-size: 16px;
+          font-size: 20px;
         }
       }
 
       .sidebar-brand-text {
-        font-size: 15px;
-        font-weight: 600;
-        color: #f1f5f9;
+        font-size: 18px;
+        font-weight: 700;
+        color: #f8fafc;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        letter-spacing: -0.5px;
       }
     }
   }

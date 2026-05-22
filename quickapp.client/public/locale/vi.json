@@ -34,9 +34,9 @@
       "Restaurant": "Thông tin cơ sở",
       "MenuItems": "Thực đơn",
       "Management": "Quản lý",
-      "Settings": "Cài đặt",
       "BlogPosts": "Bài viết"
-    }
+    },
+    "Settings": "Cài đặt"
 
   },
   "pageHeader": {

@@ -34,9 +34,9 @@
       "Restaurant": "Restaurant Information",
       "MenuItems": "Menu Items",
       "Management": "Management",
-      "Settings": "Settings",
       "BlogPosts": "Blog Posts"
-    }
+    },
+    "Settings": "Settings"
   },
   "pageHeader": {
     "Dashboard": "Dashboard",

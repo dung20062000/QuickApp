@@ -1,153 +1,354 @@
+// Variables
 $footerHeight: 40px;
-$headerHeight: 56px;
-$sidebarWidth: 250px;
-$sidebarCollapsedWidth: 60px;
+$headerHeight: 64px;
+$sidebarWidth: 260px;
+$sidebarCollapsedWidth: 72px;
+$transition-duration: 0.3s;
 
+// =============================================
+// APP CONTAINER
+// =============================================
 .app-container {
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
 }
 
-// Main content area
-.main-content {
-  flex: 1;
-  padding-top: $headerHeight;
-  padding-left: 0;
-  padding-right: 0;
-  transition: margin-left 0.3s ease, padding-left 0.3s ease;
-  min-height: calc(100vh - #{$headerHeight});
+// =============================================
+// MAIN LAYOUT - Sidebar + Content
+// =============================================
+.main-layout {
+  display: flex;
+  min-height: 100vh;
 
-  // Default: no sidebar (sushi-home hoặc not logged in)
-  &.container-xl {
-    padding-left: var(--bs-gutter-x, 0.75rem);
-    padding-right: var(--bs-gutter-x, 0.75rem);
+  // Sidebar
+  app-sidebar-menu {
+    flex-shrink: 0;
+
+    ::ng-deep .sidebar-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: $sidebarWidth;
+      height: 100vh;
+      z-index: 1000;
+      transition: width $transition-duration ease;
+    }
+
+    ::ng-deep .sidebar-menu.collapsed {
+      width: $sidebarCollapsedWidth;
+    }
   }
 
-  // With sidebar (logged in admin area)
-  &.with-sidebar {
+  // Content wrapper (includes header + page content)
+  .content-wrapper {
+    flex: 1;
     margin-left: $sidebarWidth;
-    padding-left: 1.5rem;
-    // padding-right: 1.5rem;
+    transition: margin-left $transition-duration ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 
-    &.sidebar-collapsed {
+    &.collapsed {
       margin-left: $sidebarCollapsedWidth;
     }
   }
 
-  // Sushi home page: no padding, no sidebar
-  &.sushi-home-main {
-    height: auto;
-    padding-top: 0;
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    max-width: 100%;
-  }
-}
+  // When collapsed
+  &.sidebar-collapsed {
+    app-sidebar-menu ::ng-deep .sidebar-menu {
+      width: $sidebarCollapsedWidth;
+    }
 
-.footer-height {
-  height: $footerHeight;
-}
-
-footer {
-  width: 100%;
-  height: $footerHeight;
-  line-height: $footerHeight;
-  background-color: #f5f5f5;
-  transition: margin-left 0.3s ease;
-
-  .main-content.with-sidebar ~ & {
-    margin-left: $sidebarWidth;
-  }
-
-  .main-content.with-sidebar.sidebar-collapsed ~ & {
-    margin-left: $sidebarCollapsedWidth;
-  }
-}
-
-// Header styles
-.navbar-brand > img {
-  height: 30px;
-}
-
-.navbar {
-  .btn-link {
-    text-decoration: none;
-    padding: 0.5rem;
-
-    &:hover {
-      opacity: 0.8;
+    .content-wrapper {
+      margin-left: $sidebarCollapsedWidth;
     }
   }
 }
 
-.navbar .nav-pills a:focus,
-.navbar .nav-pills a:hover {
-  color: #575757;
-}
+// =============================================
+// HEADER
+// =============================================
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  height: $headerHeight;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
 
-.navbar .nav-pills > .active > a,
-.navbar .nav-pills > .active > a:hover,
-.navbar .nav-pills > .active > a:focus {
-  background-color: #efefef;
-  color: #808080;
-}
+  .header-left-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
 
-.navbar .nav-link,
-.navbar .navbar-text {
-  color: white;
-}
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
-.navbar .nav-pills > li > a {
-  font-weight: bold;
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
-}
+  // Toggle sidebar button
+  .sidebar-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: #f1f5f9;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
 
-.user-name {
-  cursor: pointer;
+    &:hover {
+      background-color: #e2e8f0;
+      color: #1e293b;
+    }
 
-  .badge {
-    margin-left: 4px;
+    i {
+      font-size: 18px;
+    }
+  }
+
+  // Notification bell
+  .notif-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    text-decoration: none;
+
+    &:hover {
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+
+    i {
+      font-size: 18px;
+    }
+
+    .notif-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 9px;
+      background-color: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+  }
+
+  // User pill
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 6px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: #1e293b;
+
+    &:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+
+    .user-name-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1e293b;
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .user-chevron {
+      font-size: 12px;
+      color: #94a3b8;
+    }
   }
 }
 
-// Mobile sidebar overlay
+// =============================================
+// PAGE CONTENT
+// =============================================
+.page-content {
+  flex: 1;
+  background: #f8fafc;
+  min-height: calc(100vh - #{$headerHeight});
+  padding: 20px 24px;
+}
+
+// Sushi home page
+.sushi-home-main {
+  width: 100%;
+  min-height: 100vh;
+}
+
+// Public layout (login, etc.)
+.public-layout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// =============================================
+// USER POPOVER
+// =============================================
+.user-popover-content {
+  min-width: 220px;
+  padding: 4px 0;
+
+  .user-popover-header {
+    padding: 8px 12px;
+
+    .user-popover-name {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 14px;
+    }
+
+    .user-popover-email {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+  }
+
+  .dropdown-item {
+    font-size: 14px;
+    color: #1e293b;
+    border-radius: 8px;
+    margin: 2px 8px;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: #f1f5f9;
+    }
+
+    &.text-danger:hover {
+      background-color: #fef2f2;
+    }
+  }
+}
+
+// =============================================
+// OVERLAYS & RESPONSIVE
+// =============================================
+
+// Mobile overlay
 .sidebar-overlay {
   display: none;
   position: fixed;
-  top: $headerHeight;
+  top: 0;
   left: 0;
-  width: 100%;
-  height: calc(100vh - #{$headerHeight});
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 998;
+  z-index: 999;
   cursor: pointer;
+}
 
-  @media (max-width: 991px) {
+// =============================================
+// RESPONSIVE - TABLET (768px - 991px)
+// =============================================
+@media (max-width: 991px) {
+  .main-layout {
+    app-sidebar-menu ::ng-deep .sidebar-menu {
+      transform: translateX(-100%);
+      width: $sidebarWidth;
+    }
+
+    app-sidebar-menu ::ng-deep .sidebar-menu:not(.collapsed) {
+      transform: translateX(0);
+    }
+
+    .content-wrapper {
+      margin-left: 0 !important;
+    }
+  }
+
+  .sidebar-overlay {
     display: block;
   }
 }
 
-// Responsive
-@media screen and (max-width: 991px) {
-  .main-content.with-sidebar {
-    margin-left: 0 !important;
+// =============================================
+// RESPONSIVE - MOBILE (<768px)
+// =============================================
+@media (max-width: 767px) {
+  .page-content {
+    padding: 12px 14px;
   }
 
-  footer {
-    margin-left: 0 !important;
-  }
+  .app-header {
+    padding: 0 12px;
 
-  .navbar .nav-pills > li + li {
-    margin-left: 0;
-    margin-top: 1px;
-  }
-}
+    .user-name-text {
+      display: none;
+    }
 
-@media screen and (min-width: 992px) {
-  .navbar .nav-pills > li + li {
-    margin-left: 2px;
+    .user-chevron {
+      display: none;
+    }
+
+    .sidebar-toggle-btn {
+      width: 36px;
+      height: 36px;
+    }
+
+    .notif-btn {
+      width: 36px;
+      height: 36px;
+    }
   }
 }

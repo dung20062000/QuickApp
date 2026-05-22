@@ -9,28 +9,35 @@ import { BreadcrumbService, Breadcrumb } from '../../services/breadcrumb.service
   standalone: true,
   imports: [CommonModule, RouterLink, TranslateModule],
   template: `
-    <nav aria-label="breadcrumb" class="breadcrumb-container">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a routerLink="/admin">
-            <i class="fa fa-home"></i>
-            <span class="d-none d-md-inline ms-1">{{ 'breadcrumb.Dashboard' | translate }}</span>
+    <nav aria-label="breadcrumb" class="header-breadcrumb">
+      <ol class="breadcrumb" style="display:flex;align-items:center;list-style:none;margin:0;padding:0;flex-wrap:wrap;">
+        <li class="breadcrumb-item" style="display:flex;align-items:center;font-size:14px;">
+          <a routerLink="/admin" style="color:#64748b;text-decoration:none;font-weight:400;transition:color 0.2s;display:flex;align-items:center;"
+             (mouseenter)="$any($event.target).style.color = '#2563eb'"
+             (mouseleave)="$any($event.target).style.color = '#64748b'">
+            <i class="fa fa-home" style="margin-right:4px;font-size:13px;"></i>
+            <span class="d-none d-md-inline" style="margin-left:4px;">{{ 'breadcrumb.Dashboard' | translate }}</span>
           </a>
         </li>
 
         @for (breadcrumb of breadcrumbs$ | async; track breadcrumb.url; let isLast = $last) {
           @if (isLast) {
-            <li class="breadcrumb-item active" aria-current="page">
+            <li style="color:#1e293b;font-weight:500;font-size:14px;display:flex;align-items:center;padding:0 6px;">
+              <span style="color:#cbd5e1;margin:0 2px;font-size:16px;font-weight:300;">›</span>
               @if (breadcrumb.icon) {
-                <i [class]="breadcrumb.icon"></i>
+                <i [class]="breadcrumb.icon" style="margin-right:4px;font-size:13px;"></i>
               }
               {{ breadcrumb.translateKey ? ('breadcrumb.' + breadcrumb.translateKey | translate) : breadcrumb.label }}
             </li>
           } @else {
-            <li class="breadcrumb-item">
-              <a [routerLink]="breadcrumb.url">
+            <li style="display:flex;align-items:center;font-size:14px;">
+              <span style="color:#cbd5e1;margin:0 2px;font-size:16px;font-weight:300;">›</span>
+              <a [routerLink]="breadcrumb.url"
+                 style="color:#64748b;text-decoration:none;font-weight:400;transition:color 0.2s;display:flex;align-items:center;"
+                 (mouseenter)="$any($event.target).style.color = '#2563eb'"
+                 (mouseleave)="$any($event.target).style.color = '#64748b'">
                 @if (breadcrumb.icon) {
-                  <i [class]="breadcrumb.icon"></i>
+                  <i [class]="breadcrumb.icon" style="margin-right:4px;font-size:13px;"></i>
                 }
                 {{ breadcrumb.translateKey ? ('breadcrumb.' + breadcrumb.translateKey | translate) : breadcrumb.label }}
               </a>
@@ -41,58 +48,9 @@ import { BreadcrumbService, Breadcrumb } from '../../services/breadcrumb.service
     </nav>
   `,
   styles: [`
-    .breadcrumb-container {
-      background: #fff;
-      padding: 12px 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .breadcrumb {
-      margin: 0;
-      background: transparent;
-      padding: 0;
-    }
-
-    .breadcrumb-item {
-      font-size: 14px;
-
-      a {
-        color: #6c757d;
-        text-decoration: none;
-        transition: color 0.2s;
-
-        &:hover {
-          color: var(--bs-primary, #0d6efd);
-        }
-      }
-
-      &.active {
-        color: #495057;
-        font-weight: 500;
-      }
-
-      i {
-        margin-right: 4px;
-        font-size: 13px;
-      }
-    }
-
-    .breadcrumb-item + .breadcrumb-item::before {
-      content: "›";
-      font-size: 18px;
-      color: #adb5bd;
-    }
-
-    @media (max-width: 767px) {
-      .breadcrumb-container {
-        padding: 8px 15px;
-      }
-
-      .breadcrumb-item {
-        font-size: 13px;
-      }
+    :host {
+      display: flex;
+      align-items: center;
     }
   `]
 })
