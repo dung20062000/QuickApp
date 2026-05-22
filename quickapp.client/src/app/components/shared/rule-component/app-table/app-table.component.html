@@ -1,4 +1,4 @@
-<div class="app-table-wrapper">
+<div class="app-table-wrapper" [class.scrollable]="scrollHeight === 'flex'">
     <p-table
         [value]="loading ? skeletonArray : data"
         [columns]="columns"

@@ -3,6 +3,11 @@
 // ===================================================
 .blog-post-list-wrapper {
   animation: fadeIn 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; // Critical for flex to work inside page-content
+  overflow: hidden; // No overflow at wrapper level
 }
 
 // ===================================================
@@ -13,22 +18,31 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   flex-wrap: wrap;
+  flex-shrink: 0;
+
+  @media (max-width: 767px) {
+    margin-bottom: 12px;
+  }
 }
 
 .header-content {
   .page-title {
     font-size: 22px;
     font-weight: 700;
-    color: #0f172a; // slate-900
+    color: #0f172a;
     margin: 0 0 4px 0;
     line-height: 1.2;
+
+    @media (max-width: 767px) {
+      font-size: 18px;
+    }
   }
 
   .page-subtitle {
     font-size: 13px;
-    color: #94a3b8; // slate-400
+    color: #94a3b8;
     margin: 0;
     font-weight: 400;
   }
@@ -43,6 +57,20 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; // Critical for flex child to shrink
+
+  // Tablet
+  @media (max-width: 991px) {
+    border-radius: 12px;
+  }
+
+  // Mobile
+  @media (max-width: 767px) {
+    border-radius: 10px;
+  }
 }
 
 // ===================================================
@@ -52,6 +80,7 @@
   overflow: visible;
   position: relative;
   z-index: 10;
+  flex-shrink: 0;
 }
 
 // ===================================================
@@ -64,14 +93,24 @@
   padding: 12px 16px;
   border-bottom: 1px solid #f1f5f9;
   flex-wrap: wrap;
+
+  @media (max-width: 767px) {
+    padding: 10px 12px;
+    gap: 8px;
+  }
 }
 
 .search-wrapper {
   flex: 1;
-  min-width: 240px;
+  min-width: 180px;
   position: relative;
   display: flex;
   align-items: center;
+
+  @media (max-width: 767px) {
+    min-width: 100%;
+    flex: 1 1 100%;
+  }
 }
 
 .search-icon {
@@ -104,6 +143,11 @@
   &:focus {
     border-color: #4f46e5;
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+  }
+
+  @media (max-width: 767px) {
+    height: 34px;
+    font-size: 12px;
   }
 }
 
@@ -170,6 +214,11 @@
   gap: 12px;
   padding: 12px 16px;
   flex-wrap: wrap;
+
+  @media (max-width: 767px) {
+    padding: 10px 12px;
+    gap: 8px;
+  }
 }
 
 .filter-item {
@@ -214,6 +263,12 @@
     top: 50%;
     transform: translateY(-50%);
   }
+
+  // Mobile: full width
+  @media (max-width: 767px) {
+    width: 100%;
+    flex: 1 1 100%;
+  }
 }
 
 .filter-status {
@@ -230,6 +285,12 @@
     border-radius: 6px !important;
     font-size: 12px !important;
     background: #fff;
+  }
+
+  // Mobile: full width
+  @media (max-width: 767px) {
+    width: 100%;
+    flex: 1 1 100%;
   }
 }
 

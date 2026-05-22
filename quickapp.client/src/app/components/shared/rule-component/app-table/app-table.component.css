@@ -3,7 +3,30 @@
 =================================================== */
 .app-table-wrapper {
   width: 100%;
-  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  /* When scrollHeight="flex" is set, fill available height and scroll internally */
+  &.scrollable {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 200px;
+  }
+
+  /* Tablet: limit max height */
+  @media (max-width: 991px) {
+    &.scrollable {
+      flex: 1;
+    }
+  }
+
+  /* Mobile: limit max height */
+  @media (max-width: 767px) {
+    &.scrollable {
+      flex: 1;
+    }
+  }
 }
 
 /* ===================================================
@@ -12,6 +35,47 @@
 :host ::ng-deep .app-primeng-table {
   border-collapse: separate;
   border-spacing: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  /* The table container must not overflow */
+  .p-datatable {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Header wrapper */
+  .p-datatable-header-container {
+    flex-shrink: 0;
+  }
+
+  /* Table scrollable container */
+  .p-datatable-wrapper {
+    flex: 1;
+    overflow: auto !important;
+    min-height: 0;
+  }
+
+  /* THead - don't let it shrink below content */
+  .p-datatable-thead {
+    flex-shrink: 0;
+  }
+
+  /* TBody - fill remaining space */
+  .p-datatable-tbody {
+    flex: 1;
+  }
+}
+
+/* Always constrain p-datatable wrapper to prevent horizontal overflow */
+:host ::ng-deep .p-datatable-wrapper {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+  max-width: 100%;
 }
 
 /* ===================================================
@@ -131,6 +195,7 @@
   font-size: 12px;
   color: #64748b;
 }
+
 /* ===================================================
    PAGINATOR
 =================================================== */

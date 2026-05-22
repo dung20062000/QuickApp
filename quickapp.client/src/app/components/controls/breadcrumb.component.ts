@@ -51,6 +51,11 @@ import { BreadcrumbService, Breadcrumb } from '../../services/breadcrumb.service
     :host {
       display: flex;
       align-items: center;
+
+      /* Hide on mobile */
+      @media (max-width: 767px) {
+        display: none;
+      }
     }
   `]
 })

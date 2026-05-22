@@ -178,6 +178,7 @@ $header-height: 64px;
     width: 24px;
     text-align: center;
     flex-shrink: 0;
+    color: inherit;
   }
 
   .menu-label {
@@ -240,6 +241,7 @@ $header-height: 64px;
       width: 18px;
       text-align: center;
       flex-shrink: 0;
+      color: inherit;
     }
 
     .submenu-label {

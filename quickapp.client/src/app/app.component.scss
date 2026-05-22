@@ -12,6 +12,7 @@ $transition-duration: 0.3s;
   height: 100%;
   min-height: 100vh;
   position: relative;
+  overflow-x: hidden;
 }
 
 // =============================================
@@ -20,6 +21,7 @@ $transition-duration: 0.3s;
 .main-layout {
   display: flex;
   min-height: 100vh;
+  overflow-x: hidden;
 
   // Sidebar
   app-sidebar-menu {
@@ -48,6 +50,7 @@ $transition-duration: 0.3s;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow: hidden;
 
     &.collapsed {
       margin-left: $sidebarCollapsedWidth;
@@ -82,18 +85,25 @@ $transition-duration: 0.3s;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
+  overflow: visible;
+  max-width: 100%;
+  box-sizing: border-box;
 
   .header-left-section {
     display: flex;
     align-items: center;
     gap: 12px;
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
   }
 
   .header-right {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-shrink: 0;
+    overflow: visible;
   }
 
   // Toggle sidebar button
@@ -178,6 +188,7 @@ $transition-duration: 0.3s;
     transition: all 0.2s ease;
     text-decoration: none;
     color: #1e293b;
+    flex-shrink: 0;
 
     &:hover {
       background: #f1f5f9;
@@ -223,8 +234,21 @@ $transition-duration: 0.3s;
 .page-content {
   flex: 1;
   background: #f8fafc;
-  min-height: calc(100vh - #{$headerHeight});
+  min-height: 0; // Critical for flex child to shrink
+  display: flex;
+  flex-direction: column;
   padding: 20px 24px;
+  overflow: hidden; // No horizontal overflow on page level
+
+  // Tablet
+  @media (max-width: 991px) {
+    padding: 16px 20px;
+  }
+
+  // Mobile
+  @media (max-width: 767px) {
+    padding: 12px 14px;
+  }
 }
 
 // Sushi home page

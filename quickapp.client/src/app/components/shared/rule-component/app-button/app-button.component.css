@@ -261,6 +261,19 @@
     /* flex-grow: 1; */
 }
 
+/* Mobile: hide text content, show only icon */
+@media (max-width: 767px) {
+    .app-button__content {
+        display: none;
+    }
+
+    .app-button__left-icon,
+    .app-button__right-icon {
+        margin-right: 0;
+        margin-left: 0;
+    }
+}
+
 /* Icon size adjustments based on button size */
 .app-button--sm .app-button__left-icon,
 .app-button--sm .app-button__right-icon {

@@ -1,6 +1,28 @@
 <div class="app-component app-container">
   <ngx-toasta></ngx-toasta>
 
+  <!-- Template: Notifications Popover -->
+  <ng-template #notifPopTemplate>
+    <app-notifications-viewer [isViewOnly]="true"></app-notifications-viewer>
+  </ng-template>
+
+  <!-- Template: User Popover -->
+  <ng-template #userPopTemplate>
+    <div class="user-popover-content">
+      <div class="user-popover-header">
+        <div class="user-popover-name">{{ fullName || userName }}</div>
+        <div class="user-popover-email">{{ userName }}&#64;example.com</div>
+      </div>
+      <hr class="my-2">
+      <a class="dropdown-item py-2" routerLink="/settings">
+        <i class="fa fa-cog me-2"></i>{{ 'mainMenu.Settings' | translate }}
+      </a>
+      <a class="dropdown-item py-2 text-danger" href="javascript:;" (click)="logout()">
+        <i class="fa fa-sign-out me-2"></i>{{ 'mainMenu.Logout' | translate }}
+      </a>
+    </div>
+  </ng-template>
+
   @if (!isSushiHomePage && isUserLoggedIn) {
   <!-- Sidebar + Main Content Wrapper -->
   <div class="main-layout" [class.sidebar-collapsed]="isSidebarCollapsed">
@@ -26,47 +48,29 @@
 
         <!-- Right: Notification + User -->
         <div class="header-right me-3">
-          <a class="notif-btn" [ngbPopover]="popTemplate"
+          <a class="notif-btn" [ngbPopover]="notifPopTemplate"
              (hidden)="markNotificationsAsRead()"
-             placement="bottom"
+             placement="bottom-right"
              [popoverTitle]="notificationsTitle"
              href="javascript:;"
-             triggers="focus"
+             triggers="click"
              popoverClass="notifications-popup">
-            <i class="fa fa-bell-o"></i>
+            <i class="fa fa-bell"></i>
             @if (newNotificationCount > 0) {
             <span class="notif-badge">{{ newNotificationCount > 9 ? '9+' : newNotificationCount }}</span>
             }
           </a>
-          <ng-template #popTemplate>
-            <app-notifications-viewer [isViewOnly]="true"></app-notifications-viewer>
-          </ng-template>
 
           <a class="user-pill"
              [ngbPopover]="userPopTemplate"
-             placement="bottom"
+             placement="bottom-right"
              href="javascript:;"
-             triggers="focus"
+             triggers="click"
              popoverClass="user-popover">
             <div class="user-avatar">{{ userInitials }}</div>
             <span class="user-name-text">{{ userName }}</span>
             <i class="fa fa-chevron-down user-chevron"></i>
           </a>
-          <ng-template #userPopTemplate>
-            <div class="user-popover-content">
-              <div class="user-popover-header">
-                <div class="user-popover-name">{{ fullName || userName }}</div>
-                <div class="user-popover-email">{{ userName }}&#64;example.com</div>
-              </div>
-              <hr class="my-2">
-              <a class="dropdown-item py-2" routerLink="/settings">
-                <i class="fa fa-cog me-2"></i>{{ 'mainMenu.Settings' | translate }}
-              </a>
-              <a class="dropdown-item py-2 text-danger" href="javascript:;" (click)="logout()">
-                <i class="fa fa-sign-out me-2"></i>{{ 'mainMenu.Logout' | translate }}
-              </a>
-            </div>
-          </ng-template>
         </div>
       </header>
 

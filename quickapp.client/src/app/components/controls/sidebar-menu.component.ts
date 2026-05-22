@@ -107,7 +107,9 @@ export class SidebarMenuComponent implements OnInit {
   }
 
   onMenuItemClick(): void {
-    this.menuItemClick.emit();
+    if (typeof window !== 'undefined' && window.innerWidth <= 991) {
+      this.menuItemClick.emit();
+    }
   }
 
   isActiveRoute(routerLink: string): boolean {
